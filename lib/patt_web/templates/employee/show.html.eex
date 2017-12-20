@@ -1,0 +1,11 @@
+<h2><%= @employee.first_name %> <%= @employee.middle_name %> <%= @employee.last_name %></h2>
+
+<b>Address</b>
+<blockquote>
+  <%= @employee.street %>, <%= @employee.brgy %>, <%= @employee.town %>, <%= @employee.country %>
+</blockquote>
+
+<b>Birthdate</b>
+<blockquote>
+  <%= @employee.bday %>
+</blockquote>

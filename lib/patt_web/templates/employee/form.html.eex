@@ -1,0 +1,43 @@
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p> Oops, something went wrong! Please check the errors below</>
+    </div>
+  <% end %>
+
+  <%= label f, :Name %>
+  <div class="form-group">
+    <%= text_input f, :first_name, placeholder: "first name" %>
+    <%= error_tag f, :first_name %>
+
+    <%= text_input f, :middle_name, placeholder: "middle name" %>
+    <%= error_tag f, :middle_name %>
+
+    <%= text_input f, :last_name, placeholder: "last name" %>
+    <%= error_tag f, :last_name %>
+  </div>
+
+  <%= label f, :Birthdate  %>
+  <div class="form-group">
+    <%= date_select f, :bday, year: [options: 1980..2500]  %>
+  </div>
+
+  <%= label f, :Address  %>
+  <div class="form-group">
+    <%= text_input f, :street, placeholder: "street" %>
+    <%= error_tag f, :street %>
+
+    <%= text_input f, :brgy, placeholder: "brgy" %>
+    <%= error_tag f, :brgy %>
+
+    <%= text_input f, :town, placeholder: "town" %>
+    <%= error_tag f, :town %>
+
+    <%= text_input f, :country, placeholder: "country" %>
+    <%= error_tag f, :country %>
+  </div>
+
+  <div class="form-group">
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>
