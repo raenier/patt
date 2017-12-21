@@ -6,8 +6,11 @@
   <thead>
     <tr>
       <th>Name</th>
-      <th>Birdthday</th>
+      <th>Birth date</th>
+      <th>Birth Place</th>
       <th>Address</th>
+      <th>Contact Number</th>
+      <th>Employee Type</th>
       <th></th>
     </tr>
   </thead>
@@ -15,8 +18,11 @@
     <%= for employee <- @employees do %>
       <tr>
         <td><%= employee.first_name %> <%= employee.middle_name  %>. <%= employee.last_name %></td>
-        <td><%= employee.bday %></td>
-        <td><%= employee.street %>, <%= employee.brgy %>, <%= employee.town %>, <%= employee.country %></td>
+        <td><%= employee.birth_date %></td>
+        <td><%= employee.birth_place %></td>
+        <td><%= employee.street %>, <%= employee.brgy %>, <%= employee.town %>, <%= employee.province %></td>
+        <td><%= employee.contact_num %></td>
+        <td><%= employee.emp_type %></td>
 
         <td class="text-right">
           <span><%= link "Show", to: employee_path(@conn, :show, employee), class: "btn btn-default btn-xs" %></span>

@@ -2,10 +2,25 @@
 
 <b>Address</b>
 <blockquote>
-  <%= @employee.street %>, <%= @employee.brgy %>, <%= @employee.town %>, <%= @employee.country %>
+  <%= @employee.street %>, <%= @employee.brgy %>, <%= @employee.town %>, <%= @employee.province %>
+</blockquote>
+
+<b>Contact Number</b>
+<blockquote>
+  <%= @employee.contact_num %>
 </blockquote>
 
 <b>Birthdate</b>
 <blockquote>
-  <%= @employee.bday %>
+  <%= @employee.birth_date %>
+</blockquote>
+
+<b>Birth place</b>
+<blockquote>
+  <%= @employee.birth_place %>
+</blockquote>
+
+<b>Employment Type</b>
+<blockquote>
+  <%= @employee.emp_type %>
 </blockquote>

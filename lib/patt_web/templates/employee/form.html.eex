@@ -1,7 +1,7 @@
 <%= form_for @changeset, @action, fn f -> %>
   <%= if @changeset.action do %>
     <div class="alert alert-danger">
-      <p> Oops, something went wrong! Please check the errors below</>
+      <p> Oops, something went wrong! Please check the errors below</p>
     </div>
   <% end %>
 
@@ -19,7 +19,19 @@
 
   <%= label f, :Birthdate  %>
   <div class="form-group">
-    <%= date_select f, :bday, year: [options: 1980..2500]  %>
+    <%= date_select f, :birth_date, year: [options: 1980..2500] %>
+  </div>
+
+  <%= label f, :birth_place, class: "control-label"%>
+  <div class="form-group">
+    <%= text_input f, :birth_place %>
+    <%= error_tag f, :birth_place %>
+  </div>
+
+  <%= label f, :contact_number, class: "control-label"%>
+  <div class="form-group">
+    <%= text_input f, :contact_num %>
+    <%= error_tag f, :contact_num %>
   </div>
 
   <%= label f, :Address  %>
@@ -33,8 +45,14 @@
     <%= text_input f, :town, placeholder: "town" %>
     <%= error_tag f, :town %>
 
-    <%= text_input f, :country, placeholder: "country" %>
-    <%= error_tag f, :country %>
+    <%= text_input f, :province, placeholder: "province" %>
+    <%= error_tag f, :province %>
+  </div>
+
+  <% label f, :employee_type %>
+  <div class="form-group">
+    <%= select f, :emp_type, [probationary: 1, regular: 2], class: "form-control" %>
+    <%= error_tag f, :emp_type %>
   </div>
 
   <div class="form-group">
