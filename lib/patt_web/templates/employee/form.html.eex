@@ -1,61 +1,225 @@
-<%= form_for @changeset, @action, fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p> Oops, something went wrong! Please check the errors below</p>
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <div class="row">
+    <div class="col-sm-6">
+        <br>
+        <h4><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Personal Information</h4>
+        <hr>
+
+        <div class="form-group">
+          <%= label f, :first_name, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:first_name] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= text_input f, :first_name, class: "form-control #{error}", placeholder: "First Name" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :middle_name, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:middle_name] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= text_input f, :middle_name, class: "form-control #{error}", placeholder: "Middle Name" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :last_name, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:last_name] && @changeset.action, do: "alert-danger", else: "" %>
+           <%= text_input f, :last_name, class: "form-control #{error}", placeholder: "Last Name" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-3">Address</label>
+            <div class="col-sm-9">
+              <% error = if @changeset.errors[:street] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :street, class: "form-control margin-b-5 #{error}", placeholder: "Block/Street" %>
+              <% error = if @changeset.errors[:brgy] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :brgy, class: "form-control margin-b-5 #{error}", placeholder: "Barangay" %>
+              <% error = if @changeset.errors[:town] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :town, class: "form-control margin-b-5 #{error}", placeholder: "Town" %>
+              <% error = if @changeset.errors[:province] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :province, class: "form-control margin-b-5 #{error}", placeholder: "Province" %>
+            </div>
+        </div>
+        <div class="form-group">
+          <%= label f, :contact_number, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:contact_num] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= telephone_input f, :contact_num, class: "form-control #{error}", placeholder: "Contact Number" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :Birth_date, class: "control-label col-sm-3" %>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:birth_date] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= tag(:input, type: "date", class: "form-control #{error}", for: "birth_date", id: "employee_birth_date",
+                    name: "employee[birth_date]") %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :employment_type, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:emp_type] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= select f, :emp_type, ["Probationary": "probationary", "Regular": "regular"], class: "form-control #{error}" %>
+          </div>
+        </div>
+
+        <!--TODO#########################-->
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="position">Position:</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" id="position" placeholder="Position">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="basicsalary">Basic Salary:</label>
+            <div class="col-sm-9">
+                <input type="number" class="form-control" id="basicsalary" placeholder="0.00">
+            </div>
+        </div>
     </div>
-  <% end %>
 
-  <%= label f, :Name %>
-  <div class="form-group">
-    <%= text_input f, :first_name, placeholder: "first name" %>
-    <%= error_tag f, :first_name %>
-
-    <%= text_input f, :middle_name, placeholder: "middle name" %>
-    <%= error_tag f, :middle_name %>
-
-    <%= text_input f, :last_name, placeholder: "last name" %>
-    <%= error_tag f, :last_name %>
+    <div class="col-sm-6">
+        <br>
+        <h4><span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;Work Schedule</h4>
+        <hr>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="monday">Monday:</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="monday">
+                    <option>7:00 AM - 4:00 PM</option>
+                    <option>8:00 AM - 5:00 PM</option>
+                    <option>9:00 AM - 6:00 PM</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="tuesday">Tuesday:</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="tuesday">
+                    <option>7:00 AM - 4:00 PM</option>
+                    <option>8:00 AM - 5:00 PM</option>
+                    <option>9:00 AM - 6:00 PM</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="wednesday">Wednesday:</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="wednesday">
+                    <option>7:00 AM - 4:00 PM</option>
+                    <option>8:00 AM - 5:00 PM</option>
+                    <option>9:00 AM - 6:00 PM</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="thursday">Thursday:</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="thursday">
+                    <option>7:00 AM - 4:00 PM</option>
+                    <option>8:00 AM - 5:00 PM</option>
+                    <option>9:00 AM - 6:00 PM</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="friday">Friday:</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="friday">
+                    <option>7:00 AM - 4:00 PM</option>
+                    <option>8:00 AM - 5:00 PM</option>
+                    <option>9:00 AM - 6:00 PM</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="saturday">Saturday:</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="saturday">
+                    <option>7:00 AM - 4:00 PM</option>
+                    <option>8:00 AM - 5:00 PM</option>
+                    <option>9:00 AM - 6:00 PM</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="sunday">Sunday:</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="sunday">
+                    <option>7:00 AM - 4:00 PM</option>
+                    <option>8:00 AM - 5:00 PM</option>
+                    <option>9:00 AM - 6:00 PM</option>
+                </select>
+            </div>
+        </div>
+    </div>
   </div>
-
-  <%= label f, :Birthdate  %>
-  <div class="form-group">
-    <%= date_select f, :birth_date, year: [options: 1980..2500] %>
+  <br><br>
+  <h4><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Social Benefits</h4>
+  <hr>
+  <div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="sss">SSS Number:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="sss" placeholder="SSS Number">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-6" for="sssCont">SSS Contribution:</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="sssCont" placeholder="0.00">
+            </div>
+        </div>
+    </div>
   </div>
-
-  <%= label f, :birth_place, class: "control-label"%>
-  <div class="form-group">
-    <%= text_input f, :birth_place %>
-    <%= error_tag f, :birth_place %>
+  <div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="philhealth">Phil Health Number:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="philhealth" placeholder="Phil Health Number">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-6" for="philhealthCont">Phil Health Contribution:</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="philhealthCont" placeholder="0.00">
+            </div>
+        </div>
+    </div>
   </div>
-
-  <%= label f, :contact_number, class: "control-label"%>
-  <div class="form-group">
-    <%= text_input f, :contact_num %>
-    <%= error_tag f, :contact_num %>
+  <div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="pagibig">Pag-ibig Number:</label>
+            <div class="col-sm-8">
+                <input type="text" class="form-control" id="pagibig" placeholder="Pag-ibig Number">
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-6" for="pagibigCont">Pag-ibig Contribution:</label>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="pagibigCont" placeholder="0.00">
+            </div>
+        </div>
+    </div>
   </div>
-
-  <%= label f, :Address  %>
-  <div class="form-group">
-    <%= text_input f, :street, placeholder: "street" %>
-    <%= error_tag f, :street %>
-
-    <%= text_input f, :brgy, placeholder: "brgy" %>
-    <%= error_tag f, :brgy %>
-
-    <%= text_input f, :town, placeholder: "town" %>
-    <%= error_tag f, :town %>
-
-    <%= text_input f, :province, placeholder: "province" %>
-    <%= error_tag f, :province %>
+  <hr>
+  <div class="container-fluid text-right">
+      <button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save</button>
+      <button class="btn btn-info" type="reset"><span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset</button>
   </div>
-
-  <% label f, :employee_type %>
-  <div class="form-group">
-    <%= select f, :emp_type, [probationary: 1, regular: 2], class: "form-control" %>
-    <%= error_tag f, :emp_type %>
-  </div>
-
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
-  </div>
-<% end %>
+  <br>
+ <br>
+ <%= end %>
