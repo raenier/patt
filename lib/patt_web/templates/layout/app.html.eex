@@ -27,8 +27,8 @@
                     <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;Employees
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="#">Add New Employee Record</a></li>
-                    <li><a href="#">Manage Employee Records</a></li>
+                    <li><%= link "Add New Employee Record", to: employee_path(@conn, :new) %></li>
+                    <li><%= link "Manage Employee Records", to: employee_path(@conn, :index) %></li>
                 </ul>
             </li>
             <li><a href="#"><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;Payroll</a></li>
@@ -41,7 +41,7 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="container-fluid">
       <!-- <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p> -->
       <!-- <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p> -->
       <main role="main">
