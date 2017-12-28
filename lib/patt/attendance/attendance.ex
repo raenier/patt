@@ -101,4 +101,30 @@ defmodule Patt.Attendance do
   def change_employee(%Employee{} = employee) do
     Employee.changeset(employee, %{})
   end
+
+
+  @doc """
+  Search for either employee_id or employee_name
+  ## Requires a string argument
+
+  ## Returns
+  [%Patt.Attendance.Employee{}]
+
+  """
+  def search_employee(params) do
+    case Integer.parse(params) do
+      {number, _} ->
+        Patt.Attendance.Employee
+        |> Ecto.Query.where([e], e.id == ^number)
+        |> Patt.Repo.all
+
+      :error ->
+        querystr = "%#{params}%"
+        Patt.Attendance.Employee
+        |> Ecto.Query.where([e], ilike(e.first_name, ^querystr) or
+                                 ilike(e.middle_name, ^querystr) or
+                                 ilike(e.last_name, ^querystr))
+        |> Patt.Repo.all
+    end
+  end
 end

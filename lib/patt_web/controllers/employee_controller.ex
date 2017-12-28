@@ -1,5 +1,6 @@
 defmodule PattWeb.EmployeeController do
   require IEx
+  require Ecto.Query
   use PattWeb, :controller
   alias Patt.Attendance
   alias Patt.Attendance.Employee
@@ -7,6 +8,11 @@ defmodule PattWeb.EmployeeController do
   def index(conn, _params) do
     employees = Attendance.list_employees()
     render conn, "index.html", employees: employees
+  end
+
+  def search(conn, %{"search" => %{"for" => params}}) do
+    results = Attendance.search_employee(params)
+    render conn, "index.html", employees: results
   end
 
   def new(conn, _params) do
@@ -19,7 +25,7 @@ defmodule PattWeb.EmployeeController do
       {:ok, employee} ->
         conn
         |> put_flash(:info, "Successfully created employee")
-        |> redirect(to: employee_path(conn, :show, employee))
+        |> redirect(to: employee_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
         |> render("new.html", changeset: changeset)
@@ -43,13 +49,12 @@ defmodule PattWeb.EmployeeController do
       {:ok, employee} ->
         conn
         |> put_flash(:info, "successfully updated")
-        |> redirect(to: employee_path(conn, :show, employee))
+        |> redirect(to: employee_path(conn, :index))
       {:error, changeset} ->
         conn
         |> render("edit.html", changeset: changeset, employee: employee)
     end
   end
-
 
   def delete(conn,%{"id" => id}) do
     employee = Attendance.get_employee!(id)

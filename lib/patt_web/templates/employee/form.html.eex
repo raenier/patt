@@ -42,6 +42,7 @@
               <%= text_input f, :province, class: "form-control margin-b-5 #{error}", placeholder: "Province" %>
             </div>
         </div>
+
         <div class="form-group">
           <%= label f, :contact_number, class: "control-label col-sm-3"%>
           <div class="col-sm-9">
