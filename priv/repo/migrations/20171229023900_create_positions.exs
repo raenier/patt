@@ -5,7 +5,7 @@ defmodule Patt.Repo.Migrations.CreatePositions do
     create table(:positions) do
       add :name, :string
       add :description, :string
-      add :department_id, references(:departments, on_delete: :nothing)
+      add :department_id, references(:departments, on_delete: :nothing), null: false
 
       timestamps()
     end
