@@ -22,7 +22,7 @@ defmodule PattWeb.EmployeeController do
 
   def create(conn, %{"employee" => params}) do
     case Attendance.create_employee(params) do
-      {:ok, employee} ->
+      {:ok, _employee} ->
         conn
         |> put_flash(:info, "Successfully created employee")
         |> redirect(to: employee_path(conn, :index))
@@ -46,7 +46,7 @@ defmodule PattWeb.EmployeeController do
   def update(conn, %{"id" => id, "employee" => params}) do
     employee = Attendance.get_employee!(id)
     case Attendance.update_employee(employee, params) do
-      {:ok, employee} ->
+      {:ok, _employee} ->
         conn
         |> put_flash(:info, "successfully updated")
         |> redirect(to: employee_path(conn, :index))
