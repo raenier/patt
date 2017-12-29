@@ -2,9 +2,11 @@ defmodule Patt.Attendance.Department do
   use Ecto.Schema
   import Ecto.Changeset
   alias Patt.Attendance.Department
+  alias Patt.Attendance.Position
 
 
   schema "departments" do
+    has_many :positions, Position
     field :description, :string
     field :name, :string
 

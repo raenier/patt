@@ -5,11 +5,11 @@ defmodule Patt.Repo.Migrations.CreatePositions do
     create table(:positions) do
       add :name, :string
       add :description, :string
-      add :dept_id, references(:departments, on_delete: :nothing)
+      add :department_id, references(:departments, on_delete: :nothing)
 
       timestamps()
     end
 
-    create index(:positions, [:dept_id])
+    create index(:positions, [:department_id])
   end
 end
