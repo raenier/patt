@@ -7,9 +7,17 @@ defmodule Patt.Attendance do
   alias Patt.Repo
 
   alias Patt.Attendance.Employee
+  alias Patt.Attendance.Department
+  alias Patt.Attendance.Position
+
+  ###EMPLOYEE
 
   def list_employees do
     Repo.all(Employee)
+  end
+
+  def list_employees_position do
+    Repo.all(Employee) |> Repo.preload(:position)
   end
 
   def get_employee!(id), do: Repo.get!(Employee, id)
@@ -39,7 +47,8 @@ defmodule Patt.Attendance do
       {number, _} ->
         Patt.Attendance.Employee
         |> Ecto.Query.where([e], e.id == ^number)
-        |> Patt.Repo.all
+        |> Repo.all
+        |> Repo.preload(:position)
 
       :error ->
         querystr = "%#{params}%"
@@ -47,7 +56,47 @@ defmodule Patt.Attendance do
         |> Ecto.Query.where([e], ilike(e.first_name, ^querystr) or
                                  ilike(e.middle_name, ^querystr) or
                                  ilike(e.last_name, ^querystr))
-        |> Patt.Repo.all
+        |> Repo.all
+        |> Repo.preload(:position)
     end
+  end
+
+  ###DEPARTMENT
+
+  def create_department(attrs \\ %{}) do
+    %Department{}
+    |> Department.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def list_departments do
+    Repo.all(Department)
+  end
+
+  def list_departments_positions do
+    list_departments() |> Enum.map(&(Repo.preload(&1, :positions)))
+  end
+
+  def list_departments_positions_kl do
+    departments = list_departments_positions()
+    Enum.map departments, fn dept ->
+      {dept.name, Enum.map(dept.positions, &{&1.name, &1.id})}
+    end
+  end
+
+  def delete_department(%Department{} = department) do
+    Repo.delete(department)
+  end
+
+  ###POSITION
+
+  def list_positions do
+    Repo.all(Position)
+  end
+
+  def create_position(attrs \\ [], department) do
+    Ecto.build_assoc(department, :positions, attrs)
+    |> Position.changeset(%{})
+    |> Repo.insert()
   end
 end

@@ -68,13 +68,15 @@
           </div>
         </div>
 
-        <!--TODO#########################-->
         <div class="form-group">
-            <label class="control-label col-sm-3" for="position">Position:</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control" id="position" placeholder="Position">
-            </div>
+           <label class="control-label col-sm-3" for="position">Position:</label>
+           <div class="col-sm-9">
+             <%= select f, :position_id, @positions,
+                  class: "form-control" , prompt: "Choose Position for employee"%>
+           </div>
         </div>
+
+        <!--TODO#########################-->
         <div class="form-group">
             <label class="control-label col-sm-3" for="basicsalary">Basic Salary:</label>
             <div class="col-sm-9">

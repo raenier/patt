@@ -26,7 +26,7 @@ defmodule Patt.Attendance.Employee do
   def changeset(%Employee{} = employee, attrs) do
     employee
     |> cast(attrs, [:first_name, :middle_name, :last_name, :birth_date, :birth_place,
-                    :contact_num, :street, :brgy, :town, :province, :emp_type])
+                    :contact_num, :street, :brgy, :town, :province, :emp_type, :position_id])
     |> validate_required([:first_name, :middle_name, :last_name, :birth_date, :contact_num, :street,
                           :brgy, :town, :province, :emp_type])
   end

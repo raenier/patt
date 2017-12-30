@@ -20,7 +20,7 @@
       <th>Address</th>
       <th>Contact Number</th>
       <th>Type</th>
-      <th>Department</th>
+      <th>Position</th>
       <th></th>
     </tr>
     </thead>
@@ -32,7 +32,7 @@
       <td><%= employee.street %>, <%= employee.brgy %><%= employee.town %><%= employee.province %></td>
       <td><%= employee.contact_num %></td>
       <td><%= employee.emp_type %></td>
-      <td>IT Department</td>
+      <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
       <td>
         <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
             <span class="glyphicon glyphicon-edit"></span>
@@ -76,7 +76,9 @@
                     </div>
                     <div class="modal-body">
                         <div class="container-fluid">
-                          <%= render "form.html", changeset: Patt.Attendance.change_employee(employee), action: employee_path(@conn, :update, employee)%>
+                          <%= render "form.html", changeset: Patt.Attendance.change_employee(employee),
+                                                  action: employee_path(@conn, :update, employee),
+                                                  positions: @positions %>
                         </div>
                     </div>
                     <div class="modal-footer">
