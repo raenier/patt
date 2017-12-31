@@ -55,8 +55,12 @@
           <%= label f, :Birth_date, class: "control-label col-sm-3" %>
           <div class="col-sm-9">
             <% error = if @changeset.errors[:birth_date] && @changeset.action, do: "alert-danger", else: "" %>
-            <%= tag(:input, type: "date", class: "form-control #{error}", for: "birth_date", id: "employee_birth_date",
-                    name: "employee[birth_date]") %>
+            <%=# tag(:input, type: "date", class: "form-control #{error}", for: "birth_date", id: "employee_birth_date",
+                      #name: "employee[birth_date]") %>
+            <%= date_select f, :birth_date, builder: fn b -> %>
+              <%= b.(:day, [class: "input-sm"]) %> / <%= b.(:month, [class: "input-sm"]) %> / <%= b.(:year, [class: "input-sm", options: 1950..2050]) %>
+            <% end %>
+
           </div>
         </div>
 
