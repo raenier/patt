@@ -6,6 +6,7 @@
         </div>
         <div class="col-sm-7">
              <%= submit " SEARCH", class: "glyphicon glyphicon-search btn btn-info" %>
+             <%= link "", to: "/employees", class: "glyphicon glyphicon-refresh btn btn-info" %>
         </div>
     </div>
 <% end %>
@@ -28,7 +29,7 @@
     <%= for employee <- @employees do %>
     <tr>
       <td><%= employee.id %></td>
-      <td><%= employee.first_name %><%= employee.middle_name %> <%= employee.last_name %></td>
+      <td><%= employee.first_name %> <%= employee.middle_name %> <%= employee.last_name %></td>
       <td><%= employee.street %>, <%= employee.brgy %><%= employee.town %><%= employee.province %></td>
       <td><%= employee.contact_num %></td>
       <td><%= employee.emp_type %></td>
