@@ -27,8 +27,16 @@
                     <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;Employees
                 </a>
                 <ul class="dropdown-menu">
-                    <li><%= link "Add New Employee Record", to: employee_path(@conn, :new) %></li>
-                    <li><%= link "Manage Employee Records", to: employee_path(@conn, :index) %></li>
+                  <li>
+                    <%= link to: employee_path(@conn, :new) do %>
+                      <span class="glyphicon glyphicon-plus"></span><%= " Add New" %>
+                    <% end %>
+                  </li>
+                  <li>
+                    <%= link to: employee_path(@conn, :index) do %>
+                      <span class="glyphicon glyphicon-cog"></span><%= " Manage Records" %>
+                    <% end %>
+                  </li>
                 </ul>
             </li>
             <li><a href="#"><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;Payroll</a></li>
