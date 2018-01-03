@@ -19,7 +19,7 @@ defmodule PattWeb.Router do
     get "/", PageController, :index
 
     post "/employees/search", EmployeeController, :search
-    resources "/employees", EmployeeController
+    resources "/employees", EmployeeController, except: [:edit]
   end
 
   # Other scopes may use custom stacks.
