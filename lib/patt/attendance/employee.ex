@@ -3,10 +3,13 @@ defmodule Patt.Attendance.Employee do
   import Ecto.Changeset
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Position
+  alias Patt.Attendance.EmployeeSched
 
 
   schema "employees" do
     belongs_to :position, Position
+    has_one :employee_sched, EmployeeSched
+
     field :first_name, :string
     field :middle_name, :string
     field :last_name, :string

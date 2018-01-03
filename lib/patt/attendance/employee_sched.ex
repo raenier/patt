@@ -3,9 +3,12 @@ defmodule Patt.Attendance.EmployeeSched do
   import Ecto.Changeset
   alias Patt.Attendance.EmployeeSched
   alias Patt.Attendance.SchedProfile
+  alias Patt.Attendance.Employee
 
 
   schema "employee_scheds" do
+    belongs_to :employee, Employee
+
     belongs_to :monday, SchedProfile, foreign_key: :monday_id
     belongs_to :tuesday, SchedProfile, foreign_key: :tuesday_id
     belongs_to :wednesday, SchedProfile, foreign_key: :wednesday_id
@@ -21,7 +24,7 @@ defmodule Patt.Attendance.EmployeeSched do
   def changeset(%EmployeeSched{} = employee_sched, attrs) do
     employee_sched
     |> cast(attrs, [:monday_id, :tuesday_id, :wednesday_id, :thursday_id,
-                    :friday_id, :saturday_id, :sunday_id])
+                    :friday_id, :saturday_id, :sunday_id, :employee_id])
     |> validate_required([])
   end
 end

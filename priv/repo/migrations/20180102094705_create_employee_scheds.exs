@@ -3,6 +3,8 @@ defmodule Patt.Repo.Migrations.CreateEmployeeScheds do
 
   def change do
     create table(:employee_scheds) do
+      add :employee_id, references(:employees, on_delete: :delete_all)
+
       add :monday_id, references(:sched_profiles, on_delete: :nothing)
       add :tuesday_id, references(:sched_profiles, on_delete: :nothing)
       add :wednesday_id, references(:sched_profiles, on_delete: :nothing)
