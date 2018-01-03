@@ -33,4 +33,9 @@ defmodule Patt.Attendance.Employee do
     |> validate_required([:first_name, :middle_name, :last_name, :birth_date, :contact_num, :street,
                           :brgy, :town, :province, :emp_type])
   end
+
+  def changeset_wdsched(%Employee{} = employee, attrs) do
+    Employee.changeset(employee, attrs)
+    |> cast_assoc(:employee_sched)
+  end
 end
