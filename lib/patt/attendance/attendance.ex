@@ -135,4 +135,38 @@ defmodule Patt.Attendance do
     |> SchedProfile.changeset(attrs)
     |> Repo.insert()
   end
+
+  def create_default_profile() do
+    Multi.new
+    |> Multi.insert(:profile1,
+                    SchedProfile.changeset(%SchedProfile{},
+                                           %{name: "07:00am to 04:00pm",
+                                             time_in: ~T[07:00:00],
+                                             time_out: ~T[16:00:00]}))
+    |> Multi.insert(:profile2,
+                    SchedProfile.changeset(%SchedProfile{},
+                                           %{name: "08:00am to 05:00pm",
+                                             time_in: ~T[08:00:00],
+                                             time_out: ~T[17:00:00]}))
+    |> Multi.insert(:profile3,
+                    SchedProfile.changeset(%SchedProfile{},
+                                           %{name: "09:00am to 06:00pm",
+                                             time_in: ~T[09:00:00],
+                                             time_out: ~T[18:00:00]}))
+    |> Multi.insert(:profile4,
+                    SchedProfile.changeset(%SchedProfile{},
+                                           %{name: "10:00am to 07:00pm",
+                                             time_in: ~T[10:00:00],
+                                             time_out: ~T[19:00:00]}))
+    |> Multi.insert(:profile5,
+                    SchedProfile.changeset(%SchedProfile{},
+                                           %{name: "11:00am to 08:00pm",
+                                             time_in: ~T[11:00:00],
+                                             time_out: ~T[20:00:00]}))
+    |> Repo.transaction
+  end
+
+  def drop_all_profiles do
+    Repo.delete_all(SchedProfile)
+  end
 end
