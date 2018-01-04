@@ -21,7 +21,8 @@ defmodule PattWeb.EmployeeController do
   def new(conn, _params) do
     changeset = Employee.changeset_nested(%Employee{employee_sched: %EmployeeSched{}}, %{})
     positions = Attendance.list_departments_positions_kl()
-    render conn, "new.html", changeset: changeset, positions: positions
+    schedprofiles = Attendance.list_profiles_kl()
+    render conn, "new.html", changeset: changeset, positions: positions, schedprofiles: schedprofiles
   end
 
   def create(conn, %{"employee" => params}) do

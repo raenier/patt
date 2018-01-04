@@ -1,1 +1,1 @@
-<%= render "form.html", changeset: @changeset, action: employee_path(@conn, :create), positions: @positions %>
+<%= render "form.html", changeset: @changeset, action: employee_path(@conn, :create), positions: @positions, schedprofiles: @schedprofiles %>
