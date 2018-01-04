@@ -79,7 +79,8 @@
                         <div class="container-fluid">
                           <%= render "form.html", changeset: Patt.Attendance.change_employee(employee),
                                                   action: employee_path(@conn, :update, employee),
-                                                  positions: @positions %>
+                                                  positions: @positions,
+                                                  schedprofiles: @schedprofiles %>
                         </div>
                     </div>
                     <div class="modal-footer">

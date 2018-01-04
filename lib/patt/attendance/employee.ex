@@ -34,8 +34,8 @@ defmodule Patt.Attendance.Employee do
                           :brgy, :town, :province, :emp_type])
   end
 
-  def changeset_wdsched(%Employee{} = employee, attrs) do
+  def changeset_nested(%Employee{} = employee, attrs) do
     Employee.changeset(employee, attrs)
-    |> cast_assoc(:employee_sched)
+    |> cast_assoc(:employee_sched, required: true)
   end
 end

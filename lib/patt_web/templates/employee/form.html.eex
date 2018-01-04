@@ -55,8 +55,6 @@
           <%= label f, :Birth_date, class: "control-label col-sm-3" %>
           <div class="col-sm-9">
             <% error = if @changeset.errors[:birth_date] && @changeset.action, do: "alert-danger", else: "" %>
-            <%=# tag(:input, type: "date", class: "form-control #{error}", for: "birth_date", id: "employee_birth_date",
-                      #name: "employee[birth_date]") %>
             <%= date_select f, :birth_date, builder: fn b -> %>
               <%= b.(:day, [class: "input-sm"]) %> / <%= b.(:month, [class: "input-sm"]) %> / <%= b.(:year, [class: "input-sm", options: 1950..2050]) %>
             <% end %>
@@ -91,80 +89,54 @@
 
     <div class="col-sm-6">
         <br>
+        <%= inputs_for f, :employee_sched, fn sched -> %>
         <h4><span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;Work Schedule</h4>
         <hr>
         <div class="form-group">
             <label class="control-label col-sm-3" for="monday">Monday:</label>
             <div class="col-sm-9">
-                <select class="form-control" id="monday">
-                    <option>7:00 AM - 4:00 PM</option>
-                    <option>8:00 AM - 5:00 PM</option>
-                    <option>9:00 AM - 6:00 PM</option>
-                </select>
+             <%= select sched, :monday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-3" for="tuesday">Tuesday:</label>
             <div class="col-sm-9">
-                <select class="form-control" id="tuesday">
-                    <option>7:00 AM - 4:00 PM</option>
-                    <option>8:00 AM - 5:00 PM</option>
-                    <option>9:00 AM - 6:00 PM</option>
-                </select>
+             <%= select sched, :tuesday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-3" for="wednesday">Wednesday:</label>
             <div class="col-sm-9">
-                <select class="form-control" id="wednesday">
-                    <option>7:00 AM - 4:00 PM</option>
-                    <option>8:00 AM - 5:00 PM</option>
-                    <option>9:00 AM - 6:00 PM</option>
-                </select>
+             <%= select sched, :wednesday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-3" for="thursday">Thursday:</label>
             <div class="col-sm-9">
-                <select class="form-control" id="thursday">
-                    <option>7:00 AM - 4:00 PM</option>
-                    <option>8:00 AM - 5:00 PM</option>
-                    <option>9:00 AM - 6:00 PM</option>
-                </select>
+             <%= select sched, :thursday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-3" for="friday">Friday:</label>
             <div class="col-sm-9">
-                <select class="form-control" id="friday">
-                    <option>7:00 AM - 4:00 PM</option>
-                    <option>8:00 AM - 5:00 PM</option>
-                    <option>9:00 AM - 6:00 PM</option>
-                </select>
+             <%= select sched, :friday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-3" for="saturday">Saturday:</label>
             <div class="col-sm-9">
-                <select class="form-control" id="saturday">
-                    <option>7:00 AM - 4:00 PM</option>
-                    <option>8:00 AM - 5:00 PM</option>
-                    <option>9:00 AM - 6:00 PM</option>
-                </select>
+             <%= select sched, :saturday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
             </div>
         </div>
         <div class="form-group">
             <label class="control-label col-sm-3" for="sunday">Sunday:</label>
             <div class="col-sm-9">
-                <select class="form-control" id="sunday">
-                    <option>7:00 AM - 4:00 PM</option>
-                    <option>8:00 AM - 5:00 PM</option>
-                    <option>9:00 AM - 6:00 PM</option>
-                </select>
+             <%= select sched, :sunday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
             </div>
         </div>
     </div>
   </div>
+  <% end %>
   <br><br>
   <h4><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Social Benefits</h4>
   <hr>

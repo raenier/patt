@@ -5,10 +5,12 @@ defmodule Patt.Attendance do
 
   import Ecto.Query, warn: false
   alias Patt.Repo
+  alias Ecto.Multi
 
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Department
   alias Patt.Attendance.Position
+  alias Patt.Attendance.SchedProfile
 
   ###EMPLOYEE
 
@@ -16,11 +18,16 @@ defmodule Patt.Attendance do
     Repo.all(Employee)
   end
 
-  def list_employees_position do
-    Repo.all(Employee) |> Repo.preload(:position)
+  def list_employees_wdassoc do
+    Repo.all(Employee)
+    |> Repo.preload([:position, employee_sched: :monday, employee_sched: :tuesday,
+                      employee_sched: :wednesday, employee_sched: :thursday, employee_sched: :friday,
+                      employee_sched: :saturday, employee_sched: :sunday])
   end
 
   def get_employee!(id), do: Repo.get!(Employee, id)
+
+  def get_employee_wdassoc!(id), do: Repo.get!(Employee, id) |> Patt.Repo.preload(:employee_sched)
 
   def create_employee(attrs \\ %{}) do
     %Employee{}
@@ -28,9 +35,21 @@ defmodule Patt.Attendance do
     |> Repo.insert()
   end
 
+  def create_employee_nested(attrs \\ %{}) do
+    %Employee{}
+    |> Employee.changeset_nested(attrs)
+    |> Repo.insert()
+  end
+
   def update_employee(%Employee{} = employee, attrs) do
     employee
     |> Employee.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def update_employee_nested(%Employee{} = employee, attrs) do
+    employee
+    |> Employee.changeset_nested(attrs)
     |> Repo.update()
   end
 
@@ -97,6 +116,23 @@ defmodule Patt.Attendance do
   def create_position(attrs \\ [], department) do
     Ecto.build_assoc(department, :positions, attrs)
     |> Position.changeset(%{})
+    |> Repo.insert()
+  end
+
+  ###SCHED_PROFILES
+  #
+  def list_profiles do
+    Repo.all(SchedProfile)
+  end
+
+  def list_profiles_kl do
+    list_profiles()
+    |> Enum.map(&{&1.name, &1.id})
+  end
+
+  def create_profile(attrs \\ %{}) do
+    %SchedProfile{}
+    |> SchedProfile.changeset(attrs)
     |> Repo.insert()
   end
 end
