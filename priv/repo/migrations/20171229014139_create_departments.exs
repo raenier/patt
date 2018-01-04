@@ -4,7 +4,7 @@ defmodule Patt.Repo.Migrations.CreateDepartments do
   def change do
     create table(:departments) do
       add :name, :string
-      add :description, :string
+      add :description, :text
 
       timestamps()
     end
