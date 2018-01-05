@@ -4,11 +4,13 @@ defmodule Patt.Attendance.Employee do
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Position
   alias Patt.Attendance.EmployeeSched
+  alias Patt.Payroll.Contribution
 
 
   schema "employees" do
     belongs_to :position, Position
     has_one :employee_sched, EmployeeSched
+    has_one :contribution, Contribution
 
     field :first_name, :string
     field :middle_name, :string
