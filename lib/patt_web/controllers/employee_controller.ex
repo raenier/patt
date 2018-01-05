@@ -16,8 +16,9 @@ defmodule PattWeb.EmployeeController do
   def search(conn, %{"search" => %{"for" => params}}) do
     results = Attendance.search_employee(params)
     positions = Attendance.list_departments_positions_kl()
+    schedprofiles = Attendance.list_profiles_kl()
 
-    render conn, "index.html", employees: results, positions: positions
+    render conn, "index.html", employees: results, positions: positions, schedprofiles: schedprofiles
   end
 
   def new(conn, _params) do
@@ -38,7 +39,7 @@ defmodule PattWeb.EmployeeController do
         |> redirect(to: employee_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         conn
-        |> render("new.html", changeset: changeset, positions: positions)
+        |> render("new.html", changeset: changeset, positions: positions, schedprofiles: schedprofiles)
     end
   end
 
@@ -59,7 +60,10 @@ defmodule PattWeb.EmployeeController do
         |> redirect(to: employee_path(conn, :index))
       {:error, changeset} ->
         conn
-        |> render("edit.html", changeset: changeset, employee: employee, positions: positions)
+        |> render("edit.html", changeset: changeset,
+                                employee: employee,
+                                positions: positions,
+                                schedprofiles: schedprofiles)
     end
   end
 
