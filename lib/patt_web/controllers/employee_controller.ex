@@ -31,6 +31,7 @@ defmodule PattWeb.EmployeeController do
 
   def create(conn, %{"employee" => params}) do
     positions = Attendance.list_departments_positions_kl()
+    schedprofiles = Attendance.list_profiles_kl()
 
     case Attendance.create_employee_nested(params) do
       {:ok, _employee} ->
@@ -52,6 +53,7 @@ defmodule PattWeb.EmployeeController do
   def update(conn, %{"id" => id, "employee" => params}) do
     employee = Attendance.get_employee_wdassoc!(id)
     positions = Attendance.list_departments_positions_kl()
+    schedprofiles = Attendance.list_profiles_kl()
 
     case Attendance.update_employee_nested(employee, params) do
       {:ok, _employee} ->
