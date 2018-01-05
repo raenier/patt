@@ -9,12 +9,14 @@ defmodule PattWeb.EmployeeController do
     employees = Attendance.list_employees_wdassoc()
     positions = Attendance.list_departments_positions_kl()
     schedprofiles = Attendance.list_profiles_kl()
+
     render conn, "index.html", employees: employees, positions: positions, schedprofiles: schedprofiles
   end
 
   def search(conn, %{"search" => %{"for" => params}}) do
     results = Attendance.search_employee(params)
     positions = Attendance.list_departments_positions_kl()
+
     render conn, "index.html", employees: results, positions: positions
   end
 
@@ -22,6 +24,7 @@ defmodule PattWeb.EmployeeController do
     changeset = Employee.changeset_nested(%Employee{employee_sched: %EmployeeSched{}}, %{})
     positions = Attendance.list_departments_positions_kl()
     schedprofiles = Attendance.list_profiles_kl()
+
     render conn, "new.html", changeset: changeset, positions: positions, schedprofiles: schedprofiles
   end
 
@@ -41,6 +44,7 @@ defmodule PattWeb.EmployeeController do
 
   def show(conn, %{"id" => id}) do
     employee = Attendance.get_employee!(id)
+
     render conn, "show.html", employee: employee
   end
 
@@ -61,6 +65,7 @@ defmodule PattWeb.EmployeeController do
 
   def delete(conn,%{"id" => id}) do
     employee = Attendance.get_employee!(id)
+
     case Attendance.delete_employee(employee) do
       {:ok, employee} ->
         conn
