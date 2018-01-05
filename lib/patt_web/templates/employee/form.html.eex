@@ -194,6 +194,22 @@
         </div>
     </div>
   </div>
+  <% end %>
+
+  <br><br>
+  <h4><span class="glyphicon glyphicon-barcode"></span>&nbsp;&nbsp;Tax Identification Number(TIN)</h4>
+  <hr>
+  <div class="row">
+    <div class="col-sm-6">
+    <div class="form-group">
+       <label class="col-sm-4"></label>
+       <div class="col-sm-8">
+        <input type="number" class="form-control" placeholder="TIN"></input>
+       </div>
+     </div>
+     </div>
+  </div>
+
   <hr>
   <div class="container-fluid text-right">
       <button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save</button>
