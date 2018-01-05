@@ -20,14 +20,14 @@ defmodule Patt.Attendance do
 
   def list_employees_wdassoc do
     Repo.all(Employee)
-    |> Repo.preload([:position, employee_sched: :monday, employee_sched: :tuesday,
+    |> Repo.preload([:position, :contribution, employee_sched: :monday, employee_sched: :tuesday,
                       employee_sched: :wednesday, employee_sched: :thursday, employee_sched: :friday,
                       employee_sched: :saturday, employee_sched: :sunday])
   end
 
   def get_employee!(id), do: Repo.get!(Employee, id)
 
-  def get_employee_wdassoc!(id), do: Repo.get!(Employee, id) |> Patt.Repo.preload(:employee_sched)
+  def get_employee_wdassoc!(id), do: Repo.get!(Employee, id) |> Patt.Repo.preload([:employee_sched, :contribution])
 
   def create_employee(attrs \\ %{}) do
     %Employee{}
@@ -67,7 +67,7 @@ defmodule Patt.Attendance do
         Patt.Attendance.Employee
         |> Ecto.Query.where([e], e.id == ^number)
         |> Repo.all
-        |> Repo.preload(:position)
+        |> Repo.preload([:position, :employee_sched, :contribution])
 
       :error ->
         querystr = "%#{params}%"
@@ -76,7 +76,7 @@ defmodule Patt.Attendance do
                                  ilike(e.middle_name, ^querystr) or
                                  ilike(e.last_name, ^querystr))
         |> Repo.all
-        |> Repo.preload(:position)
+        |> Repo.preload([:position, :employee_sched, :contribution])
     end
   end
 

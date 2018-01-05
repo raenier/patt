@@ -137,6 +137,8 @@
     </div>
   </div>
   <% end %>
+
+  <%= inputs_for f, :contribution, fn con -> %>
   <br><br>
   <h4><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Social Benefits</h4>
   <hr>
@@ -145,7 +147,7 @@
         <div class="form-group">
             <label class="control-label col-sm-4" for="sss">SSS Number:</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" id="sss" placeholder="SSS Number">
+              <%= number_input con, :sss_num, class: "form-control", placeholder: "SSS Number"%>
             </div>
         </div>
     </div>
@@ -153,7 +155,7 @@
         <div class="form-group">
             <label class="control-label col-sm-6" for="sssCont">SSS Contribution:</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" id="sssCont" placeholder="0.00">
+              <%= number_input con, :sss_con, class: "form-control", placeholder: "0.00"%>
             </div>
         </div>
     </div>
@@ -163,7 +165,7 @@
         <div class="form-group">
             <label class="control-label col-sm-4" for="philhealth">Phil Health Number:</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" id="philhealth" placeholder="Phil Health Number">
+              <%= number_input con, :philhealth_num, class: "form-control", placeholder: "Philhealth Number"%>
             </div>
         </div>
     </div>
@@ -171,7 +173,7 @@
         <div class="form-group">
             <label class="control-label col-sm-6" for="philhealthCont">Phil Health Contribution:</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" id="philhealthCont" placeholder="0.00">
+              <%= number_input con, :philhealth_con, class: "form-control", placeholder: "0.00"%>
             </div>
         </div>
     </div>
@@ -181,7 +183,7 @@
         <div class="form-group">
             <label class="control-label col-sm-4" for="pagibig">Pag-ibig Number:</label>
             <div class="col-sm-8">
-                <input type="text" class="form-control" id="pagibig" placeholder="Pag-ibig Number">
+              <%= number_input con, :pagibig_num, class: "form-control", placeholder: "Pagibig Number"%>
             </div>
         </div>
     </div>
@@ -189,7 +191,7 @@
         <div class="form-group">
             <label class="control-label col-sm-6" for="pagibigCont">Pag-ibig Contribution:</label>
             <div class="col-sm-6">
-                <input type="text" class="form-control" id="pagibigCont" placeholder="0.00">
+              <%= number_input con, :pagibig_con, class: "form-control", placeholder: "0.00"%>
             </div>
         </div>
     </div>
@@ -217,4 +219,4 @@
   </div>
   <br>
  <br>
- <% end %>
+<% end %>

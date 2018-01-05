@@ -4,6 +4,7 @@ defmodule PattWeb.EmployeeController do
   alias Patt.Attendance
   alias Patt.Attendance.Employee
   alias Patt.Attendance.EmployeeSched
+  alias Patt.Payroll.Contribution
 
   def index(conn, _params) do
     employees = Attendance.list_employees_wdassoc()
@@ -22,7 +23,10 @@ defmodule PattWeb.EmployeeController do
   end
 
   def new(conn, _params) do
-    changeset = Employee.changeset_nested(%Employee{employee_sched: %EmployeeSched{}}, %{})
+    changeset = Employee.changeset_nested(%Employee{
+      employee_sched: %EmployeeSched{},
+      contribution: %Contribution{}
+      }, %{})
     positions = Attendance.list_departments_positions_kl()
     schedprofiles = Attendance.list_profiles_kl()
 
