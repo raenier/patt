@@ -30,9 +30,9 @@
     <tr>
       <td><%= employee.id %></td>
       <td><%= employee.first_name %> <%= employee.middle_name %> <%= employee.last_name %></td>
-      <td><%= employee.street %>, <%= employee.brgy %><%= employee.town %><%= employee.province %></td>
+      <td><%= employee.street %>, <%= employee.brgy %>, <%= employee.town %>, <%= employee.province %>.</td>
       <td><%= employee.contact_num %></td>
-      <td><%= employee.emp_type %></td>
+      <td><%= String.capitalize(employee.emp_type) %></td>
       <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
       <td>
         <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
