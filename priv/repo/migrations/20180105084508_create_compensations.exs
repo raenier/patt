@@ -3,11 +3,11 @@ defmodule Patt.Repo.Migrations.CreateCompensations do
 
   def change do
     create table(:compensations) do
-      add :basic, :integer
-      add :cola, :integer
-      add :clothing, :integer
-      add :travel, :integer
-      add :food, :integer
+      add :basic, :bigint
+      add :cola, :bigint
+      add :clothing, :bigint
+      add :travel, :bigint
+      add :food, :bigint
       add :employee_id, references(:employees, on_delete: :nothing)
 
       timestamps()
