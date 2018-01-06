@@ -4,9 +4,8 @@ defmodule Patt.Attendance do
   """
 
   import Ecto.Query, warn: false
-  alias Patt.Repo
-  alias Ecto.Multi
 
+  alias Patt.Repo
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Department
   alias Patt.Attendance.Position
@@ -63,12 +62,14 @@ defmodule Patt.Attendance do
   end
 
   def search_employee(params) do
+    schemas = [:position, :employee_sched, :contribution, :compensation]
+
     case Integer.parse(params) do
       {number, _} ->
         Patt.Attendance.Employee
         |> Ecto.Query.where([e], e.id == ^number)
         |> Repo.all
-        |> Repo.preload([:position, :employee_sched, :contribution, :compensation])
+        |> Repo.preload(schemas)
 
       :error ->
         querystr = "%#{params}%"
@@ -77,7 +78,7 @@ defmodule Patt.Attendance do
                                  ilike(e.middle_name, ^querystr) or
                                  ilike(e.last_name, ^querystr))
         |> Repo.all
-        |> Repo.preload([:position, :employee_sched, :contribution, :compensation])
+        |> Repo.preload(schemas)
     end
   end
 
