@@ -1,6 +1,6 @@
 <%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
   <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-7">
         <br>
         <h4><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Personal Information</h4>
         <hr>
@@ -57,7 +57,9 @@
           <div class="col-sm-9">
             <% error = if @changeset.errors[:birth_date] && @changeset.action, do: "alert-danger", else: "" %>
             <%= date_select f, :birth_date, builder: fn b -> %>
-              <%= b.(:day, [class: "input-sm"]) %> / <%= b.(:month, [class: "input-sm"]) %> / <%= b.(:year, [class: "input-sm", options: 1950..2050]) %>
+              <div class="col-sm-3 padding-0"><%= b.(:day, [class: "form-control"]) %></div>
+              <div class="col-sm-5 padding-0"><%= b.(:month, [class: "form-control"]) %></div>
+              <div class="col-sm-4 padding-0"><%= b.(:year, [class: "form-control", options: 1950..2050]) %></div>
             <% end %>
 
           </div>
@@ -89,7 +91,7 @@
         </div>
     </div>
 
-    <div class="col-sm-6">
+    <div class="col-sm-5">
         <br>
         <%= inputs_for f, :employee_sched, fn sched -> %>
         <h4><span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;Work Schedule</h4>
