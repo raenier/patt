@@ -19,7 +19,7 @@ defmodule Patt.Attendance do
 
   def list_employees_wdassoc do
     Repo.all(Employee)
-    |> Repo.preload([:position, :contribution, :compensation,
+    |> Repo.preload([:position, :contribution, :compensation, :tax,
                      employee_sched:
                      [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday]])
   end
@@ -27,7 +27,7 @@ defmodule Patt.Attendance do
   def get_employee!(id), do: Repo.get!(Employee, id)
 
   def get_employee_wdassoc!(id), do: Repo.get!(Employee, id)
-    |> Patt.Repo.preload([:position, :employee_sched, :contribution, :compensation])
+    |> Patt.Repo.preload([:position, :employee_sched, :contribution, :compensation, :tax])
 
   def create_employee(attrs \\ %{}) do
     %Employee{}
@@ -62,7 +62,7 @@ defmodule Patt.Attendance do
   end
 
   def search_employee(params) do
-    schemas = [:position, :employee_sched, :contribution, :compensation]
+    schemas = [:position, :employee_sched, :contribution, :compensation, :tax]
 
     case Integer.parse(params) do
       {number, _} ->

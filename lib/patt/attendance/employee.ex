@@ -45,5 +45,6 @@ defmodule Patt.Attendance.Employee do
     |> cast_assoc(:employee_sched)
     |> cast_assoc(:contribution)
     |> cast_assoc(:compensation)
+    |> cast_assoc(:tax)
   end
 end
