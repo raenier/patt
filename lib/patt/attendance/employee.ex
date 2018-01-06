@@ -40,7 +40,7 @@ defmodule Patt.Attendance.Employee do
 
   def changeset_nested(%Employee{} = employee, attrs) do
     Employee.changeset(employee, attrs)
-    |> cast_assoc(:employee_sched, required: true)
+    |> cast_assoc(:employee_sched)
     |> cast_assoc(:contribution)
   end
 end
