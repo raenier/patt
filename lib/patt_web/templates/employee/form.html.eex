@@ -47,7 +47,8 @@
           <%= label f, :contact_number, class: "control-label col-sm-3"%>
           <div class="col-sm-9">
             <% error = if @changeset.errors[:contact_num] && @changeset.action, do: "alert-danger", else: "" %>
-            <%= telephone_input f, :contact_num, class: "form-control #{error}", placeholder: "Contact Number" %>
+            <%= telephone_input f, :contact_num, class: "form-control #{error}", placeholder: "Contact Number",
+                                    maxlength: 12 %>
           </div>
         </div>
 
@@ -82,7 +83,7 @@
           <%= inputs_for f, :compensation, fn comp -> %>
             <label class="control-label col-sm-3" for="basicsalary">Basic Salary:</label>
             <div class="col-sm-9">
-              <%= number_input comp, :basic, class: "form-control", placeholder: "0.00"%>
+              <%= number_input comp, :basic, class: "form-control", placeholder: "0.00", max: 1000000 %>
             </div>
           <% end %>
         </div>
