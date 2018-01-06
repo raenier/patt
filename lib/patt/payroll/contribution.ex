@@ -21,6 +21,6 @@ defmodule Patt.Payroll.Contribution do
   def changeset(%Contribution{} = contribution, attrs) do
     contribution
     |> cast(attrs, [:sss_num, :sss_con, :pagibig_num, :pagibig_con, :philhealth_num, :philhealth_con])
-    |> validate_required([:sss_num, :sss_con, :pagibig_num, :pagibig_con, :philhealth_num, :philhealth_con])
+    |> validate_required([])
   end
 end

@@ -21,6 +21,6 @@ defmodule Patt.Payroll.Compensation do
   def changeset(%Compensation{} = compensation, attrs) do
     compensation
     |> cast(attrs, [:basic, :cola, :clothing, :travel, :food])
-    |> validate_required([:basic])
+    |> validate_required([])
   end
 end
