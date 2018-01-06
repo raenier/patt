@@ -1,0 +1,308 @@
+        <h4><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;&nbsp;Generate Payslip</h4>
+        <hr>
+        <form class="form-horizontal" action="/generatepayslip.php">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Employee ID:</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" placeholder="Employee ID">
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-info"><span class="glyphicon glyphicon-search"></span>&nbsp;&nbsp;Search</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Employee Name:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" placeholder="Employee Name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Employment Type:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control">
+                                <option>Probationary</option>
+                                <option>Regular</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">Basic Pay:</label>
+                        <div class="col-sm-6">
+                            <label class="form-control">20,800.00</label>
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">VL Credits:</label>
+                        <div class="col-sm-6">
+                             <label class="form-control">10</label>
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">SL Credits:</label>
+                        <div class="col-sm-6">
+                            <label class="form-control">5</label>
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <h4><span class="glyphicon glyphicon-calendar">
+                    </span>&nbsp;&nbsp;&nbsp;Daily Time Record
+            </h4>
+            <hr>
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label col-sm-5">Start Date:&nbsp;&nbsp;</label>
+                        <div class="col-sm-7">
+                            <input type="date" class="form-control" id="calDTRSDate">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="form-group">
+                        <label class="control-label col-sm-5">End Date:&nbsp;&nbsp;</label>
+                        <div class="col-sm-7">
+                            <input type="date" class="form-control" id="calDTREDate">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <button class="btn btn-info" type="button" onclick="generateDTRForm()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Generate DTR Form</button>
+                    </div>
+                </div>
+            </div>
+            <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;Attendance</h4>
+            <div class="table-responsive">
+                <table id="tblAttendance" class="table table-striped table-bordered">
+                    <thead class="text-center bg-color-3c3c3c txt-color-FFFFFF">
+                    <tr>
+                        <th>DATE</th>
+                        <th>IN</th>
+                        <th>OUT</th>
+                        <th>ADJUSTMENTS</th>
+                        <th>DEDUCTIONS</th>
+                        <th>DAY TOTAL</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="text" class="form-control" value="Start by generating DTR form" disabled></td>
+                        <td><input type="time" class="form-control" disabled></td>
+                        <td><input type="time" class="form-control" disabled></td>
+                        <td>
+                            <select class="form-control" disabled>
+                                <option>Regular Pay</option>
+                                <option>VL</option>
+                                <option>SL</option>
+                                <option>BL</option>
+                                <option>OB</option>
+                                <option>OT</option>
+                                <option>RD-OT</option>
+                                <option>HO-Pay</option>
+                                <option>HO-OT</option>
+                                <option>ND-OT</option>
+                                <option>Tardiness</option>
+                                <option>Absent</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="0.00" disabled>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="0.00" disabled>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-credit-card"></span>&nbsp;&nbsp;Other Pay</h4>
+            <div class="table-responsive">
+                <table id="tblOtherPay" class="table table-striped table-bordered">
+                    <thead class="text-center bg-color-3c3c3c txt-color-FFFFFF">
+                    <tr>
+                        <th>DATE</th>
+                        <th>IN</th>
+                        <th>OUT</th>
+                        <th>ADJUSTMENTS</th>
+                        <th>TOTAL</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input type="text" class="form-control" value="Start by generating DTR form" disabled></td>
+                        <td><input type="time" class="form-control" disabled></td>
+                        <td><input type="time" class="form-control" disabled></td>
+                        <td>
+                            <select class="form-control" disabled>
+                                <option>Regular Pay</option>
+                                <option>VL</option>
+                                <option>SL</option>
+                                <option>BL</option>
+                                <option>OB</option>
+                                <option>OT</option>
+                                <option>RD-OT</option>
+                                <option>HO-Pay</option>
+                                <option>HO-OT</option>
+                                <option>ND-OT</option>
+                                <option>Tardiness</option>
+                                <option>Absent</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" placeholder="0.00" disabled>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Summary</h4>
+        <div class="row">
+            <div class="col-sm-7">
+                <div class="table-responsive">
+                    <table id="tblPayslipSummary" class="table table-bordered table-condensed">
+                        <thead class="bg-color-3c3c3c txt-color-FFFFFF">
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Code</th>
+                                <th>Earnings</th>
+                                <th>Deductions</th>
+                                <th>This Period</th>
+                                <th>Year to Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><label>Bonus Pay</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>VL Pay</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>SL Pay</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>Other Leave Pay</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>Overtime Pay</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>Holiday Pay</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>Allowance</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>Tardiness</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>Absent</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>Witholding Tax</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>Pagibig</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>Phil. Health</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td><label>SSS</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="bg-success">
+                                <td><label>Total Pay</label></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>0.00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-5"></div>
+        </div>
+        <hr>
+        <div class="container-fluid text-right">
+            <button class="btn btn-info"><span class="glyphicon glyphicon-open-file"></span>&nbsp;&nbsp;Generate Summary</button>
+            <button class="btn btn-info"><span class="glyphicon glyphicon-print"></span><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Print & Save Payslip</button>
+            <button class="btn btn-info"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save Payslip</button>
+        </div>
+    <br><br><br>
