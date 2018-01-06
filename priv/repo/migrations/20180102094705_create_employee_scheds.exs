@@ -16,6 +16,7 @@ defmodule Patt.Repo.Migrations.CreateEmployeeScheds do
       timestamps()
     end
 
+    create index(:employee_scheds, [:employee_id])
     create index(:employee_scheds, [:monday_id])
     create index(:employee_scheds, [:tuesday_id])
     create index(:employee_scheds, [:wednesday_id])
