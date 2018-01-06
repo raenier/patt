@@ -5,7 +5,9 @@
             <%= text_input f, :for, class: "form-control", placeholder: "Search Employee Name or Employee ID" %>
         </div>
         <div class="col-sm-7">
-             <%= submit " SEARCH", class: "glyphicon glyphicon-search btn btn-info" %>
+             <%= submit class: "btn btn-info" do %>
+               <span class="glyphicon glyphicon-search"></span><%=" SEARCH"%>
+             <% end %>
              <%= link "", to: "/employees", class: "glyphicon glyphicon-refresh btn btn-info" %>
         </div>
     </div>
