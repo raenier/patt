@@ -39,7 +39,11 @@
                   </li>
                 </ul>
             </li>
-            <li><a href="#"><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;Payroll</a></li>
+            <li>
+              <%= link to: payroll_path(@conn, :index) do %>
+                <span class="glyphicon glyphicon-folder-open"></span>&nbsp;<%= " Payroll"%>
+              <% end %>
+            </li>
         </ul>
         <ul class="nav navbar-nav pull-right">
             <li>
