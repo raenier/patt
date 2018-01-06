@@ -42,5 +42,6 @@ defmodule Patt.Attendance.Employee do
     Employee.changeset(employee, attrs)
     |> cast_assoc(:employee_sched)
     |> cast_assoc(:contribution)
+    |> cast_assoc(:compensation)
   end
 end
