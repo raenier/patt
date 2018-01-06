@@ -1,4 +1,6 @@
 <h2>Edit Employee </h2>
 
-<%= render "form.html", changeset: @changeset, action: employee_path(@conn, :update, @employee)  %>
+<%= render "form.html", changeset: @changeset, action: employee_path(@conn, :update, @employee),
+                        positions: @positions,
+                        schedprofiles: @schedprofiles %>
 

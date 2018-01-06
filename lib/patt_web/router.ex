@@ -17,7 +17,9 @@ defmodule PattWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    resources "/employees", EmployeeController
+
+    post "/employees/search", EmployeeController, :search
+    resources "/employees", EmployeeController, except: [:edit]
   end
 
   # Other scopes may use custom stacks.

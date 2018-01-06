@@ -1,61 +1,228 @@
-<%= form_for @changeset, @action, fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p> Oops, something went wrong! Please check the errors below</p>
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <div class="row">
+    <div class="col-sm-7">
+        <br>
+        <h4><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Personal Information</h4>
+        <hr>
+
+        <div class="form-group">
+          <%= label f, :first_name, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:first_name] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= text_input f, :first_name, class: "form-control #{error}", placeholder: "First Name", required: "required"%>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :middle_name, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:middle_name] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= text_input f, :middle_name, class: "form-control #{error}", placeholder: "Middle Name", required: "required"%>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :last_name, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:last_name] && @changeset.action, do: "alert-danger", else: "" %>
+           <%= text_input f, :last_name, class: "form-control #{error}", placeholder: "Last Name", required: "required" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-3">Address</label>
+            <div class="col-sm-9">
+              <% error = if @changeset.errors[:street] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :street, class: "form-control margin-b-5 #{error}", placeholder: "Block/Street", required: "required" %>
+              <% error = if @changeset.errors[:brgy] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :brgy, class: "form-control margin-b-5 #{error}", placeholder: "Barangay", required: "required" %>
+              <% error = if @changeset.errors[:town] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :town, class: "form-control margin-b-5 #{error}", placeholder: "Town", required: "required" %>
+              <% error = if @changeset.errors[:province] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :province, class: "form-control margin-b-5 #{error}", placeholder: "Province", required: "required" %>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :contact_number, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:contact_num] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= number_input f, :contact_num, class: "form-control #{error}", placeholder: "Contact Number",
+                                  required: "required"%>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :Birth_date, class: "control-label col-sm-3" %>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:birth_date] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= date_select f, :birth_date, builder: fn b -> %>
+              <div class="col-sm-3 padding-0"><%= b.(:day, [class: "form-control"]) %></div>
+              <div class="col-sm-5 padding-0"><%= b.(:month, [class: "form-control"]) %></div>
+              <div class="col-sm-4 padding-0"><%= b.(:year, [class: "form-control", options: 1950..2050]) %></div>
+            <% end %>
+
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :employment_type, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:emp_type] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= select f, :emp_type, ["Probationary": "probationary", "Regular": "regular"], class: "form-control #{error}" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+           <label class="control-label col-sm-3" for="position">Position:</label>
+           <div class="col-sm-9">
+             <%= select f, :position_id, @positions,
+                  class: "form-control" , prompt: "Choose Position for employee"%>
+           </div>
+        </div>
+
+        <div class="form-group">
+          <%= inputs_for f, :compensation, fn comp -> %>
+            <label class="control-label col-sm-3" for="basicsalary">Basic Salary:</label>
+            <div class="col-sm-9">
+              <%= number_input comp, :basic, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            </div>
+          <% end %>
+        </div>
     </div>
+
+    <div class="col-sm-5">
+        <br>
+        <%= inputs_for f, :employee_sched, fn sched -> %>
+        <h4><span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;Work Schedule</h4>
+        <hr>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="monday">Monday:</label>
+            <div class="col-sm-9">
+             <%= select sched, :monday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="tuesday">Tuesday:</label>
+            <div class="col-sm-9">
+             <%= select sched, :tuesday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="wednesday">Wednesday:</label>
+            <div class="col-sm-9">
+             <%= select sched, :wednesday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="thursday">Thursday:</label>
+            <div class="col-sm-9">
+             <%= select sched, :thursday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="friday">Friday:</label>
+            <div class="col-sm-9">
+             <%= select sched, :friday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="saturday">Saturday:</label>
+            <div class="col-sm-9">
+             <%= select sched, :saturday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3" for="sunday">Sunday:</label>
+            <div class="col-sm-9">
+             <%= select sched, :sunday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
+            </div>
+        </div>
+    </div>
+  </div>
   <% end %>
 
-  <%= label f, :Name %>
-  <div class="form-group">
-    <%= text_input f, :first_name, placeholder: "first name" %>
-    <%= error_tag f, :first_name %>
-
-    <%= text_input f, :middle_name, placeholder: "middle name" %>
-    <%= error_tag f, :middle_name %>
-
-    <%= text_input f, :last_name, placeholder: "last name" %>
-    <%= error_tag f, :last_name %>
+  <%= inputs_for f, :contribution, fn con -> %>
+  <br><br>
+  <h4><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Social Benefits</h4>
+  <hr>
+  <div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="sss">SSS Number:</label>
+            <div class="col-sm-8">
+              <%= number_input con, :sss_num, class: "form-control", placeholder: "SSS Number"%>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-6" for="sssCont">SSS Contribution:</label>
+            <div class="col-sm-6">
+              <%= number_input con, :sss_con, class: "form-control", placeholder: "0.00"%>
+            </div>
+        </div>
+    </div>
   </div>
-
-  <%= label f, :Birthdate  %>
-  <div class="form-group">
-    <%= date_select f, :birth_date, year: [options: 1980..2500] %>
+  <div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="philhealth">Phil Health Number:</label>
+            <div class="col-sm-8">
+              <%= number_input con, :philhealth_num, class: "form-control", placeholder: "Philhealth Number"%>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-6" for="philhealthCont">Phil Health Contribution:</label>
+            <div class="col-sm-6">
+              <%= number_input con, :philhealth_con, class: "form-control", placeholder: "0.00"%>
+            </div>
+        </div>
+    </div>
   </div>
-
-  <%= label f, :birth_place, class: "control-label"%>
-  <div class="form-group">
-    <%= text_input f, :birth_place %>
-    <%= error_tag f, :birth_place %>
+  <div class="row">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-4" for="pagibig">Pag-ibig Number:</label>
+            <div class="col-sm-8">
+              <%= number_input con, :pagibig_num, class: "form-control", placeholder: "Pagibig Number"%>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label class="control-label col-sm-6" for="pagibigCont">Pag-ibig Contribution:</label>
+            <div class="col-sm-6">
+              <%= number_input con, :pagibig_con, class: "form-control", placeholder: "0.00"%>
+            </div>
+        </div>
+    </div>
   </div>
+  <% end %>
 
-  <%= label f, :contact_number, class: "control-label"%>
-  <div class="form-group">
-    <%= text_input f, :contact_num %>
-    <%= error_tag f, :contact_num %>
+  <br><br>
+  <h4><span class="glyphicon glyphicon-barcode"></span>&nbsp;&nbsp;Tax Identification Number(TIN)</h4>
+  <hr>
+  <%= inputs_for f, :tax, fn tax -> %>
+  <div class="row">
+    <div class="col-sm-6">
+    <div class="form-group">
+       <label class="col-sm-4"></label>
+       <div class="col-sm-8">
+        <%= number_input tax, :tin, class: "form-control", placeholder: "TIN"%>
+       </div>
+     </div>
+     </div>
   </div>
+  <% end %>
 
-  <%= label f, :Address  %>
-  <div class="form-group">
-    <%= text_input f, :street, placeholder: "street" %>
-    <%= error_tag f, :street %>
-
-    <%= text_input f, :brgy, placeholder: "brgy" %>
-    <%= error_tag f, :brgy %>
-
-    <%= text_input f, :town, placeholder: "town" %>
-    <%= error_tag f, :town %>
-
-    <%= text_input f, :province, placeholder: "province" %>
-    <%= error_tag f, :province %>
+  <hr>
+  <div class="container-fluid text-right">
+      <button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save</button>
+      <button class="btn btn-info" type="reset"><span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset</button>
   </div>
-
-  <% label f, :employee_type %>
-  <div class="form-group">
-    <%= select f, :emp_type, [probationary: 1, regular: 2], class: "form-control" %>
-    <%= error_tag f, :emp_type %>
-  </div>
-
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
-  </div>
+  <br>
+ <br>
 <% end %>

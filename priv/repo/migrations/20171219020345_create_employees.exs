@@ -8,7 +8,7 @@ defmodule Patt.Repo.Migrations.CreateEmployees do
       add :last_name, :string
       add :birth_date, :date
       add :birth_place, :string
-      add :contact_num, :integer
+      add :contact_num, :bigint
       add :street, :string
       add :brgy, :string
       add :town, :string

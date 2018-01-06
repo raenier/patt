@@ -1,0 +1,48 @@
+/*Margins*/
+.margin-b-5 {
+    margin-bottom: 5px;
+}
+
+.padding-0
+{
+  padding: 0;
+}
+
+.margin-t-40 {
+    margin-top: 40px;
+}
+
+/*Borders*/
+.border-radius-0 {
+    -webkit-border-radius: 0 !important;
+    -moz-border-radius: 0 !important;
+    border-radius: 0 !important;
+}
+
+/*Background Color*/
+.bg-color-3c3c3c {
+    background-color: #3c3c3c;
+}
+
+.bg-color-f5e79e {
+    background-color: #f5e79e;
+}
+
+/*Text Color*/
+.txt-color-FFFFFF {
+    color: #FFFFFF;
+}
+
+/*Text Align*/
+.txt-align-center {
+    text-align: center;
+}
+
+/*Custom Styles*/
+#tblSearchEmployeeRecords, #tblGeneratePayslip, #tblPayslipSummary {
+    text-align: center;
+}
+
+#tblSearchEmployeeRecords thead tr th, #tblGeneratePayslip thead tr th, #tblPayslipSummary thead tr th {
+    text-align: center;
+}
