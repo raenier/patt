@@ -8,7 +8,7 @@ defmodule Patt.Repo.Migrations.CreateCompensations do
       add :clothing, :bigint
       add :travel, :bigint
       add :food, :bigint
-      add :employee_id, references(:employees, on_delete: :nothing)
+      add :employee_id, references(:employees, on_delete: :delete_all)
 
       timestamps()
     end
