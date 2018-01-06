@@ -78,12 +78,13 @@
            </div>
         </div>
 
-        <!--TODO#########################-->
         <div class="form-group">
+          <%= inputs_for f, :compensation, fn comp -> %>
             <label class="control-label col-sm-3" for="basicsalary">Basic Salary:</label>
             <div class="col-sm-9">
-                <input type="number" class="form-control" id="basicsalary" placeholder="0.00">
+              <%= number_input comp, :basic, class: "form-control", placeholder: "0.00"%>
             </div>
+          <% end %>
         </div>
     </div>
 
