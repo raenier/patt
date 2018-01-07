@@ -59,7 +59,7 @@
             <%= date_select f, :birth_date, builder: fn b -> %>
               <div class="col-sm-3 padding-0"><%= b.(:day, [class: "form-control"]) %></div>
               <div class="col-sm-5 padding-0"><%= b.(:month, [class: "form-control"]) %></div>
-              <div class="col-sm-4 padding-0"><%= b.(:year, [class: "form-control", options: 1950..2050]) %></div>
+              <div class="col-sm-4 padding-0"><%= b.(:year, [class: "form-control", options: 1960..(Date.utc_today).year]) %></div>
             <% end %>
 
           </div>
