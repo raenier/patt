@@ -96,48 +96,20 @@
         <%= inputs_for f, :employee_sched, fn sched -> %>
         <h4><span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;Work Schedule</h4>
         <hr>
-        <div class="form-group">
-            <label class="control-label col-sm-3" for="monday">Monday:</label>
+        <% list = [
+                    monday: :monday_id, tuesday: :tuesday_id,
+                    wednesday: :wednesday_id, thursday: :thursday_id,
+                    friday: :friday_id, saturday: :saturday_id, sunday: :sunday_id
+                  ]%>
+
+        <%= Enum.map list, fn {day, day_id} -> %>
+          <div class="form-group">
+            <label class="control-label col-sm-3" for="<%= day %>"><%=Atom.to_string(day) |> String.capitalize() %>:</label>
             <div class="col-sm-9">
-             <%= select sched, :monday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
+             <%= select sched, day_id, @schedprofiles, class: "form-control", prompt: "RESTDAY"%>
             </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-3" for="tuesday">Tuesday:</label>
-            <div class="col-sm-9">
-             <%= select sched, :tuesday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-3" for="wednesday">Wednesday:</label>
-            <div class="col-sm-9">
-             <%= select sched, :wednesday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-3" for="thursday">Thursday:</label>
-            <div class="col-sm-9">
-             <%= select sched, :thursday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-3" for="friday">Friday:</label>
-            <div class="col-sm-9">
-             <%= select sched, :friday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-3" for="saturday">Saturday:</label>
-            <div class="col-sm-9">
-             <%= select sched, :saturday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-3" for="sunday">Sunday:</label>
-            <div class="col-sm-9">
-             <%= select sched, :sunday_id, @schedprofiles, class: "form-control", prompt: "Choose a schedule profile"%>
-            </div>
-        </div>
+          </div>
+        <% end %>
     </div>
   </div>
   <% end %>
