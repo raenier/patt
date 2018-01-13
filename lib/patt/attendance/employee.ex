@@ -16,7 +16,7 @@ defmodule Patt.Attendance.Employee do
     has_one :contribution, Contribution
     has_one :compensation, Compensation
     has_one :tax, Tax
-    has_many :leaves, Leave
+    has_one :leave, Leave
 
     field :first_name, :string
     field :middle_name, :string
