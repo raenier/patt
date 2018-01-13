@@ -4,6 +4,7 @@ defmodule Patt.Attendance.Employee do
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Position
   alias Patt.Attendance.EmployeeSched
+  alias Patt.Attendance.Leave
   alias Patt.Payroll.Contribution
   alias Patt.Payroll.Compensation
   alias Patt.Payroll.Tax
@@ -15,6 +16,7 @@ defmodule Patt.Attendance.Employee do
     has_one :contribution, Contribution
     has_one :compensation, Compensation
     has_one :tax, Tax
+    has_many :leaves, Leave
 
     field :first_name, :string
     field :middle_name, :string
