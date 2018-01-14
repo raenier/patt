@@ -5,11 +5,13 @@ defmodule Patt.Attendance do
 
   import Ecto.Query, warn: false
 
+  alias Ecto.Multi
   alias Patt.Repo
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Department
   alias Patt.Attendance.Position
   alias Patt.Attendance.SchedProfile
+  alias Patt.Attendance.Leave
 
   ###EMPLOYEE
 
@@ -32,7 +34,7 @@ defmodule Patt.Attendance do
   def get_employee!(id), do: Repo.get!(Employee, id)
 
   def get_employee_wdassoc!(id), do: Repo.get!(Employee, id)
-    |> Patt.Repo.preload([:position, :employee_sched, :contribution, :compensation, :tax])
+    |> Patt.Repo.preload([:position, :employee_sched, :contribution, :compensation, :tax, :leave])
 
   def create_employee(attrs \\ %{}) do
     %Employee{}
@@ -40,22 +42,44 @@ defmodule Patt.Attendance do
     |> Repo.insert()
   end
 
-  def create_employee_nested(attrs \\ %{}) do
-    %Employee{}
-    |> Employee.changeset_nested(attrs)
-    |> Repo.insert()
-  end
-
-  def update_employee(%Employee{} = employee, attrs) do
-    employee
-    |> Employee.changeset(attrs)
-    |> Repo.update()
+  def create_employee_multi(attrs \\ %{}) do
+    Multi.new
+    |> Multi.insert(:employee, Employee.changeset_nested(%Employee{}, attrs))
+    |> Multi.run(:leave, fn %{employee: employee} ->
+      if employee.emp_type == "regular" || employee.emp_type == "Regular" do
+        #future-todo: all leave totals are persisted not hardcoded
+        Ecto.build_assoc(employee, :leave, %{sl_used: 0, vl_used: 0, vl_total: 6, sl_total: 6})
+        |> Repo.insert()
+      else
+        Ecto.build_assoc(employee, :leave, %{sl_used: 0, vl_used: 0, vl_total: 0, sl_total: 0})
+        |> Repo.insert()
+      end
+    end )
+    |> Repo.transaction()
   end
 
   def update_employee_nested(%Employee{} = employee, attrs) do
     employee
     |> Employee.changeset_nested(attrs)
     |> Repo.update()
+  end
+
+  def update_employee_multi(%Employee{} = employee, attrs) do
+    changeset = Employee.changeset_nested(employee, attrs)
+    if Map.has_key?(changeset.changes, :emp_type) do
+      case changeset.changes.emp_type do
+        "probationary" ->
+          attrs = Map.put(attrs, "leave",
+                          %{"id" => employee.leave.id, "sl_used" => 0, "vl_used" => 0,
+                                                      "vl_total" => 0, "sl_total" => 0})
+        "regular" ->
+          attrs = Map.put(attrs, "leave",
+                          %{"id" => employee.leave.id, "sl_used" => 0, "vl_used" => 0,
+                                                      "vl_total" => 6, "sl_total" => 6})
+      end
+    end
+
+    update_employee_nested(employee, attrs)
   end
 
   def delete_employee(%Employee{} = employee) do

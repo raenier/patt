@@ -48,5 +48,6 @@ defmodule Patt.Attendance.Employee do
     |> cast_assoc(:contribution)
     |> cast_assoc(:compensation)
     |> cast_assoc(:tax)
+    |> cast_assoc(:leave)
   end
 end

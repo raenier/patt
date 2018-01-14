@@ -37,12 +37,12 @@ defmodule PattWeb.EmployeeController do
     positions = Attendance.list_departments_positions_kl()
     schedprofiles = Attendance.list_profiles_kl()
 
-    case Attendance.create_employee_nested(params) do
+    case Attendance.create_employee_multi(params) do
       {:ok, _employee} ->
         conn
         |> put_flash(:info, "Successfully created employee")
         |> redirect(to: employee_path(conn, :index))
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, _failed_operation, changeset, _changes} ->
         conn
         |> render("new.html", changeset: changeset, positions: positions, schedprofiles: schedprofiles)
     end
@@ -59,12 +59,12 @@ defmodule PattWeb.EmployeeController do
     positions = Attendance.list_departments_positions_kl()
     schedprofiles = Attendance.list_profiles_kl()
 
-    case Attendance.update_employee_nested(employee, params) do
+    case Attendance.update_employee_multi(employee, params) do
       {:ok, _employee} ->
         conn
         |> put_flash(:info, "successfully updated")
         |> redirect(to: employee_path(conn, :index))
-      {:error, changeset} ->
+      {:error, _failed_operation, changeset, _changes} ->
         conn
         |> render("edit.html", changeset: changeset,
                                 employee: employee,
