@@ -1,4 +1,15 @@
-<h4><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;&nbsp;Generate Payslip</h4>
+<div class = "row">
+<div class = "col-sm-6"><h4><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;&nbsp;Generate Payslip
+  </h4>
+</div>
+<div class="col-sm-6">
+  <div class="text-right">
+  <%= button class: "btn btn-default", to: payroll_path(@conn, :index), method: :get do %>
+    <span class="glyphicon glyphicon-circle-arrow-left"></span><%= " Back" %>
+  <% end %>
+  </div>
+</div>
+</div>
 <hr>
 <form class="form-horizontal" action="/generatepayslip.php">
     <div class="row">
