@@ -67,13 +67,14 @@ defmodule Patt.Attendance do
   def update_employee_multi(%Employee{} = employee, attrs) do
     changeset = Employee.changeset_nested(employee, attrs)
     if Map.has_key?(changeset.changes, :emp_type) do
+      attrs =
       case changeset.changes.emp_type do
         "probationary" ->
-          attrs = Map.put(attrs, "leave",
+          Map.put(attrs, "leave",
                           %{"id" => employee.leave.id, "sl_used" => 0, "vl_used" => 0,
                                                       "vl_total" => 0, "sl_total" => 0})
         "regular" ->
-          attrs = Map.put(attrs, "leave",
+          Map.put(attrs, "leave",
                           %{"id" => employee.leave.id, "sl_used" => 0, "vl_used" => 0,
                                                       "vl_total" => 6, "sl_total" => 6})
       end
