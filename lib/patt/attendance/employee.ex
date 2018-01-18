@@ -8,6 +8,7 @@ defmodule Patt.Attendance.Employee do
   alias Patt.Payroll.Contribution
   alias Patt.Payroll.Compensation
   alias Patt.Payroll.Tax
+  alias Patt.Attendance.Dtr
 
 
   schema "employees" do
@@ -17,6 +18,7 @@ defmodule Patt.Attendance.Employee do
     has_one :compensation, Compensation
     has_one :tax, Tax
     has_one :leave, Leave
+    has_many :dtrs, Dtr
 
     field :first_name, :string
     field :middle_name, :string
