@@ -207,6 +207,11 @@ defmodule Patt.Attendance do
     end
   end
 
+  def sort_dtrs_bydate(employee) do
+    sorted_dtrs = Enum.sort_by employee.dtrs, &(Date.to_erl(&1.date))
+    Map.put employee, :dtrs, sorted_dtrs
+  end
+
   def put_sched(dtrs, %Employee{} = employee) do
     Enum.map dtrs, fn dtr ->
       case Date.day_of_week(dtr.date) do

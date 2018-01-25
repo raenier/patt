@@ -29,9 +29,7 @@ defmodule PattWeb.PayrollController do
     |> Ecto.Changeset.put_assoc(:dtrs, all_dtrs)
     |> Patt.Repo.update()
 
-    #always sort dtrs by their date
-    sorted_dtrs = Enum.sort employee.dtrs, &(&1.date<=&2.date)
-    employee = Map.put employee, :dtrs, sorted_dtrs
+    employee = Attendance.sort_dtrs_bydate(employee)
 
     changeset = Employee.changeset_dtr(employee, %{})
     render conn, "payslip.html", employee: employee, changeset: changeset, range: params
@@ -48,9 +46,7 @@ defmodule PattWeb.PayrollController do
     Employee.changeset_dtr(employee, %{"dtrs" => dtrs})
     |> Patt.Repo.update()
 
-    #sort employee dtrs by their date
-    sorted_dtrs = Enum.sort employee.dtrs, &(&1.date<=&2.date)
-    employee = Map.put employee, :dtrs, sorted_dtrs
+    employee = Attendance.sort_dtrs_bydate(employee)
 
     changeset = Employee.changeset_dtr(employee, %{})
     render conn, "payslip.html", employee: employee, changeset: changeset, range: range_params
