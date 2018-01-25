@@ -212,6 +212,13 @@ defmodule Patt.Attendance do
     Map.put employee, :dtrs, sorted_dtrs
   end
 
+  def reset_dtrs(employee_id, range) do
+    range = Enum.map range, fn date -> date end
+
+    from(d in Dtr, where: d.date in ^range and d.employee_id == ^employee_id)
+    |> Patt.Repo.delete_all()
+  end
+
   def put_sched(dtrs, %Employee{} = employee) do
     Enum.map dtrs, fn dtr ->
       case Date.day_of_week(dtr.date) do

@@ -51,4 +51,24 @@ defmodule PattWeb.PayrollController do
     changeset = Employee.changeset_dtr(employee, %{})
     render conn, "payslip.html", employee: employee, changeset: changeset, range: range_params
   end
+
+  def reset_dtrs(conn, %{"id" => id, "reset_dtrs" => %{"range" => range_params}}) do
+    range = Helper.gen_range(String.to_integer(range_params))
+    Attendance.reset_dtrs(id, range)
+    #move onto context
+    employee = Attendance.get_employee_wdtrs!(id, range)
+    all_dtrs =
+    Attendance.complete_dtr(employee.dtrs, range)
+    |> Attendance.put_sched(employee)
+
+    {:ok, employee} =
+    Employee.changeset_dtr(employee, %{})
+    |> Ecto.Changeset.put_assoc(:dtrs, all_dtrs)
+    |> Patt.Repo.update()
+
+    employee = Attendance.sort_dtrs_bydate(employee)
+
+    changeset = Employee.changeset_dtr(employee, %{})
+    render conn, "payslip.html", employee: employee, changeset: changeset, range: range_params
+  end
 end

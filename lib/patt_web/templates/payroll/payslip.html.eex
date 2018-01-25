@@ -219,10 +219,17 @@
        </div>
 
        <div class="text-right">
-         <%= text_input :generated, :range, value: @range, style: "display: none;"%>
-         <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary" %>
+          <%= text_input :generated, :range, value: @range, style: "display: none;"%>
+          <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary" %>
+          <% end %>
+
+          <%= form_for @conn, payroll_path(@conn, :reset_dtrs, @employee), [as: :reset_dtrs, style: "display: inline;", method: :delete], fn f -> %>
+            <%= text_input f, :range, style: "display: none;", value: @range %>
+            <%= if assoc_loaded?(@employee.dtrs) do %>
+              <%= submit "Reset", class: "btn btn-warning"%>
+            <% end %>
+          <% end %>
        </div>
-    <% end %>
 
     <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-credit-card"></span>&nbsp;&nbsp;Other Pay</h4>
     <div class="table-responsive">
