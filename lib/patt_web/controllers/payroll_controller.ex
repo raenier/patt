@@ -42,21 +42,7 @@ defmodule PattWeb.PayrollController do
     employee = Attendance.get_employee_wdtrs!(id, range)
     %{"dtrs" => dtrparams} = emp_params
 
-    #move onto context
-    dtrs =
-    Enum.reduce dtrparams, %{}, fn(dtr, acc) ->
-      list_mhin = String.split(elem(dtr, 1)["sched_in"], ":")
-      list_mhout = String.split(elem(dtr, 1)["sched_out"], ":")
-      list_mhain = String.split(elem(dtr, 1)["in"], ":")
-      list_mhaout = String.split(elem(dtr, 1)["out"], ":")
-
-      dtrchanged = %{elem(dtr, 1) | "sched_in" => %{"hour" => List.first(list_mhin), "minute" => List.last(list_mhin)}}
-      dtrchanged = %{dtrchanged | "sched_out" => %{"hour" => List.first(list_mhout), "minute" => List.last(list_mhout)}}
-      dtrchanged = %{dtrchanged | "in" => %{"hour" => List.first(list_mhain), "minute" => List.last(list_mhain)}}
-      dtrchanged = %{dtrchanged | "out" => %{"hour" => List.first(list_mhaout), "minute" => List.last(list_mhaout)}}
-
-      acc = Map.put acc, elem(dtr, 0), dtrchanged
-    end
+    dtrs = Attendance.convert_dtr_params(dtrparams)
 
     {:ok, employee} =
     Employee.changeset_dtr(employee, %{"dtrs" => dtrs})

@@ -191,6 +191,22 @@ defmodule Patt.Attendance do
     [dtrs | new_dtrs] |> List.flatten() |> Enum.sort(&(&1.date <= &2.date))
   end
 
+  def convert_dtr_params(dtrparams) do
+    Enum.reduce dtrparams, %{}, fn(dtr, acc) ->
+      list_mhin = String.split(elem(dtr, 1)["sched_in"], ":")
+      list_mhout = String.split(elem(dtr, 1)["sched_out"], ":")
+      list_mhain = String.split(elem(dtr, 1)["in"], ":")
+      list_mhaout = String.split(elem(dtr, 1)["out"], ":")
+
+      dtrchanged = %{elem(dtr, 1) | "sched_in" => %{"hour" => List.first(list_mhin), "minute" => List.last(list_mhin)}}
+      dtrchanged = %{dtrchanged | "sched_out" => %{"hour" => List.first(list_mhout), "minute" => List.last(list_mhout)}}
+      dtrchanged = %{dtrchanged | "in" => %{"hour" => List.first(list_mhain), "minute" => List.last(list_mhain)}}
+      dtrchanged = %{dtrchanged | "out" => %{"hour" => List.first(list_mhaout), "minute" => List.last(list_mhaout)}}
+
+      acc = Map.put acc, elem(dtr, 0), dtrchanged
+    end
+  end
+
   def put_sched(dtrs, %Employee{} = employee) do
     Enum.map dtrs, fn dtr ->
       case Date.day_of_week(dtr.date) do
