@@ -12,6 +12,7 @@ defmodule Patt.Attendance do
   alias Patt.Attendance.Position
   alias Patt.Attendance.SchedProfile
   alias Patt.Attendance.Leave
+  alias Patt.Attendance.Dtr
 
   ###EMPLOYEE
 
@@ -168,4 +169,83 @@ defmodule Patt.Attendance do
     |> SchedProfile.changeset(attrs)
     |> Repo.insert()
   end
+
+  ###DTR
+
+  def get_employee_wdtrs!(id,  %{} = range) do
+    range = Enum.map range, fn date -> date end
+
+    get_employee_wdassoc!(id)
+    |> Repo.preload([
+      dtrs: from(d in Dtr, where: d.date in ^range),
+      employee_sched: ~w(monday tuesday wednesday thursday friday saturday sunday)a
+    ])
+  end
+
+  def complete_dtr(dtrs, range) do
+    new_dtrs =
+      Enum.reduce range, [], fn (date, acc) ->
+        if Enum.any?(dtrs, &(&1.date==date)), do: acc, else: [ %{date: date} | acc ]
+      end
+
+    [dtrs | new_dtrs] |> List.flatten() |> Enum.sort(&(&1.date <= &2.date))
+  end
+
+  def put_sched(dtrs, %Employee{} = employee) do
+    Enum.map dtrs, fn dtr ->
+      case Date.day_of_week(dtr.date) do
+        1 ->
+          if employee.employee_sched.monday do
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.monday.time_in)
+            Map.put(map1, :sched_out, employee.employee_sched.monday.time_out)
+          else
+            dtr
+          end
+        2 ->
+          if employee.employee_sched.tuesday do
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.tuesday.time_in)
+            Map.put(map1, :sched_out, employee.employee_sched.tuesday.time_out)
+          else
+            dtr
+          end
+        3 ->
+          if employee.employee_sched.wednesday do
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.wednesday.time_in)
+            Map.put(map1, :sched_out, employee.employee_sched.wednesday.time_out)
+          else
+            dtr
+          end
+        4 ->
+          if employee.employee_sched.thursday do
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.thursday.time_in)
+            Map.put(map1, :sched_out, employee.employee_sched.thursday.time_out)
+          else
+            dtr
+          end
+        5 ->
+          if employee.employee_sched.friday do
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.friday.time_in)
+            Map.put(map1, :sched_out, employee.employee_sched.friday.time_out)
+          else
+            dtr
+          end
+        6 ->
+          if employee.employee_sched.saturday do
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.saturday.time_in)
+            Map.put(map1, :sched_out, employee.employee_sched.saturday.time_out)
+          else
+            dtr
+          end
+        7 ->
+          if employee.employee_sched.sunday do
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.sunday.time_in)
+            Map.put(map1, :sched_out, employee.employee_sched.sunday.time_out)
+          else
+            dtr
+          end
+      end
+    end
+  end
+
+
 end

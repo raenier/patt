@@ -7,6 +7,20 @@ defmodule Patt.Helper do
   alias Patt.Attendance.SchedProfile
   alias Patt.Attendance
 
+  def gen_range(rangepattern) do
+    case rangepattern do
+      13 ->
+        {:ok, startr} = Date.new(Date.utc_today().year, Date.utc_today().month, 13)
+        {:ok, endr} = Date.new(Date.utc_today().year, Date.utc_today().month, 27)
+        Date.range(startr, endr)
+
+      28 ->
+        {:ok, startr} = Date.new(Date.utc_today().year, Date.utc_today().month, 28)
+        {:ok, endr} = Date.new(Date.utc_today().year, Date.utc_today().month + 1, 12)
+        Date.range(startr, endr)
+    end
+  end
+
   def create_default_profile() do
     Multi.new
     |> Multi.insert(:profile1,

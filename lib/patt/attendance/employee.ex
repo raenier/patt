@@ -52,4 +52,9 @@ defmodule Patt.Attendance.Employee do
     |> cast_assoc(:tax)
     |> cast_assoc(:leave)
   end
+
+  def changeset_dtr(%Employee{} = employee, attrs) do
+    Employee.changeset(employee, attrs)
+    |> cast_assoc(:dtrs)
+  end
 end

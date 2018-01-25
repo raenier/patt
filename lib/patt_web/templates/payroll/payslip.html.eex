@@ -11,7 +11,8 @@
 </div>
 </div>
 <hr>
-<form class="form-horizontal" action="/generatepayslip.php">
+
+<form class="form-horizontal">
     <div class="row">
         <div class="col-sm-6">
             <div class="form-group">
@@ -69,6 +70,9 @@
             </div>
         </div>
     </div>
+    </form>
+
+    <!--DTR Section Generate-->
     <br><br>
     <h4><span class="glyphicon glyphicon-calendar">
             </span>&nbsp;&nbsp;&nbsp;Daily Time Record
@@ -79,7 +83,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-5">Start Date:&nbsp;&nbsp;</label>
                 <div class="col-sm-7">
-                    <input type="date" class="form-control" id="calDTRSDate">
+                  <%= tag :input, type: "date", class: "form-control", id: "calDTRSDate" %>
                 </div>
             </div>
         </div>
@@ -87,60 +91,139 @@
             <div class="form-group">
                 <label class="control-label col-sm-5">End Date:&nbsp;&nbsp;</label>
                 <div class="col-sm-7">
-                    <input type="date" class="form-control" id="calDTREDate">
+                  <%= tag :input, type: "date", class: "form-control", id: "calDTREDate" %>
                 </div>
             </div>
         </div>
         <div class="col-sm-6">
-            <div class="form-group">
-                <button class="btn btn-info" type="button" onclick="generateDTRForm()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Generate DTR Form</button>
+          <div class="form-group">
+            <div class="col-sm-6">
+            <button class="btn btn-info" type="button" onclick="generateDTRForm()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Generate DTR Form</button>
             </div>
+
+          <div class="col-sm-6 text-right">
+            <div class="col-sm-4">
+            <label class="control-label">Defaults:&nbsp;&nbsp;</label>
+            </div>
+
+            <div class="col-sm-4">
+            <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
+              <%= number_input f, :range, value: 13, type: "hidden" %>
+              <%= submit class: "btn btn-warning" do %>
+                <span class="glyphicon glyphicon-plus"></span><%= " 13 to 27" %>
+              <% end %>
+            <% end %>
+            </div>
+
+            <div class="col-sm-4">
+            <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
+              <%= number_input f, :range, value: 28, type: "hidden" %>
+              <%= submit class: "btn btn-warning" do %>
+                <span class="glyphicon glyphicon-plus"></span><%= " 28 to 12" %>
+              <% end %>
+            <% end %>
+            </div>
+
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
-    <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-time"></span>&nbsp;&nbsp;Attendance</h4>
-    <div class="table-responsive">
-        <table id="tblAttendance" class="table table-striped table-bordered">
-            <thead class="text-center bg-color-3c3c3c txt-color-FFFFFF">
-            <tr>
-                <th>DATE</th>
-                <th>IN</th>
-                <th>OUT</th>
-                <th>ADJUSTMENTS</th>
-                <th>DEDUCTIONS</th>
-                <th>DAY TOTAL</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><input type="text" class="form-control" value="Start by generating DTR form" disabled></td>
-                <td><input type="time" class="form-control" disabled></td>
-                <td><input type="time" class="form-control" disabled></td>
+      </div>
+
+    <!--DTR Section Main-->
+       <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-time"></span>
+       &nbsp;&nbsp;Attendance
+       </h4>
+       <div class="table-responsive">
+       <table id="tblAttendance" class="table table-striped table-bordered">
+        <thead class="text-center bg-color-3c3c3c txt-color-FFFFFF">
+          <tr style="background: maroon;">
+            <td></td>
+            <td colspan=2>Scheduled</td>
+            <td></td>
+            <td colspan=2>Actual</td>
+            <td colspan=4></td>
+          </tr>
+          <tr>
+              <th>DATE</th>
+              <th>IN</th>
+              <th>OUT</th>
+              <th></th>
+              <th>IN</th>
+              <th>OUT</th>
+              <th>ADJUSTMENTS</th>
+              <th>OVERTIME</th>
+              <th>UNDERTIME</th>
+              <th>TARDINESS</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <%= form_for @changeset, payroll_path(@conn, :up_dtr, @employee), fn f -> %>
+            <%= inputs_for f, :dtrs, fn dtr -> %>
+              <tr>
                 <td>
-                    <select class="form-control" disabled>
-                        <option>Regular Pay</option>
-                        <option>VL</option>
-                        <option>SL</option>
-                        <option>BL</option>
-                        <option>OB</option>
-                        <option>OT</option>
-                        <option>RD-OT</option>
-                        <option>HO-Pay</option>
-                        <option>HO-OT</option>
-                        <option>ND-OT</option>
-                        <option>Tardiness</option>
-                        <option>Absent</option>
-                    </select>
+                  <%= text_input dtr, :date, disabled: "disabled", class: "form-control"%>
                 </td>
                 <td>
-                    <input type="text" class="form-control" placeholder="0.00" disabled>
+                  <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_in]",
+                        type: "time", class: "form-control",
+                        value: if dtr.data.sched_in, do: time_string(dtr.data.sched_in.hour, dtr.data.sched_in.minute) %>
                 </td>
                 <td>
-                    <input type="text" class="form-control" placeholder="0.00" disabled>
+                  <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_out]",
+                        type: "time", class: "form-control",
+                        value: if dtr.data.sched_out, do: time_string(dtr.data.sched_out.hour, dtr.data.sched_out.minute) %>
                 </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                <td></td>
+                <td>
+                  <%= tag :input, name: "employee[dtrs][#{dtr.index}][in]",
+                        type: "time", class: "form-control",
+                        value: if dtr.data.in, do: time_string(dtr.data.in.hour, dtr.data.in.minute) %>
+                </td>
+                <td>
+                  <%= tag :input, name: "employee[dtrs][#{dtr.index}][out]",
+                        type: "time", class: "form-control",
+                        value: if dtr.data.out, do: time_string(dtr.data.out.hour, dtr.data.out.minute) %>
+                </td>
+                  <td>
+                      <select class="form-control" disabled>
+                          <option>Regular Pay</option>
+                          <option>VL</option>
+                          <option>SL</option>
+                          <option>BL</option>
+                          <option>OB</option>
+                          <option>OT</option>
+                          <option>RD-OT</option>
+                          <option>HO-Pay</option>
+                          <option>HO-OT</option>
+                          <option>ND-OT</option>
+                          <option>Tardiness</option>
+                          <option>Absent</option>
+                      </select>
+                  </td>
+                  <td>
+                    <%= label dtr, "00:00"%>
+                  </td>
+                  <td>
+                    <%= label dtr, "00:00"%>
+                  </td>
+                  <td>
+                    <%= label dtr, "00:00"%>
+                  </td>
+              </tr>
+            <% end %>
+
+        </tbody>
+       </table>
+       </div>
+
+       <div class="text-right">
+         <%= text_input :generated, :range, value: @range, style: "display: none;"%>
+         <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary" %>
+       </div>
+    <% end %>
+
     <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-credit-card"></span>&nbsp;&nbsp;Other Pay</h4>
     <div class="table-responsive">
         <table id="tblOtherPay" class="table table-striped table-bordered">
@@ -181,7 +264,6 @@
             </tbody>
         </table>
     </div>
-</form>
 <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Summary</h4>
 <div class="row">
     <div class="col-sm-7">

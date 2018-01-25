@@ -20,8 +20,10 @@ defmodule PattWeb.Router do
 
     post "/employees/search", EmployeeController, :search
     resources "/employees", EmployeeController, except: [:edit]
-    resources "/payroll", PayrollController, only: [:index]
+    get "/payroll", PayrollController, :index
     get "/payroll/:id/new", PayrollController, :new
+    post "/payroll/:id/new", PayrollController, :gen_dtr
+    put "/payroll/:id/new", PayrollController, :up_dtr
   end
 
   # Other scopes may use custom stacks.
