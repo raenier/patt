@@ -101,4 +101,22 @@ defmodule Patt.Payroll do
   def change_contribution(%Contribution{} = contribution) do
     Contribution.changeset(contribution, %{})
   end
+
+  #custom
+
+  def daytype_list() do
+    [
+      "Regular": "reg",
+      "OT": "ot",
+      "RD-OT": "rdot",
+      "VL": "vl",
+      "SL": "sl",
+      "BL": "bl",
+      "OB": "ob",
+      "HO-Pay": "ho",
+      "HO-OT": "hoot",
+      "ND-OT": "ndot"
+    ]
+  end
+
 end
