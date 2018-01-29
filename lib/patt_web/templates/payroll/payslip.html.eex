@@ -187,20 +187,7 @@
                         value: if dtr.data.out, do: time_string(dtr.data.out.hour, dtr.data.out.minute) %>
                 </td>
                   <td>
-                      <select class="form-control" disabled>
-                          <option>Regular Pay</option>
-                          <option>VL</option>
-                          <option>SL</option>
-                          <option>BL</option>
-                          <option>OB</option>
-                          <option>OT</option>
-                          <option>RD-OT</option>
-                          <option>HO-Pay</option>
-                          <option>HO-OT</option>
-                          <option>ND-OT</option>
-                          <option>Tardiness</option>
-                          <option>Absent</option>
-                      </select>
+                    <%= select dtr, :daytype, @daytypes, class: "form-control"%>
                   </td>
                   <td>
                     <%= label dtr, "00:00"%>
