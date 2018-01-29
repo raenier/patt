@@ -1,6 +1,7 @@
 defmodule PattWeb.PayrollController do
   use PattWeb, :controller
   alias Patt.Attendance
+  alias Patt.Payroll
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Dtr
   alias Patt.Helper
@@ -32,7 +33,8 @@ defmodule PattWeb.PayrollController do
     employee = Attendance.sort_dtrs_bydate(employee)
 
     changeset = Employee.changeset_dtr(employee, %{})
-    render conn, "payslip.html", employee: employee, changeset: changeset, range: params
+    daytypes = Payroll.daytype_list()
+    render conn, "payslip.html", employee: employee, changeset: changeset, range: params, daytypes: daytypes
   end
 
   def up_dtr(conn, %{"id" => id, "employee" => emp_params, "generated" => %{"range" => range_params}}) do
@@ -49,12 +51,14 @@ defmodule PattWeb.PayrollController do
     employee = Attendance.sort_dtrs_bydate(employee)
 
     changeset = Employee.changeset_dtr(employee, %{})
-    render conn, "payslip.html", employee: employee, changeset: changeset, range: range_params
+    daytypes = Payroll.daytype_list()
+    render conn, "payslip.html", employee: employee, changeset: changeset, range: range_params, daytypes: daytypes
   end
 
   def reset_dtrs(conn, %{"id" => id, "reset_dtrs" => %{"range" => range_params}}) do
     range = Helper.gen_range(String.to_integer(range_params))
     Attendance.reset_dtrs(id, range)
+
     #move onto context
     employee = Attendance.get_employee_wdtrs!(id, range)
     all_dtrs =
@@ -69,6 +73,7 @@ defmodule PattWeb.PayrollController do
     employee = Attendance.sort_dtrs_bydate(employee)
 
     changeset = Employee.changeset_dtr(employee, %{})
-    render conn, "payslip.html", employee: employee, changeset: changeset, range: range_params
+    daytypes = Payroll.daytype_list()
+    render conn, "payslip.html", employee: employee, changeset: changeset, range: range_params, daytypes: daytypes
   end
 end
