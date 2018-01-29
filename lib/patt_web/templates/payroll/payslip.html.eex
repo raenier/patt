@@ -179,12 +179,15 @@
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][in]",
                         type: "time", class: "form-control",
-                        value: if dtr.data.in, do: time_string(dtr.data.in.hour, dtr.data.in.minute) %>
+                        value: if(dtr.data.in, do: time_string(dtr.data.in.hour, dtr.data.in.minute)),
+                        id: "#{dtr.index}timein"%>
                 </td>
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][out]",
                         type: "time", class: "form-control",
-                        value: if dtr.data.out, do: time_string(dtr.data.out.hour, dtr.data.out.minute) %>
+                        value: if(dtr.data.out, do: time_string(dtr.data.out.hour, dtr.data.out.minute)),
+                        id: "#{dtr.index}timeout",
+                        onchange: "validateTime('##{dtr.index}timein', '##{dtr.index}timeout');"%>
                 </td>
                   <td>
                     <%= select dtr, :daytype, @daytypes, class: "form-control"%>
@@ -207,7 +210,7 @@
 
        <div class="text-right">
           <%= text_input :generated, :range, value: @range, style: "display: none;"%>
-          <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary" %>
+          <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary"%>
           <% end %>
 
           <%= form_for @conn, payroll_path(@conn, :reset_dtrs, @employee), [as: :reset_dtrs, style: "display: inline;", method: :delete], fn f -> %>

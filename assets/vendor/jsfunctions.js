@@ -96,3 +96,27 @@ function validateDateInput(inputFields){
     }
     return formValidate;
 }
+
+function validateTime(timein, timeout) {
+  timein = ($(timein).val()).split(":");
+  timeout = ($(timeout).val()).split(":");
+  ain = new Date();
+  ain.setHours(parseInt(timein[0], 10), parseInt(timeout[1], 10), 00)
+  aout = new Date();
+  aout.setHours(parseInt(timeout[0], 10), parseInt(timeout[1], 10), 00)
+
+  if(timein == ""){
+    alert("Time in is blank, please enter Time in First");
+    return false;
+  }
+  else if(timein == "" && timeout == ""){
+    return true;
+  }
+  else if(aout < ain){
+    alert("Invalid date, Time out must be greater than time in")
+    return false;
+  }
+  else{
+    return true;
+  }
+}
