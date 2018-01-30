@@ -11,7 +11,6 @@ defmodule Patt.Attendance do
   alias Patt.Attendance.Department
   alias Patt.Attendance.Position
   alias Patt.Attendance.SchedProfile
-  alias Patt.Attendance.Leave
   alias Patt.Attendance.Dtr
 
   ###EMPLOYEE
@@ -67,8 +66,8 @@ defmodule Patt.Attendance do
 
   def update_employee_multi(%Employee{} = employee, attrs) do
     changeset = Employee.changeset_nested(employee, attrs)
+    attrs =
     if Map.has_key?(changeset.changes, :emp_type) do
-      attrs =
       case changeset.changes.emp_type do
         "probationary" ->
           Map.put(attrs, "leave",
@@ -203,7 +202,7 @@ defmodule Patt.Attendance do
       dtrchanged = %{dtrchanged | "in" => %{"hour" => List.first(list_mhain), "minute" => List.last(list_mhain)}}
       dtrchanged = %{dtrchanged | "out" => %{"hour" => List.first(list_mhaout), "minute" => List.last(list_mhaout)}}
 
-      acc = Map.put acc, elem(dtr, 0), dtrchanged
+      Map.put acc, elem(dtr, 0), dtrchanged
     end
   end
 
