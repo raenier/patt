@@ -42,13 +42,19 @@ defmodule PattWeb.PayrollController do
     employee = Attendance.get_employee_wdtrs!(id, range)
     %{"dtrs" => dtrparams} = emp_params
 
-    dtrs = Attendance.convert_dtr_params(dtrparams)
+    dtrs =
+      dtrparams
+      |> Attendance.convert_dtr_params()
 
     {:ok, employee} =
-    Employee.changeset_dtr(employee, %{"dtrs" => dtrs})
-    |> Patt.Repo.update()
+      employee
+      |> Employee.changeset_dtr(%{"dtrs" => dtrs})
+      |> Patt.Repo.update()
 
-    employee = Attendance.sort_dtrs_bydate(employee)
+    employee =
+      employee
+      |> Attendance.compute_penaltyhours()
+      |> Attendance.sort_dtrs_bydate()
 
     changeset = Employee.changeset_dtr(employee, %{})
     daytypes = Payroll.daytype_list()

@@ -193,13 +193,13 @@
                     <%= select dtr, :daytype, @daytypes, class: "form-control"%>
                   </td>
                   <td>
-                    <%= label dtr, "00:00"%>
+                    <%= text_input dtr, :overtime, class: "form-control", disabled: "disabled"%>
                   </td>
                   <td>
-                    <%= label dtr, "00:00"%>
+                    <%= text_input dtr, :undertime, class: "form-control", disabled: "disabled"%>
                   </td>
                   <td>
-                    <%= label dtr, "00:00"%>
+                    <%= text_input dtr, :tardiness, class: "form-control", disabled: "disabled"%>
                   </td>
               </tr>
             <% end %>

@@ -274,5 +274,35 @@ defmodule Patt.Attendance do
     end
   end
 
+  def compute_ot(dtr) do
+    if dtr.in && dtr.out && :gt == Time.compare(dtr.out, dtr.sched_out) do
+      Time.diff(dtr.out, dtr.sched_out) / 60
+    end
+  end
+  def compute_ut(dtr) do
+    if dtr.in && dtr.out && :lt == Time.compare(dtr.out, dtr.sched_out) do
+      Time.diff(dtr.sched_out, dtr.out) / 60
+    end
+  end
+  def compute_tard(dtr) do
+    if dtr.in && dtr.out && :gt == Time.compare(dtr.in, dtr.sched_in) do
+      Time.diff(dtr.in, dtr.sched_in) / 60
+    end
+  end
+
+  def compute_penaltyhours(employee) do
+    dtrs =
+    Enum.map employee.dtrs, fn dtr ->
+      overtime = compute_ot(dtr)
+      undertime = compute_ut(dtr)
+      tardiness = compute_tard(dtr)
+
+      dtr
+      |> Map.put(:overtime, overtime)
+      |> Map.put(:undertime, undertime)
+      |> Map.put(:tardiness, tardiness)
+    end
+    Map.put(employee, :dtrs, dtrs)
+  end
 
 end

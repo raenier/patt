@@ -14,6 +14,9 @@ defmodule Patt.Attendance.Dtr do
     field :sched_in, :time
     field :sched_out, :time
     field :daytype, :string
+    field :overtime, :integer, virtual: true
+    field :undertime, :integer, virtual: true
+    field :tardiness, :integer, virtual: true
 
     timestamps()
   end
