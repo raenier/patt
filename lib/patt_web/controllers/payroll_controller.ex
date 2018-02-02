@@ -30,7 +30,10 @@ defmodule PattWeb.PayrollController do
     |> Ecto.Changeset.put_assoc(:dtrs, all_dtrs)
     |> Patt.Repo.update()
 
-    employee = Attendance.sort_dtrs_bydate(employee)
+    employee =
+      employee
+      |> Attendance.compute_penaltyhours()
+      |> Attendance.sort_dtrs_bydate()
 
     changeset = Employee.changeset_dtr(employee, %{})
     daytypes = Payroll.daytype_list()
