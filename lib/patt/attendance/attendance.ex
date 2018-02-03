@@ -78,6 +78,8 @@ defmodule Patt.Attendance do
                           %{"id" => employee.leave.id, "sl_used" => 0, "vl_used" => 0,
                                                       "vl_total" => 6, "sl_total" => 6})
       end
+    else
+      attrs
     end
 
     update_employee_nested(employee, attrs)
