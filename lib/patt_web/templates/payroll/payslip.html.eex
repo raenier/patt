@@ -106,23 +106,23 @@
             <label class="control-label">Defaults:&nbsp;&nbsp;</label>
             </div>
 
-            <div class="col-sm-4">
-            <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
-              <%= number_input f, :range, value: 13, type: "hidden" %>
-              <%= submit class: "btn btn-warning" do %>
-                <span class="glyphicon glyphicon-plus"></span><%= " 13 to 27" %>
+              <div class="col-sm-4">
+              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
+                <%= number_input f, :range, value: 28, type: "hidden" %>
+                <%= submit class: "btn btn-warning" do %>
+                  <span class="glyphicon glyphicon-plus"></span><%= " 28 to 12" %>
+                <% end %>
               <% end %>
-            <% end %>
-            </div>
+              </div>
 
-            <div class="col-sm-4">
-            <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
-              <%= number_input f, :range, value: 28, type: "hidden" %>
-              <%= submit class: "btn btn-warning" do %>
-                <span class="glyphicon glyphicon-plus"></span><%= " 28 to 12" %>
+              <div class="col-sm-4">
+              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
+                <%= number_input f, :range, value: 13, type: "hidden" %>
+                <%= submit class: "btn btn-warning" do %>
+                  <span class="glyphicon glyphicon-plus"></span><%= " 13 to 27" %>
+                <% end %>
               <% end %>
-            <% end %>
-            </div>
+              </div>
 
               </div>
             </div>
@@ -190,7 +190,7 @@
                         onchange: "validateTime('##{dtr.index}timein', '##{dtr.index}timeout');"%>
                 </td>
                   <td>
-                    <%= select dtr, :daytype, @daytypes, class: "form-control"%>
+                    <%= select dtr, :daytype, @daytypes, class: "form-control" %>
                   </td>
                   <td class="col-sm-1">
                     <%= text_input dtr, :overtime, class: "form-control", disabled: "disabled"%>
