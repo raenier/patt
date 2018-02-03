@@ -105,18 +105,16 @@ defmodule Patt.Payroll do
   #custom
 
   def daytype_list() do
-    [
-      "Regular": "reg",
-      "OT": "ot",
-      "RD-OT": "rdot",
-      "VL": "vl",
-      "SL": "sl",
-      "BL": "bl",
-      "OB": "ob",
-      "HO-Pay": "ho",
-      "HO-OT": "hoot",
-      "ND-OT": "ndot"
-    ]
+    all_dtypes =
+      %Patt.Payroll.Daytype{}
+        |> Map.pop(:__struct__)
+        |> elem(1)
+        |> Enum.sort_by(&(elem(&1, 1).order))
+        |> Keyword.keys
+
+    Enum.map all_dtypes, fn daytype ->
+      {String.upcase(Atom.to_string(daytype)), daytype}
+    end
   end
 
 end
