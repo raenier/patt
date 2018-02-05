@@ -15,6 +15,10 @@ defmodule PattWeb.PayrollView do
     put_zero(start) <> ":" <> put_zero(endt)
   end
 
+  def return_time_string(time) do
+    if(time, do: time_string(time.hour, time.minute))
+  end
+
   def return_date_and_day(date) do
     "#{date}" <> " | " <> Patt.Helper.return_day_string(Date.day_of_week(date))
   end

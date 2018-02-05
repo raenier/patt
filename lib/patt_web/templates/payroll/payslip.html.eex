@@ -168,14 +168,12 @@
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_in]",
                         type: "time", class: "form-control",
-                        value: if(dtr.data.sched_in, do: time_string(dtr.data.sched_in.hour, dtr.data.sched_in.minute)),
-                        style: if is_nil(dtr.data.sched_in), do: "display: none;", else: "" %>
+                        value:  return_time_string(dtr.data.sched_in)%>
                 </td>
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_out]",
                         type: "time", class: "form-control",
-                        value: if(dtr.data.sched_out, do: time_string(dtr.data.sched_out.hour, dtr.data.sched_out.minute)),
-                        style: if is_nil(dtr.data.sched_out), do: "display: none;", else: "" %>
+                        value:  return_time_string(dtr.data.sched_out)%>
                 </td>
                 <td></td>
                 <td>
