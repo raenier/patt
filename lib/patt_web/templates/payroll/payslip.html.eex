@@ -159,7 +159,7 @@
         </thead>
         <tbody>
 
-          <%= form_for @changeset, payroll_path(@conn, :up_dtr, @employee), fn f -> %>
+          <%= form_for @changeset, payroll_path(@conn, :up_dtr, @employee), [onsubmit: "return confirm('Save dtrs?')"], fn f -> %>
             <%= inputs_for f, :dtrs, fn dtr -> %>
               <tr>
                 <td>
@@ -215,7 +215,14 @@
           <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary"%>
           <% end %>
 
-          <%= form_for @conn, payroll_path(@conn, :reset_dtrs, @employee), [as: :reset_dtrs, style: "display: inline;", method: :delete], fn f -> %>
+          <%= form_for @conn, payroll_path(@conn, :reset_dtrs, @employee),
+            [
+              as: :reset_dtrs,
+              style: "display: inline;",
+              method: :delete,
+              onsubmit: "return confirm('Are you sure? all dtr inputs will be reset')"
+            ],
+            fn f -> %>
             <%= text_input f, :range, style: "display: none;", value: @range %>
             <%= if assoc_loaded?(@employee.dtrs) do %>
               <%= submit "Reset", class: "btn btn-warning"%>
