@@ -163,7 +163,7 @@
             <%= inputs_for f, :dtrs, fn dtr -> %>
               <tr>
                 <td>
-                  <%= text_input dtr, :date, disabled: "disabled", class: "form-control"%>
+                  <%= label dtr, return_date_and_day(dtr.data.date), class: "form-control" %>
                 </td>
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_in]",
