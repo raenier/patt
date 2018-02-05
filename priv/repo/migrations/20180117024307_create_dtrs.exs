@@ -9,7 +9,7 @@ defmodule Patt.Repo.Migrations.CreateDtrs do
       add :in, :time
       add :out, :time
       add :daytype, :string
-      add :employee_id, references(:employees, on_delete: :nothing)
+      add :employee_id, references(:employees, on_delete: :delete_all)
 
       timestamps()
     end
