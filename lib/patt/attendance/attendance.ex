@@ -225,50 +225,50 @@ defmodule Patt.Attendance do
       case Date.day_of_week(dtr.date) do
         1 ->
           if employee.employee_sched.monday do
-            map1 = Map.put(dtr, :sched_in, employee.employee_sched.monday.time_in)
-            Map.put(map1, :sched_out, employee.employee_sched.monday.time_out)
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.monday.morning_in)
+            Map.put(map1, :sched_out, employee.employee_sched.monday.afternoon_out)
           else
             dtr
           end
         2 ->
           if employee.employee_sched.tuesday do
-            map1 = Map.put(dtr, :sched_in, employee.employee_sched.tuesday.time_in)
-            Map.put(map1, :sched_out, employee.employee_sched.tuesday.time_out)
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.tuesday.morning_in)
+            Map.put(map1, :sched_out, employee.employee_sched.tuesday.afternoon_out)
           else
             dtr
           end
         3 ->
           if employee.employee_sched.wednesday do
-            map1 = Map.put(dtr, :sched_in, employee.employee_sched.wednesday.time_in)
-            Map.put(map1, :sched_out, employee.employee_sched.wednesday.time_out)
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.wednesday.morning_in)
+            Map.put(map1, :sched_out, employee.employee_sched.wednesday.afternoon_out)
           else
             dtr
           end
         4 ->
           if employee.employee_sched.thursday do
-            map1 = Map.put(dtr, :sched_in, employee.employee_sched.thursday.time_in)
-            Map.put(map1, :sched_out, employee.employee_sched.thursday.time_out)
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.thursday.morning_in)
+            Map.put(map1, :sched_out, employee.employee_sched.thursday.afternoon_out)
           else
             dtr
           end
         5 ->
           if employee.employee_sched.friday do
-            map1 = Map.put(dtr, :sched_in, employee.employee_sched.friday.time_in)
-            Map.put(map1, :sched_out, employee.employee_sched.friday.time_out)
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.friday.morning_in)
+            Map.put(map1, :sched_out, employee.employee_sched.friday.afternoon_out)
           else
             dtr
           end
         6 ->
           if employee.employee_sched.saturday do
-            map1 = Map.put(dtr, :sched_in, employee.employee_sched.saturday.time_in)
-            Map.put(map1, :sched_out, employee.employee_sched.saturday.time_out)
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.saturday.morning_in)
+            Map.put(map1, :sched_out, employee.employee_sched.saturday.afternoon_out)
           else
             dtr
           end
         7 ->
           if employee.employee_sched.sunday do
-            map1 = Map.put(dtr, :sched_in, employee.employee_sched.sunday.time_in)
-            Map.put(map1, :sched_out, employee.employee_sched.sunday.time_out)
+            map1 = Map.put(dtr, :sched_in, employee.employee_sched.sunday.morning_in)
+            Map.put(map1, :sched_out, employee.employee_sched.sunday.afternoon_out)
           else
             dtr
           end
@@ -277,21 +277,33 @@ defmodule Patt.Attendance do
   end
 
   def compute_ot(dtr) do
-    if dtr.in && dtr.out && :gt == Time.compare(dtr.out, dtr.sched_out) do
-      Time.diff(dtr.out, dtr.sched_out) / 60
+    if dtr.sched_in && dtr.sched_out do
+      if dtr.in && dtr.out && :gt == Time.compare(dtr.out, dtr.sched_out) do
+        Time.diff(dtr.out, dtr.sched_out) / 60
+      end
     end
   end
   def compute_ut(dtr) do
-    if dtr.in && dtr.out && :lt == Time.compare(dtr.out, dtr.sched_out) do
-      Time.diff(dtr.sched_out, dtr.out) / 60
+    if dtr.sched_in && dtr.sched_out do
+      if dtr.in && dtr.out && :lt == Time.compare(dtr.out, dtr.sched_out) do
+        Time.diff(dtr.sched_out, dtr.out) / 60
+      end
     end
   end
   def compute_tard(dtr) do
-    if dtr.in && dtr.out && :gt == Time.compare(dtr.in, dtr.sched_in) do
-      Time.diff(dtr.in, dtr.sched_in) / 60
+    if dtr.sched_in && dtr.sched_out do
+      if dtr.in && dtr.out && :gt == Time.compare(dtr.in, dtr.sched_in) do
+        Time.diff(dtr.in, dtr.sched_in) / 60
+      end
     end
   end
-
+  ##!i!i! NOTE:::
+  #compute based on daytype
+  #if daytype = hlfday then based computations on morning_in and out or afternoon_in and out
+  #maybe we can have morning halfday and afternoon halfday daytype
+  #or afternoon halfday can be solely undertime
+  #if whole day compute based on morning out/in and afternoon/in/out:w
+  #
   def compute_penaltyhours(employee) do
     dtrs =
     Enum.map employee.dtrs, fn dtr ->

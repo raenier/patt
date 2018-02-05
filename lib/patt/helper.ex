@@ -26,28 +26,45 @@ defmodule Patt.Helper do
     |> Multi.insert(:profile1,
                 SchedProfile.changeset(%SchedProfile{},
                                        %{name: "07:00am to 04:00pm",
-                                         time_in: ~T[07:00:00],
-                                         time_out: ~T[16:00:00]}))
+                                         morning_in: ~T[07:00:00],
+                                         morning_out: ~T[11:00:00],
+                                         afternoon_in: ~T[12:00:00],
+                                         afternoon_out: ~T[16:00:00]}))
     |> Multi.insert(:profile2,
                 SchedProfile.changeset(%SchedProfile{},
                                        %{name: "08:00am to 05:00pm",
-                                         time_in: ~T[08:00:00],
-                                         time_out: ~T[17:00:00]}))
+                                         morning_in: ~T[08:00:00],
+                                         morning_out: ~T[12:00:00],
+                                         afternoon_in: ~T[13:00:00],
+                                         afternoon_out: ~T[17:00:00]}))
     |> Multi.insert(:profile3,
                 SchedProfile.changeset(%SchedProfile{},
-                                       %{name: "09:00am to 06:00pm",
-                                         time_in: ~T[09:00:00],
-                                         time_out: ~T[18:00:00]}))
+                                       %{name: "08:30am to 05:30pm",
+                                         morning_in: ~T[08:30:00],
+                                         morning_out: ~T[12:30:00],
+                                         afternoon_in: ~T[13:30:00],
+                                         afternoon_out: ~T[17:30:00]}))
     |> Multi.insert(:profile4,
                 SchedProfile.changeset(%SchedProfile{},
-                                       %{name: "10:00am to 07:00pm",
-                                         time_in: ~T[10:00:00],
-                                         time_out: ~T[19:00:00]}))
+                                       %{name: "09:00am to 06:00pm",
+                                         morning_in: ~T[09:00:00],
+                                         morning_out: ~T[13:00:00],
+                                         afternoon_in: ~T[14:00:00],
+                                         afternoon_out: ~T[18:00:00]}))
     |> Multi.insert(:profile5,
                 SchedProfile.changeset(%SchedProfile{},
+                                       %{name: "10:00am to 07:00pm",
+                                         morning_in: ~T[10:00:00],
+                                         morning_out: ~T[14:00:00],
+                                         afternoon_in: ~T[15:00:00],
+                                         afternoon_out: ~T[19:00:00]}))
+    |> Multi.insert(:profile6,
+                SchedProfile.changeset(%SchedProfile{},
                                        %{name: "11:00am to 08:00pm",
-                                         time_in: ~T[11:00:00],
-                                         time_out: ~T[20:00:00]}))
+                                         morning_in: ~T[11:00:00],
+                                         morning_out: ~T[15:00:00],
+                                         afternoon_in: ~T[16:00:00],
+                                         afternoon_out: ~T[20:00:00]}))
     |> Repo.transaction
   end
 
@@ -136,5 +153,17 @@ defmodule Patt.Helper do
                                     }, department4)
                                 end)
     |> Repo.transaction
+  end
+
+  def return_day_string(daynumber) do
+    case daynumber do
+      1 -> "mon"
+      2 -> "tue"
+      3 -> "wed"
+      4 -> "thu"
+      5 -> "fri"
+      6 -> "sat"
+      7 -> "sun"
+    end
   end
 end

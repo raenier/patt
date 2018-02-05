@@ -4,8 +4,10 @@ defmodule Patt.Repo.Migrations.CreateSchedProfiles do
   def change do
     create table(:sched_profiles) do
       add :name, :string
-      add :time_in, :time
-      add :time_out, :time
+      add :morning_in, :time
+      add :morning_out, :time
+      add :afternoon_in, :time
+      add :afternoon_out, :time
 
       timestamps()
     end

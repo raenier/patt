@@ -6,8 +6,10 @@ defmodule Patt.Attendance.SchedProfile do
 
   schema "sched_profiles" do
     field :name, :string
-    field :time_in, :time
-    field :time_out, :time
+    field :morning_in, :time
+    field :morning_out, :time
+    field :afternoon_in, :time
+    field :afternoon_out, :time
 
     timestamps()
   end
@@ -15,7 +17,7 @@ defmodule Patt.Attendance.SchedProfile do
   @doc false
   def changeset(%SchedProfile{} = sched_profile, attrs) do
     sched_profile
-    |> cast(attrs, [:name, :time_in, :time_out])
-    |> validate_required([:name, :time_in, :time_out])
+    |> cast(attrs, [:name, :morning_in, :morning_out, :afternoon_in, :afternoon_out])
+    |> validate_required([:name, :morning_in, :morning_out, :afternoon_in, :afternoon_out])
   end
 end
