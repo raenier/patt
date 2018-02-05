@@ -1,4 +1,5 @@
 defmodule PattWeb.PayrollView do
+  require IEx
   use PattWeb, :view
 
   def put_zero(digit) do
@@ -15,7 +16,7 @@ defmodule PattWeb.PayrollView do
   end
 
   def return_date_and_day(date) do
-    "#{date}" <> " " <> Patt.Helper.return_day_string(Date.day_of_week(date))
+    "#{date}" <> " | " <> Patt.Helper.return_day_string(Date.day_of_week(date))
   end
 
   def assoc_loaded?(data) do
