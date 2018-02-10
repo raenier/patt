@@ -96,7 +96,7 @@ function validateDateInput(inputFields){
     }
     return formValidate;
 }
-
+/*delete or modify this*/
 function validateTime(timein, timeout) {
   timein = ($(timein).val()).split(":");
   timeout = ($(timeout).val()).split(":");
@@ -110,7 +110,7 @@ function validateTime(timein, timeout) {
     return false;
   }
   else if(timein == "" && timeout == ""){
-    return true;
+    return false;
   }
   else if(aout < ain){
     alert("Invalid date, Time out must be greater than time in")

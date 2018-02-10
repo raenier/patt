@@ -14,9 +14,11 @@ defmodule Patt.Attendance.Dtr do
     field :sched_in, :time
     field :sched_out, :time
     field :daytype, :string
+    field :ot, :boolean, default: false
     field :overtime, :integer, virtual: true
     field :undertime, :integer, virtual: true
     field :tardiness, :integer, virtual: true
+    field :hw, :integer, virtual: true
 
     timestamps()
   end
@@ -24,7 +26,7 @@ defmodule Patt.Attendance.Dtr do
   @doc false
   def changeset(%Dtr{} = dtr, attrs) do
     dtr
-    |> cast(attrs, [:date, :sched_in, :sched_out, :in, :out, :daytype])
+    |> cast(attrs, [:date, :sched_in, :sched_out, :in, :out, :daytype, :ot])
     |> validate_required([:date])
   end
 end

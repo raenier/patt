@@ -46,3 +46,8 @@
 #tblSearchEmployeeRecords thead tr th, #tblGeneratePayslip thead tr th, #tblPayslipSummary thead tr th {
     text-align: center;
 }
+
+/*Input custome size*/
+.xs {
+  width: 50px;
+}

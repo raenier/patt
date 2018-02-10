@@ -276,46 +276,215 @@ defmodule Patt.Attendance do
     end
   end
 
+  #########miscellaneous
+  def minute_diff(timeend,timestart) do
+    Time.diff(timeend, timestart)/60
+  end
+
+  def fastforward(time, toadd) do
+    {h, m, s} = Time.to_erl(time)
+    {:ok, time} = Time.from_erl {h + toadd, m, s}
+    time
+  end
+
+  def backtrack(time, minus) do
+    {h, m, s} = Time.to_erl(time)
+    {:ok, time} = Time.from_erl {h - minus, m, s}
+    time
+  end
+
+  def check_tardiness(tardiness) do
+    tardiness <= 30 || is_nil(tardiness) || tardiness == ""
+  end
+
+  def all_inputs_complete(dtr) do
+    dtr.sched_in && dtr.sched_out && dtr.out && dtr.in
+  end
+
+  def sched_and_in_present(dtr) do
+    dtr.sched_in && dtr.sched_out && dtr.in
+  end
+
+  def compute_mout_ain(dtr) do
+    totalhour = total_hour(dtr)
+    ahour = round(totalhour / 2)
+    mhour = totalhour - ahour
+
+    ain = backtrack(dtr.sched_out, ahour)
+    mout = fastforward(dtr.sched_in, mhour)
+    {mout, ain}
+  end
+
+  def total_hour(dtr) do
+    round(minute_diff(dtr.sched_out, dtr.sched_in)/60) - 1
+  end
+
+  ###########
+
   def compute_ot(dtr) do
-    if dtr.sched_in && dtr.sched_out do
-      if dtr.in && dtr.out && :gt == Time.compare(dtr.out, dtr.sched_out) do
-        Time.diff(dtr.out, dtr.sched_out) / 60
+    if all_inputs_complete(dtr) do
+      if dtr.ot do
+        if dtr.out && Time.compare(dtr.out, dtr.sched_out) == :gt do
+          actual = round(minute_diff(dtr.out, dtr.sched_out))
+          if actual >= 60, do: actual-rem(actual, 60), else: 0
+        else
+          0
+        end
+      else
+        0
       end
     end
   end
+
+
   def compute_ut(dtr) do
-    if dtr.sched_in && dtr.sched_out do
-      if dtr.in && dtr.out && :lt == Time.compare(dtr.out, dtr.sched_out) do
-        Time.diff(dtr.sched_out, dtr.out) / 60
+    if all_inputs_complete(dtr) do
+      {mout, ain} = compute_mout_ain(dtr)
+      aftotalwh = round(total_hour(dtr)/2) * 60
+
+      cond do
+        Time.compare(dtr.out, dtr.sched_out) == :lt && Time.compare(dtr.out, ain) == :gt ->
+          round(minute_diff(dtr.sched_out, dtr.out))
+
+        Time.compare(dtr.out, ain) == :lt && Time.compare(dtr.out, mout) == :gt ->
+          aftotalwh
+
+        Time.compare(dtr.out, ain) == :eq || Time.compare(dtr.out, mout) == :eq ->
+          aftotalwh
+
+        Time.compare(dtr.out, mout) == :lt ->
+          round(minute_diff(mout, dtr.out)) + aftotalwh
+
+        true ->
+          0
       end
     end
   end
+
   def compute_tard(dtr) do
-    if dtr.sched_in && dtr.sched_out do
-      if dtr.in && dtr.out && :gt == Time.compare(dtr.in, dtr.sched_in) do
-        Time.diff(dtr.in, dtr.sched_in) / 60
+    if sched_and_in_present(dtr) do
+      {mout, ain} = compute_mout_ain(dtr)
+      total_hour = total_hour(dtr)
+      mtotalwh = (total_hour - round(total_hour/2)) * 60
+
+      cond do
+        Time.compare(dtr.in, dtr.sched_in) == :gt && Time.compare(dtr.in, mout) == :lt ->
+          round(minute_diff(dtr.in, dtr.sched_in))
+
+        Time.compare(dtr.in, mout) == :gt && Time.compare(dtr.in, ain) == :lt ->
+          mtotalwh
+
+        Time.compare(dtr.in, mout) == :eq || Time.compare(dtr.in, ain) == :eq ->
+          mtotalwh
+
+        Time.compare(dtr.in, ain) == :gt ->
+          round(minute_diff(dtr.in, ain)) + mtotalwh
+
+        true ->
+          0
       end
     end
   end
-  ##!i!i! NOTE:::
-  #compute based on daytype
-  #if daytype = hlfday then based computations on morning_in and out or afternoon_in and out
-  #maybe we can have morning halfday and afternoon halfday daytype
-  #or afternoon halfday can be solely undertime
-  #if whole day compute based on morning out/in and afternoon/in/out:w
-  #
+
+  ###--COMPUTE TOTAL WORKING HOURS
+  def compute_morning_wh(dtr) do
+    if all_inputs_complete(dtr) do
+      {mout, ain} = compute_mout_ain(dtr)
+      total_hour = total_hour(dtr)
+      mtotalwh = (total_hour - round(total_hour/2)) * 60
+
+      cond do
+        Time.compare(dtr.in, dtr.sched_in) == :lt || Time.compare(dtr.in, dtr.sched_in) == :eq ->
+          mtotalwh
+
+        Time.compare(dtr.in, dtr.sched_in) == :gt && Time.compare(dtr.in, mout) == :lt ->
+          round(minute_diff(mout, dtr.in))
+
+        Time.compare(dtr.in, ain) == :gt ->
+          round(minute_diff(ain, dtr.in))
+
+        true ->
+          0
+      end
+    end
+  end
+
+  def compute_afternoon_wh(dtr) do
+    if all_inputs_complete(dtr) do
+      {mout, ain} = compute_mout_ain(dtr)
+      aftotalwh = round(total_hour(dtr)/2) * 60
+
+      cond do
+        Time.compare(dtr.out, dtr.sched_out) == :gt || Time.compare(dtr.out, dtr.sched_out) == :eq ->
+          aftotalwh
+
+        Time.compare(dtr.out, dtr.sched_out) == :lt && Time.compare(dtr.out, ain) == :gt ->
+          round(minute_diff(dtr.out, ain))
+
+        Time.compare(dtr.out, mout) == :lt ->
+          round(minute_diff(dtr.out, mout))
+
+        true ->
+          0
+      end
+    end
+  end
+
+  def compute_total_wh(dtr) do
+    mwh = compute_morning_wh(dtr)
+    afwh = compute_afternoon_wh(dtr)
+    unless is_nil(mwh) || is_nil(afwh), do: mwh + afwh
+  end
+  ###--------------
+
+  #compute based on daytypes
+  def process_workhours(dtr) do
+    case dtr.daytype do
+      "regular" ->
+        tardiness = compute_tard(dtr)
+
+        %{
+          overtime: if(check_tardiness(tardiness), do: compute_ot(dtr), else: 0),
+          undertime: compute_ut(dtr),
+          tardiness: tardiness,
+          hw: compute_total_wh(dtr)
+        }
+
+      "halfday" ->
+        total_hour = total_hour(dtr)
+        mtotalwh = (total_hour - round(total_hour/2)) * 60
+        tardiness = compute_tard(dtr) - mtotalwh
+
+        %{
+          overtime: 0,
+          undertime: compute_ut(dtr) + mtotalwh,
+          tardiness: unless(tardiness < 0, do: tardiness, else: 0),
+          hw: compute_total_wh(dtr)
+        }
+
+      _any ->
+        %{
+          overtime: "",
+          undertime: "",
+          tardiness: "",
+          hw: ""
+        }
+    end
+  end
+
+  #put all computations on employee struct virtual fields
   def compute_penaltyhours(employee) do
     dtrs =
     Enum.map employee.dtrs, fn dtr ->
-      overtime = compute_ot(dtr)
-      undertime = compute_ut(dtr)
-      tardiness = compute_tard(dtr)
+      result = process_workhours(dtr)
 
       dtr
-      |> Map.put(:overtime, overtime)
-      |> Map.put(:undertime, undertime)
-      |> Map.put(:tardiness, tardiness)
+      |> Map.put(:overtime, result.overtime)
+      |> Map.put(:undertime, result.undertime)
+      |> Map.put(:tardiness, result.tardiness)
+      |> Map.put(:hw, result.hw)
     end
+
     Map.put(employee, :dtrs, dtrs)
   end
 

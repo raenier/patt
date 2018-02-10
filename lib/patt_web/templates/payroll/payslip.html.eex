@@ -138,27 +138,28 @@
        <table id="tblAttendance" class="table table-striped table-bordered">
         <thead class="text-center bg-color-3c3c3c txt-color-FFFFFF">
           <tr style="background: maroon;">
-            <td></td>
+            <td style="background: white;"></td>
             <td colspan=2>Scheduled</td>
-            <td></td>
+            <td style="background: white;"></td>
             <td colspan=2>Actual</td>
-            <td colspan=4></td>
+            <td colspan=7 style="background: white;"></td>
           </tr>
           <tr>
               <th>DATE</th>
               <th>IN</th>
               <th>OUT</th>
-              <th></th>
+              <th style="background: white;"></th>
               <th>IN</th>
               <th>OUT</th>
+              <th>HO</th>
               <th>ADJUSTMENTS</th>
-              <th>OVERTIME</th>
-              <th>UNDERTIME</th>
-              <th>TARDINESS</th>
+              <th colspan=2>OT</th>
+              <th>UT</th>
+              <th>TD</th>
+              <th>HW</th>
           </tr>
         </thead>
         <tbody>
-
           <%= form_for @changeset, payroll_path(@conn, :up_dtr, @employee), [onsubmit: "return confirm('Save dtrs?')"], fn f -> %>
             <%= inputs_for f, :dtrs, fn dtr -> %>
               <tr>
@@ -175,7 +176,7 @@
                         type: "time", class: "form-control",
                         value:  return_time_string(dtr.data.sched_out)%>
                 </td>
-                <td></td>
+                <td style="background: grey;"></td>
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][in]",
                         type: "time", class: "form-control",
@@ -189,21 +190,32 @@
                         id: "#{dtr.index}timeout",
                         onchange: "validateTime('##{dtr.index}timein', '##{dtr.index}timeout');"%>
                 </td>
-                  <td>
-                    <%= select dtr, :daytype, @daytypes, class: "form-control" %>
-                  </td>
-                  <td class="col-sm-1">
-                    <%= text_input dtr, :overtime, class: "form-control", disabled: "disabled"%>
-                  </td>
-                  <td class="col-sm-1">
-                    <%= text_input dtr, :undertime, class: "form-control", disabled: "disabled"%>
-                  </td>
-                  <td class="col-sm-1">
-                    <%= text_input dtr, :tardiness, class: "form-control", disabled: "disabled"%>
-                  </td>
+                <td>
+                  <%= checkbox dtr, :ho %>
+                </td>
+                <td>
+                  <%= select dtr, :daytype, @daytypes, class: "form-control" %>
+                </td>
+                <td>
+                  <%= checkbox dtr, :ot %>
+                </td>
+                <td>
+                  <%= text_input dtr, :overtime, class: "form-control xs", disabled: "disabled" %>
+                </td>
+                <td>
+                  <%= text_input dtr, :undertime, class: "form-control xs", disabled: "disabled" %>
+                </td>
+                <td>
+                  <%= text_input dtr, :tardiness, class: "form-control xs", disabled: "disabled" %>
+                </td>
+                <td>
+                  <%= text_input dtr, :hw, class: "form-control xs", disabled: "disabled" %>
+                </td>
               </tr>
             <% end %>
-
+          <tr>
+            <td colspan=13 style="background: black;"></td>
+          </tr>
         </tbody>
        </table>
        </div>
