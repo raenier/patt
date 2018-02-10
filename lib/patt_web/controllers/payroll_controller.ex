@@ -37,7 +37,13 @@ defmodule PattWeb.PayrollController do
 
     changeset = Employee.changeset_dtr(employee, %{})
     daytypes = Payroll.daytype_list()
-    render conn, "payslip.html", employee: employee, changeset: changeset, range: params, daytypes: daytypes
+    render conn, "payslip.html",
+    [
+      employee: employee,
+      changeset: changeset,
+      range: params,
+      daytypes: daytypes
+    ]
   end
 
   def up_dtr(conn, %{"id" => id, "employee" => emp_params, "generated" => %{"range" => range_params}}) do
@@ -61,7 +67,13 @@ defmodule PattWeb.PayrollController do
 
     changeset = Employee.changeset_dtr(employee, %{})
     daytypes = Payroll.daytype_list()
-    render conn, "payslip.html", employee: employee, changeset: changeset, range: range_params, daytypes: daytypes
+    render conn, "payslip.html",
+    [
+      employee: employee,
+      changeset: changeset,
+      range: range_params,
+      daytypes: daytypes
+    ]
   end
 
   def reset_dtrs(conn, %{"id" => id, "reset_dtrs" => %{"range" => range_params}}) do
@@ -83,6 +95,12 @@ defmodule PattWeb.PayrollController do
 
     changeset = Employee.changeset_dtr(employee, %{})
     daytypes = Payroll.daytype_list()
-    render conn, "payslip.html", employee: employee, changeset: changeset, range: range_params, daytypes: daytypes
+    render conn, "payslip.html",
+    [
+      employee: employee,
+      changeset: changeset,
+      range: range_params,
+      daytypes: daytypes
+    ]
   end
 end
