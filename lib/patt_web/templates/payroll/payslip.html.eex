@@ -138,11 +138,11 @@
        <table id="tblAttendance" class="table table-striped table-bordered">
         <thead class="text-center bg-color-3c3c3c txt-color-FFFFFF">
           <tr style="background: maroon;">
-            <td style="background: white;"></td>
+            <td colspan=2 style="background: white;"></td>
             <td colspan=2>Scheduled</td>
             <td style="background: white;"></td>
             <td colspan=2>Actual</td>
-            <td colspan=7 style="background: white;"></td>
+            <td colspan=6 style="background: white;"></td>
           </tr>
           <tr>
               <th>DATE</th>
