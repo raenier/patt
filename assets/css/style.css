@@ -51,3 +51,8 @@
 .xs {
   width: 50px;
 }
+
+/*hide elements but display space*/
+.hide {
+  visibility: hidden;
+}

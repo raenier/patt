@@ -26,4 +26,12 @@ defmodule PattWeb.PayrollView do
   def assoc_loaded?(data) do
     Ecto.assoc_loaded? data
   end
+
+  def no_basic(basic) do
+    is_nil(basic) || basic == 0 || basic == ""
+  end
+
+  def hide_ifnobasic(basic) do
+    if(no_basic(basic), do: "hide", else: "")
+  end
 end

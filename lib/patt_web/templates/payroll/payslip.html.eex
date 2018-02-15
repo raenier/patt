@@ -44,7 +44,7 @@
             <div class="form-group">
                 <label class="control-label col-sm-3">Basic Pay:</label>
                 <div class="col-sm-6">
-                  <label class="form-control">
+                  <label class="form-control <%= if(no_basic(@employee.compensation.basic), do: "alert-danger")%>">
                     <%= @employee.compensation.basic %>
                   </label>
                 </div>
@@ -80,7 +80,7 @@
     <hr>
     <div class="row">
         <div class="col-sm-3">
-            <div class="form-group">
+            <div class="form-group hide">
                 <label class="control-label col-sm-5">Start Date:&nbsp;&nbsp;</label>
                 <div class="col-sm-7">
                   <%= tag :input, type: "date", class: "form-control", id: "calDTRSDate" %>
@@ -88,7 +88,7 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div class="form-group">
+            <div class="form-group hide">
                 <label class="control-label col-sm-5">End Date:&nbsp;&nbsp;</label>
                 <div class="col-sm-7">
                   <%= tag :input, type: "date", class: "form-control", id: "calDTREDate" %>
@@ -98,7 +98,7 @@
         <div class="col-sm-6">
           <div class="form-group">
             <div class="col-sm-6">
-            <button class="btn btn-info" type="button" onclick="generateDTRForm()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Generate DTR Form</button>
+            <button class="btn btn-info hide" type="button" onclick="generateDTRForm()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Generate DTR Form</button>
             </div>
 
           <div class="col-sm-6 text-right">
@@ -109,7 +109,7 @@
               <div class="col-sm-4">
               <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
                 <%= number_input f, :range, value: 28, type: "hidden" %>
-                <%= submit class: "btn btn-warning" do %>
+                <%= submit class: "btn btn-warning " <> hide_ifnobasic(@employee.compensation.basic) do %>
                   <span class="glyphicon glyphicon-plus"></span><%= " 28 to 12" %>
                 <% end %>
               <% end %>
@@ -118,7 +118,7 @@
               <div class="col-sm-4">
               <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
                 <%= number_input f, :range, value: 13, type: "hidden" %>
-                <%= submit class: "btn btn-warning" do %>
+                <%= submit class: "btn btn-warning " <> hide_ifnobasic(@employee.compensation.basic) do %>
                   <span class="glyphicon glyphicon-plus"></span><%= " 13 to 27" %>
                 <% end %>
               <% end %>
