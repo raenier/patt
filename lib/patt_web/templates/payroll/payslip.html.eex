@@ -146,12 +146,12 @@
           </tr>
           <tr>
               <th>DATE</th>
+              <th>HO</th>
               <th>IN</th>
               <th>OUT</th>
               <th style="background: white;"></th>
               <th>IN</th>
               <th>OUT</th>
-              <th>HO</th>
               <th>ADJUSTMENTS</th>
               <th colspan=2>OT</th>
               <th>UT</th>
@@ -165,6 +165,9 @@
               <tr>
                 <td>
                   <%= label dtr, return_date_and_day(dtr.data.date), class: "form-control" %>
+                </td>
+                <td>
+                  <%= checkbox dtr, :ho %>
                 </td>
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_in]",
@@ -189,9 +192,6 @@
                         value: if(dtr.data.out, do: time_string(dtr.data.out.hour, dtr.data.out.minute)),
                         id: "#{dtr.index}timeout",
                         onchange: "validateTime('##{dtr.index}timein', '##{dtr.index}timeout');"%>
-                </td>
-                <td>
-                  <%= checkbox dtr, :ho %>
                 </td>
                 <td>
                   <%= select dtr, :daytype, @daytypes, class: "form-control" %>
@@ -280,6 +280,55 @@
             </tbody>
         </table>
     </div>
+
+    <!--DTR TOTALS-->
+    <%= if assoc_loaded?(@employee.dtrs) do %>
+      <div class= "table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Total Vacation Leave:</td>
+              <td><%= @totals.vl %></td>
+            </tr>
+            <tr>
+              <td>Total Sick Leave:</td>
+              <td><%= @totals.sl %></td>
+            </tr>
+            <tr>
+              <td>Total Overtime:</td>
+              <td><%= @totals.ot %></td>
+            </tr>
+            <tr>
+              <td>Total Undertime:</td>
+              <td><%= @totals.ut %></td>
+            </tr>
+            <tr>
+              <td>Total Tardiness:</td>
+              <td><%= @totals.tard %></td>
+            </tr>
+            <tr>
+              <td>Total Minutes Worked:</td>
+              <td><%= @totals.mw %></td>
+            </tr>
+            <tr>
+              <td>Total Absent:</td>
+              <td><%= @totals.absent %> day(s)</td>
+            </tr>
+            <tr>
+              <td>Total Work Days:</td>
+              <td><%= @totals.daysofwork %> day(s)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+
 <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Summary</h4>
 <div class="row">
     <div class="col-sm-7">
@@ -288,7 +337,6 @@
                 <thead class="bg-color-3c3c3c txt-color-FFFFFF">
                     <tr>
                         <th>&nbsp;</th>
-                        <th>Code</th>
                         <th>Earnings</th>
                         <th>Deductions</th>
                         <th>This Period</th>
@@ -297,8 +345,7 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td><label>Bonus Pay</label></td>
-                        <td></td>
+                        <td><label>Regular Pay</label></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -310,11 +357,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>SL Pay</label></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -326,11 +371,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Overtime Pay</label></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -342,11 +385,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Allowance</label></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -358,11 +399,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Absent</label></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -374,11 +413,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Pagibig</label></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -390,7 +427,6 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>SSS</label></td>
@@ -398,11 +434,9 @@
                         <td></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr class="bg-success">
                         <td><label>Total Pay</label></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                         <td></td>

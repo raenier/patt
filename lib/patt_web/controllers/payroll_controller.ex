@@ -37,12 +37,15 @@ defmodule PattWeb.PayrollController do
 
     changeset = Employee.changeset_dtr(employee, %{})
     daytypes = Payroll.daytype_list()
+
+    totals = Attendance.overall_totals(employee.dtrs)
     render conn, "payslip.html",
     [
       employee: employee,
       changeset: changeset,
       range: params,
-      daytypes: daytypes
+      daytypes: daytypes,
+      totals: totals,
     ]
   end
 
@@ -67,12 +70,15 @@ defmodule PattWeb.PayrollController do
 
     changeset = Employee.changeset_dtr(employee, %{})
     daytypes = Payroll.daytype_list()
+    totals = Attendance.overall_totals(employee.dtrs)
+
     render conn, "payslip.html",
     [
       employee: employee,
       changeset: changeset,
       range: range_params,
-      daytypes: daytypes
+      daytypes: daytypes,
+      totals: totals
     ]
   end
 
@@ -95,12 +101,15 @@ defmodule PattWeb.PayrollController do
 
     changeset = Employee.changeset_dtr(employee, %{})
     daytypes = Payroll.daytype_list()
+    totals = Attendance.overall_totals(employee.dtrs)
+
     render conn, "payslip.html",
     [
       employee: employee,
       changeset: changeset,
       range: range_params,
-      daytypes: daytypes
+      daytypes: daytypes,
+      totals: totals
     ]
   end
 end

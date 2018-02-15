@@ -301,6 +301,10 @@ defmodule Patt.Attendance do
     dtr.sched_in && dtr.sched_out && dtr.out && dtr.in
   end
 
+  def in_out_present(dtr) do
+    dtr.in && dtr.out
+  end
+
   def sched_and_in_present(dtr) do
     dtr.sched_in && dtr.sched_out && dtr.in
   end
@@ -450,6 +454,16 @@ defmodule Patt.Attendance do
           hw: compute_total_wh(dtr)
         }
 
+      "ob" ->
+        tardiness = compute_tard(dtr)
+
+        %{
+          overtime: if(check_tardiness(tardiness), do: compute_ot(dtr), else: 0),
+          undertime: compute_ut(dtr),
+          tardiness: tardiness,
+          hw: compute_total_wh(dtr)
+        }
+
       "halfday" ->
         total_hour = total_hour(dtr)
         mtotalwh = (total_hour - round(total_hour/2)) * 60
@@ -460,6 +474,30 @@ defmodule Patt.Attendance do
           undertime: compute_ut(dtr) + mtotalwh,
           tardiness: unless(tardiness < 0, do: tardiness, else: 0),
           hw: compute_total_wh(dtr)
+        }
+
+      "restday" ->
+        %{
+          overtime: compute_ot(dtr),
+          undertime: 0,
+          tardiness: 0,
+          hw: compute_total_wh(dtr)
+        }
+
+      "vl" ->
+        %{
+          overtime: 0,
+          undertime: 0,
+          tardiness: 0,
+          hw: 0
+        }
+
+      "sl" ->
+        %{
+          overtime: 0,
+          undertime: 0,
+          tardiness: 0,
+          hw: 0
         }
 
       _any ->
@@ -486,6 +524,94 @@ defmodule Patt.Attendance do
     end
 
     Map.put(employee, :dtrs, dtrs)
+  end
+
+  #compute total for employee for that cutoff
+  #Tallying
+  def overall_totals(dtrs) do
+    minutesworked =
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        hw = unless is_nil(dtr.hw) || dtr.hw == "", do: dtr.hw, else: 0
+        hw + acc
+      end
+
+    overtime =
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        ot = unless is_nil(dtr.overtime) || dtr.overtime == "", do: dtr.overtime, else: 0
+        ot + acc
+      end
+
+    undertime =
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        ut = unless is_nil(dtr.undertime) || dtr.undertime == "", do: dtr.undertime, else: 0
+        ut + acc
+      end
+
+    absent =
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" do
+          if (dtr.sched_in && dtr.sched_out) && (is_nil(dtr.in) && is_nil(dtr.out)) do
+            absent = round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
+            absent + acc
+          else
+            acc
+          end
+        else
+          acc
+        end
+      end
+
+    #count total work minutes skipping restday that has no actual in and out
+    totalwm =
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        if dtr.sched_in && dtr.sched_out do
+          unless dtr.daytype == "restday" && is_nil(dtr.in) && is_nil(dtr.out) do
+            twh = round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
+            twh + acc
+          else
+            acc
+          end
+        else
+          acc
+        end
+      end
+
+    tardiness =
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        tard = unless is_nil(dtr.tardiness) || dtr.tardiness == "", do: dtr.tardiness, else: 0
+        tard + acc
+      end
+
+    vl =
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        if dtr.sched_in && dtr.sched_out && dtr.daytype == "vl" do
+            twh = round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
+            twh + acc
+        else
+          acc
+        end
+      end
+
+    sl =
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        if dtr.sched_in && dtr.sched_out && dtr.daytype == "sl" do
+            twh = round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
+            twh + acc
+        else
+          acc
+        end
+      end
+
+    totals = %{
+      ot: overtime,
+      ut: undertime,
+      tard: tardiness,
+      mw: minutesworked,
+      absent: round((absent/60)/8),
+      daysofwork: round((totalwm/60)/8),
+      vl: vl,
+      sl: sl,
+    }
   end
 
 end
