@@ -103,14 +103,27 @@ defmodule Patt.Payroll do
   end
 
   #custom
-
-  def daytype_list() do
+  def daytype_list(employee) do
     all_dtypes =
       %Patt.Payroll.Daytype{}
         |> Map.pop(:__struct__)
         |> elem(1)
         |> Enum.sort_by(&(elem(&1, 1).order))
         |> Keyword.keys
+
+    #hide vl and sl option when probationary or sl/vl_total is 0
+    all_dtypes =
+      if employee.leave.sl_total == 0 do
+        Enum.filter(all_dtypes, &(&1 !== :sl))
+      else
+        all_dtypes
+      end
+    all_dtypes =
+      if employee.leave.vl_total == 0 do
+        Enum.filter(all_dtypes, &(&1 !== :vl))
+      else
+        all_dtypes
+      end
 
     Enum.map all_dtypes, fn daytype ->
       {String.upcase(Atom.to_string(daytype)), daytype}
