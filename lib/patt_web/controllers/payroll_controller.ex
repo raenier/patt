@@ -15,7 +15,15 @@ defmodule PattWeb.PayrollController do
     employee = Attendance.get_employee_wdassoc!(id)
     changeset = Employee.changeset_dtr(Map.put(employee, :dtrs, []), %{})
     range = ""
-    render conn, "payslip.html", employee: employee, changeset: changeset, range: range
+    usedleave = Payroll.used_leave(employee)
+
+    render conn, "payslip.html",
+      [
+        employee: employee,
+        changeset: changeset,
+        range: range,
+        usedleave: usedleave,
+      ]
   end
 
   def gen_dtr(conn, %{"id" => id, "generated" => %{"range" => params}}) do
@@ -36,9 +44,10 @@ defmodule PattWeb.PayrollController do
       |> Attendance.sort_dtrs_bydate()
 
     changeset = Employee.changeset_dtr(employee, %{})
-    daytypes = Payroll.daytype_list()
-
+    daytypes = Payroll.daytype_list(employee)
     totals = Attendance.overall_totals(employee.dtrs)
+    usedleave = Payroll.used_leave(employee)
+
     render conn, "payslip.html",
     [
       employee: employee,
@@ -46,6 +55,7 @@ defmodule PattWeb.PayrollController do
       range: params,
       daytypes: daytypes,
       totals: totals,
+      usedleave: usedleave,
     ]
   end
 
@@ -69,8 +79,9 @@ defmodule PattWeb.PayrollController do
       |> Attendance.sort_dtrs_bydate()
 
     changeset = Employee.changeset_dtr(employee, %{})
-    daytypes = Payroll.daytype_list()
+    daytypes = Payroll.daytype_list(employee)
     totals = Attendance.overall_totals(employee.dtrs)
+    usedleave = Payroll.used_leave(employee)
 
     render conn, "payslip.html",
     [
@@ -78,7 +89,8 @@ defmodule PattWeb.PayrollController do
       changeset: changeset,
       range: range_params,
       daytypes: daytypes,
-      totals: totals
+      totals: totals,
+      usedleave: usedleave,
     ]
   end
 
@@ -100,8 +112,9 @@ defmodule PattWeb.PayrollController do
     employee = Attendance.sort_dtrs_bydate(employee)
 
     changeset = Employee.changeset_dtr(employee, %{})
-    daytypes = Payroll.daytype_list()
+    daytypes = Payroll.daytype_list(employee)
     totals = Attendance.overall_totals(employee.dtrs)
+    usedleave = Payroll.used_leave(employee)
 
     render conn, "payslip.html",
     [
@@ -109,7 +122,8 @@ defmodule PattWeb.PayrollController do
       changeset: changeset,
       range: range_params,
       daytypes: daytypes,
-      totals: totals
+      totals: totals,
+      usedleave: usedleave,
     ]
   end
 end

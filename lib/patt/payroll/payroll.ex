@@ -118,6 +118,7 @@ defmodule Patt.Payroll do
       else
         all_dtypes
       end
+
     all_dtypes =
       if employee.leave.vl_total == 0 do
         Enum.filter(all_dtypes, &(&1 !== :vl))
@@ -130,4 +131,22 @@ defmodule Patt.Payroll do
     end
   end
 
+  def used_leave(employee) do
+    {:ok, start} = Date.from_erl {Date.utc_today.year, 01, 01}
+    {:ok, endd} = Date.from_erl {Date.utc_today.year, 12, 31}
+    used_sl =
+      from(d in Patt.Attendance.Dtr, where: d.daytype == "sl" and d.employee_id == ^employee.id and d.date >= ^start and d.date <= ^endd)
+      |> Patt.Repo.all
+      |> Enum.count
+
+    used_vl =
+      from(d in Patt.Attendance.Dtr, where: d.daytype == "vl" and d.employee_id == ^employee.id and d.date >= ^start and d.date <= ^endd)
+      |> Patt.Repo.all
+      |> Enum.count
+
+    %{
+      rem_sl: employee.leave.sl_total - used_sl,
+      rem_vl: employee.leave.vl_total - used_vl,
+    }
+  end
 end
