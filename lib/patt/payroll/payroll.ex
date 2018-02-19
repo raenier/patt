@@ -8,6 +8,7 @@ defmodule Patt.Payroll do
 
   alias Patt.Payroll.Contribution
   alias Patt.Payroll.Payperiod
+  alias Patt.Payroll.Payslip
 
   def list_contributions do
     Repo.all(Contribution)
@@ -107,5 +108,32 @@ defmodule Patt.Payroll do
       rem_sl: employee.leave.sl_total - used_sl,
       rem_vl: employee.leave.vl_total - used_vl,
     }
+  end
+
+  ###PAYSLIP
+  def list_payslips do
+    Repo.all(Payslip)
+  end
+
+  def get_payslip!(id), do: Repo.get!(Payslip, id)
+
+  def create_payslip(attrs \\ %{}) do
+    %Payslip{}
+    |> Payslip.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_payslip(%Payslip{} = payslip, attrs) do
+    payslip
+    |> Payslip.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_payslip(%Payslip{} = payslip) do
+    Repo.delete(payslip)
+  end
+
+  def change_payslip(%Payslip{} = payslip) do
+    Payslip.changeset(payslip, %{})
   end
 end
