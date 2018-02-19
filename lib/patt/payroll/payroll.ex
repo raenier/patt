@@ -7,6 +7,7 @@ defmodule Patt.Payroll do
   alias Patt.Repo
 
   alias Patt.Payroll.Contribution
+  alias Patt.Payroll.Payperiod
 
   def list_contributions do
     Repo.all(Contribution)
@@ -30,15 +31,34 @@ defmodule Patt.Payroll do
     Repo.delete(contribution)
   end
 
-
-  ## Examples
-
-      iex> change_contribution(contribution)
-      %Ecto.Changeset{source: %Contribution{}}
-
-  """
   def change_contribution(%Contribution{} = contribution) do
     Contribution.changeset(contribution, %{})
+  end
+
+  #payperiod
+  def get_all_payperiod() do
+    Repo.all Payperiod
+  end
+
+  def get_else_create_payperiod(from, to) do
+    payperiod = get_specific_payperiod(from, to)
+    unless is_nil(payperiod) || Enum.empty?(payperiod) do
+      List.first payperiod
+    else
+      {:ok, payperiod} = create_payperiod(%{from: from, to: to})
+      payperiod
+    end
+  end
+
+  def get_specific_payperiod(from, to) do
+    from(pp in Payperiod, where: pp.from == ^from and pp.to == ^to)
+    |> Repo.all()
+  end
+
+  def create_payperiod(attrs \\ %{}) do
+    %Payperiod{}
+    |> Payperiod.changeset(attrs)
+    |> Repo.insert()
   end
 
   #custom

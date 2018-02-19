@@ -2,6 +2,7 @@ defmodule PattWeb.PayrollController do
   use PattWeb, :controller
   alias Patt.Attendance
   alias Patt.Payroll
+  alias Patt.Payroll.Payperiod
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Dtr
   alias Patt.Helper
@@ -47,6 +48,9 @@ defmodule PattWeb.PayrollController do
     daytypes = Payroll.daytype_list(employee)
     totals = Attendance.overall_totals(employee.dtrs)
     usedleave = Payroll.used_leave(employee)
+
+    #get_payperiod or create
+    payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
 
     render conn, "payslip.html",
     [
