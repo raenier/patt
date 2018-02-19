@@ -23,21 +23,31 @@
         </div>
         <ul class="nav navbar-nav">
             <li>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;Employees
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <%= link to: employee_path(@conn, :new) do %>
-                      <span class="glyphicon glyphicon-plus"></span><%= " Add New" %>
-                    <% end %>
-                  </li>
-                  <li>
-                    <%= link to: employee_path(@conn, :index) do %>
-                      <span class="glyphicon glyphicon-cog"></span><%= " Manage Records" %>
-                    <% end %>
-                  </li>
-                </ul>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-chevron-down"></span>&nbsp;Employees
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <%= link to: employee_path(@conn, :new) do %>
+                    <span class="glyphicon glyphicon-plus"></span><%= " Add New" %>
+                  <% end %>
+                </li>
+                <li>
+                  <%= link to: employee_path(@conn, :index) do %>
+                    <span class="glyphicon glyphicon-cog"></span><%= " Manage Records" %>
+                  <% end %>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <%= link to: payroll_path(@conn, :index) do %>
+                <span class="glyphicon glyphicon-list-alt"></span>&nbsp;<%= " Holidays"%>
+              <% end %>
+            </li>
+            <li>
+              <%= link to: payroll_path(@conn, :index) do %>
+                <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;<%= " Loans"%>
+              <% end %>
             </li>
             <li>
               <%= link to: payroll_path(@conn, :index) do %>
