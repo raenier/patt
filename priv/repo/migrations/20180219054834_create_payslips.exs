@@ -3,16 +3,16 @@ defmodule Patt.Repo.Migrations.CreatePayslips do
 
   def change do
     create table(:payslips) do
-      add :gross, :integer
-      add :net, :integer
-      add :regpay, :integer
-      add :otpay, :integer
-      add :leavepay, :integer
-      add :sss, :integer
-      add :pagibig, :integer
-      add :philhealth, :integer
-      add :undertime, :integer
-      add :tardiness, :integer
+      add :gross, :float
+      add :net, :float
+      add :regpay, :float
+      add :otpay, :float
+      add :leavepay, :float
+      add :sss, :float
+      add :pagibig, :float
+      add :philhealth, :float
+      add :undertime, :float
+      add :tardiness, :float
       add :employee_id, references(:employees, on_delete: :nilify_all)
       add :payperiod_id, references(:payperiods, on_delete: :nilify_all)
 

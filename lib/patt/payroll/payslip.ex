@@ -10,16 +10,16 @@ defmodule Patt.Payroll.Payslip do
     belongs_to :employee, Employee
     belongs_to :payperiod, Payperiod
 
-    field :gross, :integer
-    field :leavepay, :integer
-    field :net, :integer
-    field :otpay, :integer
-    field :pagibig, :integer
-    field :philhealth, :integer
-    field :regpay, :integer
-    field :sss, :integer
-    field :tardiness, :integer
-    field :undertime, :integer
+    field :gross, :float
+    field :leavepay, :float
+    field :net, :float
+    field :otpay, :float
+    field :pagibig, :float
+    field :philhealth, :float
+    field :regpay, :float
+    field :sss, :float
+    field :tardiness, :float
+    field :undertime, :float
 
     timestamps()
   end
