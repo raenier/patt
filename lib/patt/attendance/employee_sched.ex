@@ -17,6 +17,8 @@ defmodule Patt.Attendance.EmployeeSched do
     belongs_to :saturday, SchedProfile, foreign_key: :saturday_id
     belongs_to :sunday, SchedProfile, foreign_key: :sunday_id
 
+    field :dpm, :integer
+
     timestamps()
   end
 
@@ -24,7 +26,7 @@ defmodule Patt.Attendance.EmployeeSched do
   def changeset(%EmployeeSched{} = employee_sched, attrs) do
     employee_sched
     |> cast(attrs, [:monday_id, :tuesday_id, :wednesday_id, :thursday_id,
-                    :friday_id, :saturday_id, :sunday_id, :employee_id])
+                    :friday_id, :saturday_id, :sunday_id, :employee_id, :dpm])
     |> validate_required([])
   end
 end

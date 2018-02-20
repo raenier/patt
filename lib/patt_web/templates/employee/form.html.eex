@@ -110,6 +110,13 @@
             </div>
           </div>
         <% end %>
+        <div class="form-group">
+          <label class="control-label col-sm-3">Days of work per month:</label>
+          <div class="col-sm-9">
+            <%= select sched, :dpm, ["26": 26, "24": 24, "22": 22], class: "form-control"%>
+          </div>
+        </div>
+
     </div>
   </div>
   <% end %>
