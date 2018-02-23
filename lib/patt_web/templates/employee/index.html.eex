@@ -87,8 +87,7 @@
                                                   schedprofiles: @schedprofiles %>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-info" data-dismiss="modal">Cancel</button>
+                    <div class="modal-footer" style="margin-left: 2px;">
                     </div>
                 </div>
             </div>
