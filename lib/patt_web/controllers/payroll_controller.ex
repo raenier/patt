@@ -130,4 +130,16 @@ defmodule PattWeb.PayrollController do
       usedleave: usedleave,
     ]
   end
+  def print(conn, %{"payslip" => pid}) do
+    payslip = Payroll.get_payslip!(pid)
+    payslip = Patt.Repo.preload(payslip, [:employee, :payperiod])
+
+    conn = put_layout conn, false
+
+    render conn, "print.html",
+    [
+      payslip: payslip,
+    ]
+  end
+
 end

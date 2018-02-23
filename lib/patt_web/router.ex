@@ -26,6 +26,8 @@ defmodule PattWeb.Router do
     post "/payroll/:id/new", PayrollController, :gen_dtr
     put "/payroll/:id/new", PayrollController, :up_dtr
     delete "/payroll/:id/new", PayrollController, :reset_dtrs
+    get "/payroll/:payslip/print", PayrollController, :print
+
     resources "/holidays", HolidayController
   end
 
