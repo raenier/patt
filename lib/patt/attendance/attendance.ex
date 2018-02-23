@@ -365,6 +365,25 @@ defmodule Patt.Attendance do
     end
   end
 
+  def compute_tard_deductable(dtr) do
+    actard = compute_tard(dtr)
+    cond do
+      actard in 31..240 ->
+        240
+
+      actard <= 30 ->
+        actard
+
+      true ->
+        actard
+    end
+  end
+
+  #for computation of 100minutes allowance for whole month
+  def compute_allowable_tard() do
+
+  end
+
   def compute_tard(dtr) do
     if sched_and_in_present(dtr) do
       {mout, ain} = compute_mout_ain(dtr)
@@ -445,35 +464,56 @@ defmodule Patt.Attendance do
   def process_workhours(dtr) do
     case dtr.daytype do
       "regular" ->
-        tardiness = compute_tard(dtr)
+        tardiness = compute_tard_deductable(dtr)
+        undertime = compute_ut(dtr)
+        totalwh =
+          if all_inputs_complete(dtr) do
+            tard = unless is_nil(tardiness), do: tardiness, else: 0
+            ut = unless is_nil(undertime), do: undertime, else: 0
+            day_totalwh(dtr) - (tard + ut)
+          end
 
         %{
           overtime: if(check_tardiness(tardiness), do: compute_ot(dtr), else: 0),
-          undertime: compute_ut(dtr),
+          undertime: undertime,
           tardiness: tardiness,
-          hw: compute_total_wh(dtr)
+          hw: totalwh
         }
 
       "ob" ->
-        tardiness = compute_tard(dtr)
+        tardiness = compute_tard_deductable(dtr)
+        undertime = compute_ut(dtr)
+        totalwh =
+          if all_inputs_complete(dtr) do
+            tard = unless is_nil(tardiness), do: tardiness, else: 0
+            ut = unless is_nil(undertime), do: undertime, else: 0
+            day_totalwh(dtr) - (tard + ut)
+          end
 
         %{
           overtime: if(check_tardiness(tardiness), do: compute_ot(dtr), else: 0),
-          undertime: compute_ut(dtr),
+          undertime: undertime,
           tardiness: tardiness,
-          hw: compute_total_wh(dtr)
+          hw: totalwh
         }
 
       "halfday" ->
         total_hour = total_hour(dtr)
         mtotalwh = (total_hour - round(total_hour/2)) * 60
         tardiness = compute_tard(dtr) - mtotalwh
+        tard = unless(tardiness < 0, do: tardiness, else: 0)
+        undertime = compute_ut(dtr)
+        ut = if(is_nil(undertime), do: 0 + mtotalwh, else: undertime + mtotalwh)
+        totalwh =
+          if all_inputs_complete(dtr) do
+            day_totalwh(dtr) - (tard + ut)
+          end
 
         %{
           overtime: 0,
-          undertime: compute_ut(dtr) + mtotalwh,
-          tardiness: unless(tardiness < 0, do: tardiness, else: 0),
-          hw: compute_total_wh(dtr)
+          undertime: ut,
+          tardiness: tard,
+          hw: totalwh
         }
 
       "restday" ->
@@ -524,6 +564,11 @@ defmodule Patt.Attendance do
     end
 
     Map.put(employee, :dtrs, dtrs)
+  end
+
+  #compute day totalwh
+  def day_totalwh(dtr) do
+    round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
   end
 
   #compute total for employee for that cutoff
@@ -581,7 +626,7 @@ defmodule Patt.Attendance do
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
         if dtr.sched_in && dtr.sched_out do
           unless dtr.daytype == "restday" && is_nil(dtr.in) && is_nil(dtr.out) do
-            twh = round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
+            twh = day_totalwh(dtr)
             twh + acc
           else
             acc
@@ -640,6 +685,8 @@ defmodule Patt.Attendance do
       daysofwork: daycount,
       vl: vl,
       sl: sl,
+      totalwm: totalwm,
+      totalabs: absent,
     }
   end
 

@@ -10,16 +10,26 @@ defmodule Patt.Payroll.Payslip do
     belongs_to :employee, Employee
     belongs_to :payperiod, Payperiod
 
-    field :gross, :float
-    field :leavepay, :float
-    field :net, :float
+    field :regpay, :float
+    field :allowance, :float
     field :otpay, :float
+    field :vlpay, :float
+    field :slpay, :float
+    field :hopay, :float
+    field :gross, :float
+    field :net, :float
+
+    field :sss, :float
     field :pagibig, :float
     field :philhealth, :float
-    field :regpay, :float
-    field :sss, :float
-    field :tardiness, :float
+    field :healthcare, :float
+    field :wtax, :float
+    field :loan, :float
+    field :feliciana, :float
+    field :other_deduction, :float
     field :undertime, :float
+    field :absent, :float
+    field :tardiness, :float
 
     timestamps()
   end
@@ -27,7 +37,13 @@ defmodule Patt.Payroll.Payslip do
   @doc false
   def changeset(%Payslip{} = payslip, attrs) do
     payslip
-    |> cast(attrs, [:gross, :net, :regpay, :otpay, :leavepay, :sss, :pagibig, :philhealth, :undertime, :tardiness, :employee_id, :payperiod_id])
+    |> cast(attrs,
+            [
+              :gross, :net, :regpay, :otpay, :vlpay, :slpay,
+              :sss, :pagibig, :philhealth, :undertime,
+              :tardiness, :employee_id, :payperiod_id, :allowance,
+              :hopay, :healthcare, :wtax, :loan, :feliciana, :absent, :other_deduction
+            ])
     |> validate_required([])
   end
 end

@@ -9,6 +9,7 @@ defmodule Patt.Payroll do
   alias Patt.Payroll.Contribution
   alias Patt.Payroll.Payperiod
   alias Patt.Payroll.Payslip
+  alias Patt.Payroll.Holiday
 
   def list_contributions do
     Repo.all(Contribution)
@@ -71,7 +72,6 @@ defmodule Patt.Payroll do
         |> Enum.sort_by(&(elem(&1, 1).order))
         |> Keyword.keys
 
-    #hide vl and sl option when probationary or sl/vl_total is 0
     all_dtypes =
       if employee.leave.sl_total == 0 do
         Enum.filter(all_dtypes, &(&1 !== :sl))
@@ -117,6 +117,20 @@ defmodule Patt.Payroll do
 
   def get_payslip!(id), do: Repo.get!(Payslip, id)
 
+  def get_specific_payslip(employee_id, payperiod_id) do
+    from(ps in Payslip, where: ps.employee_id == ^employee_id and ps.payperiod_id == ^payperiod_id )
+    |> Repo.all()
+  end
+
+  def get_ps_else_new(employee_id, payperiod_id) do
+    payslip = get_specific_payslip(employee_id, payperiod_id)
+    unless is_nil(payslip) || Enum.empty?(payslip) do
+      List.first(payslip)
+    else
+      %Payslip{employee_id: employee_id, payperiod_id: payperiod_id}
+    end
+  end
+
   def create_payslip(attrs \\ %{}) do
     %Payslip{}
     |> Payslip.changeset(attrs)
@@ -136,6 +150,50 @@ defmodule Patt.Payroll do
   def change_payslip(%Payslip{} = payslip) do
     Payslip.changeset(payslip, %{})
   end
+
+  def minute_rate(employee) do
+    employee = Repo.preload(employee, [:compensation, :employee_sched])
+    ((employee.compensation.basic / employee.employee_sched.dpm)/8/60)
+  end
+
+  def compute_payslip(payslip, totals) do
+    payslip = Repo.preload(payslip, employee: [:compensation])
+    minuterate = minute_rate(payslip.employee)
+
+    vlpay = totals.vl * minuterate
+    slpay = totals.sl * minuterate
+
+    #anticipate daytypes when computing,
+    #hopay consider hollidaytypes when computing, legal special - create table
+    #edit compensation include allowance on editing of employee info - constant. divide by two or by number of days present
+
+    #undertime and absent are different computations
+    #consider tardiness rule for computing tardiness, subtract halfday/4hrs when late of > 30 minutes
+    #edit payslip add totaldays of work and absent days
+
+    pschangeset = Payslip.changeset(payslip, %{
+        regpay: (totals.totalwm * minuterate) - (vlpay + slpay),
+        vlpay: vlpay,
+        slpay: slpay,
+        otpay: totals.ot * (minuterate * 1.25),
+        hopay: 0,
+        allowance: 0,
+        tardiness: 0,
+        undertime: 0,
+        absent: 0,
+        wtax: 0,
+      })
+    if payslip.id do
+      Repo.update(pschangeset)
+    else
+      Repo.insert(pschangeset)
+    end
+  end
+
+  def minute_rate() do
+    #compute minute rate
+  end
+
   ###HOLIDAYS
   #
   def list_holidays do

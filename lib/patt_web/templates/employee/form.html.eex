@@ -2,7 +2,11 @@
   <div class="row">
     <div class="col-sm-7">
         <br>
-        <h4><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Personal Information</h4>
+        <h4>
+          <span class="glyphicon glyphicon-user"></span>
+          <span class="glyphicon glyphicon-list-alt"></span>
+          &nbsp;&nbsp;Personal Information
+        </h4>
         <hr>
 
         <div class="form-group">
@@ -88,15 +92,6 @@
                   class: "form-control" , prompt: "Choose Position for employee"%>
            </div>
         </div>
-
-        <div class="form-group">
-          <%= inputs_for f, :compensation, fn comp -> %>
-            <label class="control-label col-sm-3" for="basicsalary">Basic Salary:</label>
-            <div class="col-sm-9">
-              <%= number_input comp, :basic, class: "form-control", placeholder: "0.00", max: 1000000 %>
-            </div>
-          <% end %>
-        </div>
     </div>
 
     <div class="col-sm-5">
@@ -121,7 +116,7 @@
         <div class="form-group">
           <label class="control-label col-sm-3">Days of work per month:</label>
           <div class="col-sm-9">
-            <%= select sched, :dpm, ["26": 26, "24": 24, "22": 22], class: "form-control"%>
+            <%= select sched, :dpm, ["26": 26, "22": 22], class: "form-control"%>
           </div>
         </div>
 
@@ -131,85 +126,89 @@
 
   <%= inputs_for f, :contribution, fn con -> %>
   <br><br>
-  <h4><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Social Benefits</h4>
-  <hr>
   <div class="row">
-    <div class="col-sm-6">
+    <!--BENEFITS-->
+    <div class="col-sm-7">
+    <h4><span class="glyphicon glyphicon-check"></span>&nbsp;&nbsp;Social Benefits</h4>
+    <hr>
         <div class="form-group">
             <label class="control-label col-sm-4" for="sss">SSS Number:</label>
             <div class="col-sm-8">
               <%= number_input con, :sss_num, class: "form-control", placeholder: "SSS Number"%>
             </div>
         </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="form-group">
-            <label class="control-label col-sm-6" for="sssCont">SSS Contribution:</label>
-            <div class="col-sm-6">
-              <%= number_input con, :sss_con, class: "form-control", placeholder: "0.00"%>
-            </div>
-        </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6">
         <div class="form-group">
             <label class="control-label col-sm-4" for="philhealth">Phil Health Number:</label>
             <div class="col-sm-8">
               <%= number_input con, :philhealth_num, class: "form-control", placeholder: "Philhealth Number"%>
             </div>
         </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="form-group">
-            <label class="control-label col-sm-6" for="philhealthCont">Phil Health Contribution:</label>
-            <div class="col-sm-6">
-              <%= number_input con, :philhealth_con, class: "form-control", placeholder: "0.00"%>
-            </div>
-        </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-6">
         <div class="form-group">
             <label class="control-label col-sm-4" for="pagibig">Pag-ibig Number:</label>
             <div class="col-sm-8">
               <%= number_input con, :pagibig_num, class: "form-control", placeholder: "Pagibig Number"%>
             </div>
         </div>
-    </div>
-    <div class="col-sm-6">
+
+        <br>
+        <h4><span class="glyphicon glyphicon-barcode"></span>&nbsp;&nbsp;Tax Identification Number</h4>
+        <hr>
         <div class="form-group">
-            <label class="control-label col-sm-6" for="pagibigCont">Pag-ibig Contribution:</label>
-            <div class="col-sm-6">
-              <%= number_input con, :pagibig_con, class: "form-control", placeholder: "0.00"%>
+          <%= inputs_for f, :tax, fn tax -> %>
+            <label class="col-sm-4"></label>
+            <div class="col-sm-8">
+              <%= number_input tax, :tin, class: "form-control", placeholder: "TIN"%>
+            </div>
+          <%= end %>
+        </div>
+      </div>
+
+    <!--COMPENSATION-->
+    <div class="col-sm-5">
+      <h4><span class="glyphicon glyphicon-apple"></span>&nbsp;&nbsp;Compensation</h4>
+      <hr>
+        <%= inputs_for f, :compensation, fn comp -> %>
+        <div class="form-group">
+            <label class="control-label col-sm-3">Basic Salary:</label>
+            <div class="col-sm-9">
+              <%= number_input comp, :basic, class: "form-control", placeholder: "0.00", max: 1000000 %>
             </div>
         </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">COLA:</label>
+            <div class="col-sm-9">
+              <%= number_input comp, :cola, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">Clothing:</label>
+            <div class="col-sm-9">
+              <%= number_input comp, :clothing, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">Food:</label>
+            <div class="col-sm-9">
+              <%= number_input comp, :clothing, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-3">Travel:</label>
+            <div class="col-sm-9">
+              <%= number_input comp, :travel, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            </div>
+        </div>
+        <% end %>
     </div>
+
   </div>
   <% end %>
 
   <br><br>
-  <h4><span class="glyphicon glyphicon-barcode"></span>&nbsp;&nbsp;Tax Identification Number(TIN)</h4>
-  <hr>
-  <%= inputs_for f, :tax, fn tax -> %>
-  <div class="row">
-    <div class="col-sm-6">
-    <div class="form-group">
-       <label class="col-sm-4"></label>
-       <div class="col-sm-8">
-        <%= number_input tax, :tin, class: "form-control", placeholder: "TIN"%>
-       </div>
-     </div>
-     </div>
-  </div>
-  <% end %>
 
   <hr>
   <div class="container-fluid text-right">
       <button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save</button>
-      <button class="btn btn-info" type="reset"><span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Reset</button>
   </div>
   <br>
- <br>
 <% end %>

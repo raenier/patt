@@ -3,6 +3,7 @@ defmodule PattWeb.PayrollController do
   alias Patt.Attendance
   alias Patt.Payroll
   alias Patt.Payroll.Payperiod
+  alias Patt.Payroll.Payslip
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Dtr
   alias Patt.Helper
@@ -17,6 +18,7 @@ defmodule PattWeb.PayrollController do
     changeset = Employee.changeset_dtr(Map.put(employee, :dtrs, []), %{})
     range = ""
     usedleave = Payroll.used_leave(employee)
+    payslip = %Payslip{}
 
     render conn, "payslip.html",
       [
@@ -24,6 +26,7 @@ defmodule PattWeb.PayrollController do
         changeset: changeset,
         range: range,
         usedleave: usedleave,
+        payslip: payslip,
       ]
   end
 
@@ -48,9 +51,10 @@ defmodule PattWeb.PayrollController do
     daytypes = Payroll.daytype_list(employee)
     totals = Attendance.overall_totals(employee.dtrs)
     usedleave = Payroll.used_leave(employee)
-
-    #get_payperiod or create
+    #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
+    payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
+    holidays = Payroll.list_holidays_date()
 
     render conn, "payslip.html",
     [
@@ -60,6 +64,8 @@ defmodule PattWeb.PayrollController do
       daytypes: daytypes,
       totals: totals,
       usedleave: usedleave,
+      holidays: holidays,
+      payslip: payslip,
     ]
   end
 
@@ -86,6 +92,10 @@ defmodule PattWeb.PayrollController do
     daytypes = Payroll.daytype_list(employee)
     totals = Attendance.overall_totals(employee.dtrs)
     usedleave = Payroll.used_leave(employee)
+    #forgeneratingpayslip
+    payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
+    payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
+    holidays = Payroll.list_holidays_date()
 
     render conn, "payslip.html",
     [
@@ -95,6 +105,8 @@ defmodule PattWeb.PayrollController do
       daytypes: daytypes,
       totals: totals,
       usedleave: usedleave,
+      payslip: payslip,
+      holidays: holidays,
     ]
   end
 
@@ -119,6 +131,10 @@ defmodule PattWeb.PayrollController do
     daytypes = Payroll.daytype_list(employee)
     totals = Attendance.overall_totals(employee.dtrs)
     usedleave = Payroll.used_leave(employee)
+    #forgeneratingpayslip
+    payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
+    payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
+    holidays = Payroll.list_holidays_date()
 
     render conn, "payslip.html",
     [
@@ -128,8 +144,53 @@ defmodule PattWeb.PayrollController do
       daytypes: daytypes,
       totals: totals,
       usedleave: usedleave,
+      payslip: payslip,
+      holidays: holidays,
     ]
   end
+
+  #stopped here
+  def gen_payslip(conn, %{"id" => id, "gen_payslip" => %{"range" => range_params}}) do
+    range = Helper.gen_range(String.to_integer(range_params))
+    employee = Attendance.get_employee_wdtrs!(id, range)
+    all_dtrs =
+      Attendance.complete_dtr(employee.dtrs, range)
+      |> Attendance.put_sched(employee)
+
+    employee =
+      employee
+      |> Attendance.compute_penaltyhours()
+      |> Attendance.sort_dtrs_bydate()
+
+    changeset = Employee.changeset_dtr(employee, %{})
+    daytypes = Payroll.daytype_list(employee)
+    totals = Attendance.overall_totals(employee.dtrs)
+    usedleave = Payroll.used_leave(employee)
+
+    #forgeneratingpayslip
+    payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
+    payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
+    holidays = Payroll.list_holidays_date()
+    {:ok, payslip} = Payroll.compute_payslip(payslip, totals)
+
+    render conn, "payslip.html",
+    [
+      employee: employee,
+      changeset: changeset,
+      range: range_params,
+      daytypes: daytypes,
+      totals: totals,
+      usedleave: usedleave,
+      payslip: payslip,
+      holidays: holidays,
+    ]
+  end
+
+  def up_payslip(conn, params) do
+    #for updating existing payslip
+    redirect(conn, to: payroll_path(conn, :new, 4))
+  end
+
   def print(conn, %{"payslip" => pid}) do
     payslip = Payroll.get_payslip!(pid)
     payslip = Patt.Repo.preload(payslip, [:employee, :payperiod])
