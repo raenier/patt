@@ -136,4 +136,40 @@ defmodule Patt.Payroll do
   def change_payslip(%Payslip{} = payslip) do
     Payslip.changeset(payslip, %{})
   end
+  ###HOLIDAYS
+  #
+  def list_holidays do
+    {:ok, start} = Date.new(Date.utc_today().year, 01, 01)
+    {:ok, endd} = Date.new(Date.utc_today().year, 12, 31)
+
+    from(h in Holiday, where: h.date >= ^start and h.date <= ^endd)
+    |> Repo.all()
+  end
+
+  def list_holidays_date() do
+    holidays = list_holidays()
+    Enum.map holidays, &(&1.date)
+  end
+
+  def get_holiday!(id), do: Repo.get!(Holiday, id)
+
+  def create_holiday(attrs \\ %{}) do
+    %Holiday{}
+    |> Holiday.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def update_holiday(%Holiday{} = holiday, attrs) do
+    holiday
+    |> Holiday.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def delete_holiday(%Holiday{} = holiday) do
+    Repo.delete(holiday)
+  end
+
+  def change_holiday(%Holiday{} = holiday) do
+    Holiday.changeset(holiday, %{})
+  end
 end

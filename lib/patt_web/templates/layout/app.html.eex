@@ -40,7 +40,7 @@
               </ul>
             </li>
             <li>
-              <%= link to: payroll_path(@conn, :index) do %>
+              <%= link to: holiday_path(@conn, :index) do %>
                 <span class="glyphicon glyphicon-list-alt"></span>&nbsp;<%= " Holidays"%>
               <% end %>
             </li>

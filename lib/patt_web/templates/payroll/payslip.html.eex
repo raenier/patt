@@ -167,7 +167,7 @@
                   <%= label dtr, return_date_and_day(dtr.data.date), class: "form-control" %>
                 </td>
                 <td>
-                  <%= checkbox dtr, :ho %>
+                  <%= checkbox dtr, :ho, class: unless dtr.data.date in @holidays, do: "hide", else: "" %>
                 </td>
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_in]",
@@ -346,21 +346,21 @@
                 <tbody>
                     <tr>
                         <td><label>Regular Pay</label></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.regpay), do: round(@payslip.regpay) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>VL Pay</label></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.vlpay), do: round(@payslip.vlpay) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>SL Pay</label></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.slpay), do: round(@payslip.slpay) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -374,13 +374,20 @@
                     </tr>
                     <tr>
                         <td><label>Overtime Pay</label></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.otpay), do: round(@payslip.otpay) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Holiday Pay</label></td>
+                        <td><%= unless is_nil(@payslip.hopay), do: round(@payslip.hopay) %></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Restday Pay</label></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -388,7 +395,7 @@
                     </tr>
                     <tr>
                         <td><label>Allowance</label></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.allowance), do: round(@payslip.allowance) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -396,21 +403,28 @@
                     <tr>
                         <td><label>Tardiness</label></td>
                         <td></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.tardiness), do: round(@payslip.tardiness) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td><label>Absent</label></td>
+                        <td><label>Undertime</label></td>
+                        <td></td>
+                        <td><%= unless is_nil(@payslip.undertime), do: round(@payslip.undertime) %></td>
                         <td></td>
                         <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>absent</label></td>
+                        <td></td>
+                        <td><%= unless is_nil(@payslip.absent), do: round(@payslip.absent) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Witholding Tax</label></td>
                         <td></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.wtax), do: round(@payslip.wtax) %></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -435,6 +449,13 @@
                         <td></td>
                         <td></td>
                     </tr>
+                    <tr>
+                        <td><label>Loans</label></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                     <tr class="bg-success">
                         <td><label>Total Pay</label></td>
                         <td></td>
@@ -450,8 +471,24 @@
 </div>
 <hr>
 <div class="container-fluid text-right">
-    <button class="btn btn-info"><span class="glyphicon glyphicon-open-file"></span>&nbsp;&nbsp;Generate Summary</button>
-    <button class="btn btn-info"><span class="glyphicon glyphicon-print"></span><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Print & Save Payslip</button>
-    <button class="btn btn-info"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save Payslip</button>
+    <%= form_for @conn, payroll_path(@conn, :gen_payslip, @employee),
+      [
+        as: :gen_payslip,
+        style: "display: inline;",
+      ],
+      fn f -> %>
+      <%= text_input f, :range, style: "display: none;", value: @range %>
+      <%= if assoc_loaded?(@employee.dtrs) do %>
+        <%= submit class: "btn btn-info" do %>
+          <span class="glyphicon glyphicon-save"></span>
+          <%= if(is_nil(@payslip.id), do: " GENERATE", else: " UPDATE") %>
+        <% end %>
+      <% end %>
+    <% end %>
+    <%= unless is_nil(@payslip.id) do %>
+      <%= link [to: payroll_path(@conn, :print, @payslip), class: "btn btn-info", target: "_blank"] do %>
+        <span class="glyphicon glyphicon-print"></span> PRINT
+      <% end %>
+    <% end %>
 </div>
 <br><br>

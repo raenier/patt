@@ -150,4 +150,68 @@ defmodule Patt.PayrollTest do
       assert %Ecto.Changeset{} = Payroll.change_payslip(payslip)
     end
   end
+
+  describe "holidays" do
+    alias Patt.Payroll.Holiday
+
+    @valid_attrs %{date: ~D[2010-04-17], name: "some name", type: "some type"}
+    @update_attrs %{date: ~D[2011-05-18], name: "some updated name", type: "some updated type"}
+    @invalid_attrs %{date: nil, name: nil, type: nil}
+
+    def holiday_fixture(attrs \\ %{}) do
+      {:ok, holiday} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Payroll.create_holiday()
+
+      holiday
+    end
+
+    test "list_holidays/0 returns all holidays" do
+      holiday = holiday_fixture()
+      assert Payroll.list_holidays() == [holiday]
+    end
+
+    test "get_holiday!/1 returns the holiday with given id" do
+      holiday = holiday_fixture()
+      assert Payroll.get_holiday!(holiday.id) == holiday
+    end
+
+    test "create_holiday/1 with valid data creates a holiday" do
+      assert {:ok, %Holiday{} = holiday} = Payroll.create_holiday(@valid_attrs)
+      assert holiday.date == ~D[2010-04-17]
+      assert holiday.name == "some name"
+      assert holiday.type == "some type"
+    end
+
+    test "create_holiday/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Payroll.create_holiday(@invalid_attrs)
+    end
+
+    test "update_holiday/2 with valid data updates the holiday" do
+      holiday = holiday_fixture()
+      assert {:ok, holiday} = Payroll.update_holiday(holiday, @update_attrs)
+      assert %Holiday{} = holiday
+      assert holiday.date == ~D[2011-05-18]
+      assert holiday.name == "some updated name"
+      assert holiday.type == "some updated type"
+    end
+
+    test "update_holiday/2 with invalid data returns error changeset" do
+      holiday = holiday_fixture()
+      assert {:error, %Ecto.Changeset{}} = Payroll.update_holiday(holiday, @invalid_attrs)
+      assert holiday == Payroll.get_holiday!(holiday.id)
+    end
+
+    test "delete_holiday/1 deletes the holiday" do
+      holiday = holiday_fixture()
+      assert {:ok, %Holiday{}} = Payroll.delete_holiday(holiday)
+      assert_raise Ecto.NoResultsError, fn -> Payroll.get_holiday!(holiday.id) end
+    end
+
+    test "change_holiday/1 returns a holiday changeset" do
+      holiday = holiday_fixture()
+      assert %Ecto.Changeset{} = Payroll.change_holiday(holiday)
+    end
+  end
 end
