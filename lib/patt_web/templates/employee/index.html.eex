@@ -25,6 +25,7 @@
       <th>Contact Number</th>
       <th>Type</th>
       <th>Position</th>
+      <th>Department</th>
       <th></th>
     </tr>
     </thead>
@@ -37,6 +38,7 @@
       <td><%= employee.contact_num %></td>
       <td><%= String.capitalize(employee.emp_type) %></td>
       <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
+      <td><%= String.upcase(employee.position.department.name) %></td>
       <td>
         <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
             <span class="glyphicon glyphicon-edit"></span>

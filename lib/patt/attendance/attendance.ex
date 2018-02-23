@@ -26,9 +26,11 @@ defmodule Patt.Attendance do
 
   def list_employees_wdassoc do
     list_employees()
-    |> Repo.preload([:position, :contribution, :compensation, :tax,
+    |> Repo.preload([:contribution, :compensation, :tax,
                      employee_sched:
-                     [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday]])
+                     [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday],
+                      position: :department,
+                    ])
   end
 
   def get_employee!(id), do: Repo.get!(Employee, id)
