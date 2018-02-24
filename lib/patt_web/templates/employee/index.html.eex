@@ -58,10 +58,10 @@
       <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
       <td><%= String.upcase(employee.position.department.name) %></td>
       <td>
-        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
+        <button class="btn btn-info btn-xs" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
             <span class="glyphicon glyphicon-edit"></span>
         </button>
-        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#deleteEmpModal<%= employee.id %>">
+        <button class="btn btn-info btn-xs" data-toggle="modal" data-target="#deleteEmpModal<%= employee.id %>">
             <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>
