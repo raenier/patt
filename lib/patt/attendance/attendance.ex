@@ -96,7 +96,7 @@ defmodule Patt.Attendance do
   end
 
   def search_employee(params) do
-    schemas = [:position, :employee_sched, :contribution, :compensation, :tax]
+    schemas = [:employee_sched, :contribution, :compensation, :tax, position: :department]
 
     case Integer.parse(params) do
       {number, _} ->
