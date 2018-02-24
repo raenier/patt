@@ -95,24 +95,75 @@ defmodule Patt.Attendance do
     Employee.changeset(employee, %{})
   end
 
-  def search_employee(params) do
+  def search_employee(params, criteria) do
     schemas = [:employee_sched, :contribution, :compensation, :tax, position: :department]
+    query = generate_query(params, criteria)
+    query
+      |> Repo.all
+      |> Repo.preload(schemas)
+  end
 
-    case Integer.parse(params) do
-      {number, _} ->
-        Patt.Attendance.Employee
-        |> Ecto.Query.where([e], e.id == ^number)
-        |> Repo.all
-        |> Repo.preload(schemas)
+  def generate_query(params, criteria) do
+    querystr = "%#{params}%"
+    case criteria do
+      "id" ->
+      case Integer.parse(params) do
+        {number, _} ->
+          Employee
+          |> Ecto.Query.where([e], e.id == ^number)
 
-      :error ->
-        querystr = "%#{params}%"
-        Patt.Attendance.Employee
-        |> Ecto.Query.where([e], ilike(e.first_name, ^querystr) or
-                                 ilike(e.middle_name, ^querystr) or
-                                 ilike(e.last_name, ^querystr))
-        |> Repo.all
-        |> Repo.preload(schemas)
+        :error ->
+          Employee
+      end
+
+      "fname" ->
+        Employee
+          |> Ecto.Query.where([e], ilike(e.first_name, ^querystr) )
+
+      "mname" ->
+        Employee
+          |> Ecto.Query.where([e], ilike(e.middle_name, ^querystr) )
+
+      "lname" ->
+        Employee
+          |> Ecto.Query.where([e], ilike(e.last_name, ^querystr) )
+
+      "brgy" ->
+        Employee
+          |> Ecto.Query.where([e], ilike(e.brgy, ^querystr) )
+
+      "brgy" ->
+        Employee
+          |> Ecto.Query.where([e], ilike(e.brgy, ^querystr) )
+
+      "town" ->
+        Employee
+          |> Ecto.Query.where([e], ilike(e.town, ^querystr) )
+
+      "province" ->
+        Employee
+          |> Ecto.Query.where([e], ilike(e.province, ^querystr) )
+
+      "emptype" ->
+        Employee
+          |> Ecto.Query.where([e], ilike(e.emp_type, ^querystr) )
+
+      "department" ->
+        Ecto.Query.from(
+          e in Employee,
+          join: p in assoc(e, :position),
+          join: d in assoc(p, :department), where: ilike(d.name, ^querystr)
+        )
+
+      "position" ->
+        Ecto.Query.from(
+          e in Employee,
+          join: p in assoc(e, :position),
+          where: ilike(p.name, ^querystr)
+        )
+
+       true ->
+        Employee
     end
   end
 

@@ -14,8 +14,8 @@ defmodule PattWeb.EmployeeController do
     render conn, "index.html", employees: employees, positions: positions, schedprofiles: schedprofiles
   end
 
-  def search(conn, %{"search" => %{"for" => params}}) do
-    results = Attendance.search_employee(params)
+  def search(conn, %{"search" => %{"for" => params, "attr" => attr}}) do
+    results = Attendance.search_employee(params, attr)
     positions = Attendance.list_departments_positions_kl()
     schedprofiles = Attendance.list_profiles_kl()
 

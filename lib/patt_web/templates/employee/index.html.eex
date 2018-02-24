@@ -4,11 +4,29 @@
         <div class="col-sm-5">
             <%= text_input f, :for, class: "form-control", placeholder: "Search Employee Name or Employee ID" %>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-3">
+          <%= select f, :attr,
+            [
+              ID: "id",
+              FIRSTNAME: "fname",
+              MIDDLENAME: "mname",
+              LASTNAME: "lname",
+              STREET: "street",
+              BRGY: "brgy",
+              TOWN: "town",
+              PROVINCE: "province",
+              EMPLOYEETYPE: "emptype",
+              DEPARTMENT: "department",
+              POSITION: "position",
+            ], class: "form-control" %>
+        </div>
+        <div class="col-sm-4">
              <%= submit class: "btn btn-info" do %>
                <span class="glyphicon glyphicon-search"></span><%=" SEARCH"%>
              <% end %>
-             <%= link "", to: "/employees", class: "glyphicon glyphicon-refresh btn btn-info" %>
+            <%= link to: "/employees", class: "btn btn-info" do %>
+              <span class="glyphicon glyphicon-refresh"></span>
+            <% end %>
         </div>
     </div>
   <% end %>
