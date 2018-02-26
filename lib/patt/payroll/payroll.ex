@@ -176,6 +176,19 @@ defmodule Patt.Payroll do
     %{loan: loan, fel: fel, others: others}
   end
 
+  def compute_philhealth(basic) do
+    cond do
+      (basic <= 10000) ->
+        275/2
+
+      (basic > 10000 and basic < 40000) ->
+        (basic * 0.0275)/2
+
+      (basic >= 40000) ->
+        11000/2
+    end
+  end
+
   def compute_payslip(payslip, totals, userinputs) do
     payslip = Repo.preload(payslip, employee: [:compensation, :contribution])
     minuterate = minute_rate(payslip.employee)
@@ -184,6 +197,7 @@ defmodule Patt.Payroll do
     slpay = totals.sl * minuterate
     compen = payslip.employee.compensation
     allowance = compute_allowance(payslip.employee.compensation)/2
+    philhealth = compute_philhealth(payslip.employee.compensation.basic)
 
     #anticipate daytypes when computing,
     #hopay consider hollidaytypes when computing, legal special - create table
@@ -204,7 +218,7 @@ defmodule Patt.Payroll do
         undertime: 0,
         absent: 0,
         pagibig: compute_pagibig(payslip.employee.contribution),
-        philhealth: 0,
+        philhealth: philhealth,
         sss: 0,
         wtax: 0,
         loan: userinputs.loan,
