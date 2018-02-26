@@ -1,6 +1,6 @@
-<h2>Listing Holidays</h2>
+<h2>Listing Holidays <%= Date.utc_today.year %></h2>
 
-<table class="table">
+<table class="table table-striped table-bordered">
   <thead>
     <tr>
       <th>Name</th>
@@ -18,12 +18,27 @@
       <td><%= holiday.date %></td>
 
       <td class="text-right">
-        <span><%= link "Edit", to: holiday_path(@conn, :edit, holiday), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: holiday_path(@conn, :delete, holiday), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
+        <span>
+          <%= link [to: holiday_path(@conn, :edit, holiday), class: "btn btn-default btn-xs"] do %>
+            <span class="glyphicon glyphicon-edit"></span>
+          <% end %>
+        </span>
+        <span>
+          <%= link [to: holiday_path(@conn, :delete, holiday),
+                        method: :delete, data: [confirm: "Are you sure?"],
+                        class: "btn btn-danger btn-xs"] do %>
+            <span class="glyphicon glyphicon-trash"></span>
+          <% end %>
+        </span>
+
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
-<span><%= link "New Holiday", to: holiday_path(@conn, :new) %></span>
+<span>
+  <%= link [to: holiday_path(@conn, :new), class: "btn btn-info btn-sm"] do %>
+    <span class="glyphicon glyphicon-plus"></span>
+  <% end %>
+</span>
