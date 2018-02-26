@@ -149,7 +149,6 @@ defmodule PattWeb.PayrollController do
     ]
   end
 
-  #stopped here
   def gen_payslip(conn, %{"id" => id, "gen_payslip" => params }) do
     %{"range" => range_params, "loan" => loan, "feliciana" => fel, "others" => others} = params
 
