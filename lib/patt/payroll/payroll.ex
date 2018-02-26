@@ -198,10 +198,10 @@ defmodule Patt.Payroll do
     compen = payslip.employee.compensation
     allowance = compute_allowance(payslip.employee.compensation)/2
     philhealth = compute_philhealth(payslip.employee.compensation.basic)
+    pagibig = compute_pagibig(payslip.employee.contribution)
 
     #anticipate daytypes when computing,
     #hopay consider hollidaytypes when computing, legal special - create table
-    #edit compensation include allowance on editing of employee info - constant. divide by two or by number of days present
 
     #undertime and absent are different computations
     #consider tardiness rule for computing tardiness, subtract halfday/4hrs when late of > 30 minutes
@@ -217,7 +217,7 @@ defmodule Patt.Payroll do
         tardiness: 0,
         undertime: 0,
         absent: 0,
-        pagibig: compute_pagibig(payslip.employee.contribution),
+        pagibig: pagibig,
         philhealth: philhealth,
         sss: 0,
         wtax: 0,
