@@ -128,9 +128,9 @@ defmodule Patt.Attendance do
         Employee
           |> Ecto.Query.where([e], ilike(e.last_name, ^querystr) )
 
-      "brgy" ->
+      "street" ->
         Employee
-          |> Ecto.Query.where([e], ilike(e.brgy, ^querystr) )
+          |> Ecto.Query.where([e], ilike(e.street, ^querystr) )
 
       "brgy" ->
         Employee
