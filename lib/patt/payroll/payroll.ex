@@ -158,6 +158,14 @@ defmodule Patt.Payroll do
 
   def compute_payslip(payslip, totals) do
     payslip = Repo.preload(payslip, employee: [:compensation])
+
+  def compute_other_deductions(loan, fel, others) do
+    loan = unless String.trim(loan) == "", do: String.to_integer(loan), else: 0
+    fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
+    others = unless String.trim(others) == "", do: String.to_integer(others), else: 0
+    %{loan: loan, fel: fel, others: others}
+  end
+
     minuterate = minute_rate(payslip.employee)
 
     vlpay = totals.vl * minuterate
@@ -182,6 +190,9 @@ defmodule Patt.Payroll do
         undertime: 0,
         absent: 0,
         wtax: 0,
+        loan: userinputs.loan,
+        feliciana: userinputs.fel,
+        other_deduction: userinputs.others,
       })
     if payslip.id do
       Repo.update(pschangeset)

@@ -167,7 +167,7 @@
                   <%= label dtr, return_date_and_day(dtr.data.date), class: "form-control" %>
                 </td>
                 <td>
-                  <%= checkbox dtr, :ho, class: unless dtr.data.date in @holidays, do: "hide", else: "" %>
+                  <%= checkbox dtr, :ho, class: unless(dtr.data.date in @holidays, do: "hide", else: "") %>
                 </td>
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_in]",
@@ -329,6 +329,12 @@
       </div>
     <% end %>
 
+<%= form_for @conn, payroll_path(@conn, :gen_payslip, @employee),
+      [
+        as: :gen_payslip,
+        style: "display: inline;",
+      ],
+      fn f -> %>
 <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Summary</h4>
 <div class="row">
     <div class="col-sm-7">
@@ -415,7 +421,7 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td><label>absent</label></td>
+                        <td><label>Absent</label></td>
                         <td></td>
                         <td><%= unless is_nil(@payslip.absent), do: round(@payslip.absent) %></td>
                         <td></td>
@@ -431,28 +437,42 @@
                     <tr>
                         <td><label>Pagibig</label></td>
                         <td></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.pagibig), do: round(@payslip.pagibig) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Phil. Health</label></td>
                         <td></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.philhealth), do: round(@payslip.philhealth) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>SSS</label></td>
                         <td></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.sss), do: round(@payslip.sss) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Loans</label></td>
                         <td></td>
+                        <td><%= number_input f, :loan, class: "form-control med-tright", value: unless(is_nil(@payslip.loan), do: round(@payslip.loan)) %></td>
                         <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>feliciana</label></td>
+                        <td></td>
+                        <td><%= number_input f, :feliciana, class: "form-control med-tright", value: unless(is_nil(@payslip.feliciana), do: round(@payslip.feliciana)) %></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Others</label></td>
+                        <td></td>
+                        <td><%= number_input f, :others, class: "form-control med-tright", value: unless(is_nil(@payslip.other_deduction), do: round(@payslip.other_deduction)) %></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -471,15 +491,10 @@
 </div>
 <hr>
 <div class="container-fluid text-right">
-    <%= form_for @conn, payroll_path(@conn, :gen_payslip, @employee),
-      [
-        as: :gen_payslip,
-        style: "display: inline;",
-      ],
-      fn f -> %>
       <%= text_input f, :range, style: "display: none;", value: @range %>
+
       <%= if assoc_loaded?(@employee.dtrs) do %>
-        <%= submit class: "btn btn-info" do %>
+        <%= submit [class: "btn btn-info", id: "sub"] do %>
           <span class="glyphicon glyphicon-save"></span>
           <%= if(is_nil(@payslip.id), do: " GENERATE", else: " UPDATE") %>
         <% end %>

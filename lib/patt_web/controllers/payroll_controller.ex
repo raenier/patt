@@ -150,7 +150,9 @@ defmodule PattWeb.PayrollController do
   end
 
   #stopped here
-  def gen_payslip(conn, %{"id" => id, "gen_payslip" => %{"range" => range_params}}) do
+  def gen_payslip(conn, %{"id" => id, "gen_payslip" => params }) do
+    %{"range" => range_params, "loan" => loan, "feliciana" => fel, "others" => others} = params
+
     range = Helper.gen_range(String.to_integer(range_params))
     employee = Attendance.get_employee_wdtrs!(id, range)
     all_dtrs =
@@ -171,7 +173,11 @@ defmodule PattWeb.PayrollController do
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
     payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
     holidays = Payroll.list_holidays_date()
-    {:ok, payslip} = Payroll.compute_payslip(payslip, totals)
+
+    #update for loan and feliciana
+    userinputs = Payroll.compute_other_deductions(loan, fel, others)
+
+    {:ok, payslip} = Payroll.compute_payslip(payslip, totals, userinputs)
 
     render conn, "payslip.html",
     [

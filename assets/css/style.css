@@ -52,6 +52,12 @@
   width: 50px;
 }
 
+.med-tright {
+  width: 100px;
+  margin: auto;
+  text-align: right;
+}
+
 /*hide elements but display space*/
 .hide {
   visibility: hidden;
