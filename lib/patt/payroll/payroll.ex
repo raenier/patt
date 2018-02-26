@@ -156,8 +156,18 @@ defmodule Patt.Payroll do
     ((employee.compensation.basic / employee.employee_sched.dpm)/8/60)
   end
 
-  def compute_payslip(payslip, totals) do
-    payslip = Repo.preload(payslip, employee: [:compensation])
+  def compute_allowance(compen) do
+    cola = unless is_nil(compen.cola), do: compen.cola, else: 0
+    clothing = unless is_nil(compen.clothing), do: compen.clothing, else: 0
+    food = unless is_nil(compen.food), do: compen.food, else: 0
+    travel = unless is_nil(compen.travel), do: compen.travel, else: 0
+
+    cola + clothing + food + travel
+  end
+
+  def compute_pagibig(contrib) do
+    if(contrib.pagibig_num, do: 100, else: 0)
+  end
 
   def compute_other_deductions(loan, fel, others) do
     loan = unless String.trim(loan) == "", do: String.to_integer(loan), else: 0
@@ -166,10 +176,14 @@ defmodule Patt.Payroll do
     %{loan: loan, fel: fel, others: others}
   end
 
+  def compute_payslip(payslip, totals, userinputs) do
+    payslip = Repo.preload(payslip, employee: [:compensation, :contribution])
     minuterate = minute_rate(payslip.employee)
 
     vlpay = totals.vl * minuterate
     slpay = totals.sl * minuterate
+    compen = payslip.employee.compensation
+    allowance = compute_allowance(payslip.employee.compensation)/2
 
     #anticipate daytypes when computing,
     #hopay consider hollidaytypes when computing, legal special - create table
@@ -185,10 +199,13 @@ defmodule Patt.Payroll do
         slpay: slpay,
         otpay: totals.ot * (minuterate * 1.25),
         hopay: 0,
-        allowance: 0,
+        allowance: allowance,
         tardiness: 0,
         undertime: 0,
         absent: 0,
+        pagibig: compute_pagibig(payslip.employee.contribution),
+        philhealth: 0,
+        sss: 0,
         wtax: 0,
         loan: userinputs.loan,
         feliciana: userinputs.fel,
