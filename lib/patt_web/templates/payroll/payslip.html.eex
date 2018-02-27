@@ -283,7 +283,7 @@
 
     <!--DTR TOTALS-->
     <%= if assoc_loaded?(@employee.dtrs) do %>
-      <div class= "table-responsive">
+      <div class= "table-responsive col-sm-6">
         <table class="table">
           <thead>
             <tr>
@@ -335,7 +335,13 @@
         style: "display: inline;",
       ],
       fn f -> %>
-<h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Summary</h4>
+      <div class="col-sm-12">
+        <h4>
+          <span class="glyphicon glyphicon-user"></span>
+          <span class="glyphicon glyphicon-list-alt"></span>
+          &nbsp;&nbsp;Summary
+        </h4>
+      </div>
 <div class="row">
     <div class="col-sm-7">
         <div class="table-responsive">
@@ -477,11 +483,11 @@
                         <td></td>
                     </tr>
                     <tr class="bg-success">
-                        <td><label>Total Pay</label></td>
+                        <td><label>Totals</label></td>
+                        <td>Gross:</td>
+                        <td>Deduction:</td>
+                        <td>NETPAY: 0.00</td>
                         <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>0.00</td>
                     </tr>
                 </tbody>
             </table>
