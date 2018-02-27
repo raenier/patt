@@ -173,6 +173,15 @@ defmodule Patt.Payroll do
     end
   end
 
+  def compute_undertime(utminutes, mrate) do
+    unless is_nil(utminutes) || utminutes == 0 || utminutes == "" do
+      utminutes * mrate
+    else
+      0
+    end
+
+  end
+
   def compute_other_deductions(loan, fel, others) do
     loan = unless String.trim(loan) == "", do: String.to_integer(loan), else: 0
     fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
@@ -208,13 +217,12 @@ defmodule Patt.Payroll do
     philhealth = compute_philhealth(payslip.employee.compensation.basic)
     pagibig = compute_pagibig(payslip.employee.contribution)
     absent = compute_absent(totals.totalabs, minuterate)
+    undertime = compute_undertime(totals.ut, minuterate)
 
     #anticipate daytypes when computing,
     #hopay consider hollidaytypes when computing, legal special - create table
 
-    #undertime and absent are different computations
     #consider tardiness rule for computing tardiness, subtract halfday/4hrs when late of > 30 minutes
-    #edit payslip add totaldays of work and absent days
 
     pschangeset = Payslip.changeset(payslip, %{
         regpay: (totals.totalwm * minuterate) - (vlpay + slpay),
@@ -224,7 +232,7 @@ defmodule Patt.Payroll do
         hopay: 0,
         allowance: allowance,
         tardiness: 0,
-        undertime: 0,
+        undertime: undertime,
         absent: absent,
         pagibig: pagibig,
         philhealth: philhealth,
@@ -239,10 +247,6 @@ defmodule Patt.Payroll do
     else
       Repo.insert(pschangeset)
     end
-  end
-
-  def minute_rate() do
-    #compute minute rate
   end
 
   ###HOLIDAYS
