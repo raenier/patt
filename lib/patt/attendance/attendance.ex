@@ -648,7 +648,7 @@ defmodule Patt.Attendance do
     #count total minutes of absent
     absent =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
-        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" do
+        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || dtr.ho == true do
           if (dtr.sched_in && dtr.sched_out) && (is_nil(dtr.in) && is_nil(dtr.out)) do
             absent = round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
             absent + acc
@@ -663,7 +663,7 @@ defmodule Patt.Attendance do
     #count total days of absent
     absentdays =
       Enum.count dtrs, fn dtr ->
-        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" do
+        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || dtr.ho == true do
           if (dtr.sched_in && dtr.sched_out) && (is_nil(dtr.in) && is_nil(dtr.out)) do
             true
           else
