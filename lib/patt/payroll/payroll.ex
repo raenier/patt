@@ -165,6 +165,12 @@ defmodule Patt.Payroll do
     cola + clothing + food + travel
   end
 
+  def compute_absent(absentminutes, mrate) do
+    unless is_nil(absentminutes) || absentminutes == 0 || absentminutes == "" do
+      absentminutes * mrate
+    else
+      0
+    end
   end
 
   def compute_other_deductions(loan, fel, others) do
@@ -201,6 +207,7 @@ defmodule Patt.Payroll do
     allowance = compute_allowance(payslip.employee.compensation)/2
     philhealth = compute_philhealth(payslip.employee.compensation.basic)
     pagibig = compute_pagibig(payslip.employee.contribution)
+    absent = compute_absent(totals.totalabs, minuterate)
 
     #anticipate daytypes when computing,
     #hopay consider hollidaytypes when computing, legal special - create table
@@ -218,7 +225,7 @@ defmodule Patt.Payroll do
         allowance: allowance,
         tardiness: 0,
         undertime: 0,
-        absent: 0,
+        absent: absent,
         pagibig: pagibig,
         philhealth: philhealth,
         sss: 0,
