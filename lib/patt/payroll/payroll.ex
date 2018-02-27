@@ -165,8 +165,6 @@ defmodule Patt.Payroll do
     cola + clothing + food + travel
   end
 
-  def compute_pagibig(contrib) do
-    if(contrib.pagibig_num, do: 100, else: 0)
   end
 
   def compute_other_deductions(loan, fel, others) do
@@ -174,6 +172,10 @@ defmodule Patt.Payroll do
     fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
     others = unless String.trim(others) == "", do: String.to_integer(others), else: 0
     %{loan: loan, fel: fel, others: others}
+  end
+
+  def compute_pagibig(contrib) do
+    if(contrib.pagibig_num, do: 100, else: 0)
   end
 
   def compute_philhealth(basic) do
