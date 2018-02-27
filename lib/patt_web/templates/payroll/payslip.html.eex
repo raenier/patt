@@ -434,13 +434,6 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td><label>Witholding Tax</label></td>
-                        <td></td>
-                        <td><%= unless is_nil(@payslip.wtax), do: round(@payslip.wtax) %></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
                         <td><label>Pagibig</label></td>
                         <td></td>
                         <td><%= unless is_nil(@payslip.pagibig), do: round(@payslip.pagibig) %></td>
@@ -458,6 +451,13 @@
                         <td><label>SSS</label></td>
                         <td></td>
                         <td><%= unless is_nil(@payslip.sss), do: round(@payslip.sss) %></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Witholding Tax</label></td>
+                        <td></td>
+                        <td><%= unless is_nil(@payslip.wtax), do: round(@payslip.wtax) %></td>
                         <td></td>
                         <td></td>
                     </tr>

@@ -179,7 +179,6 @@ defmodule Patt.Payroll do
     else
       0
     end
-
   end
 
   def compute_other_deductions(loan, fel, others) do
