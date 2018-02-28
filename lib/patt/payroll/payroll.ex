@@ -181,6 +181,39 @@ defmodule Patt.Payroll do
     end
   end
 
+  def compute_overtime_perday(dtrs, minuterate) do
+    Enum.reduce dtrs, 0, fn(dtr, acc) ->
+      if dtr.ot && Patt.Attendance.all_inputs_complete(dtr) do
+        ho = get_holiday_bydate(dtr.date)
+        if is_nil(ho) do
+          if dtr.daytype == "restday" do
+            acc + ((%Patt.Payroll.Rates{}.restday.ot * minuterate) * dtr.overtime)
+          else
+            acc + ((%Patt.Payroll.Rates{}.regular.ot * minuterate) * dtr.overtime)
+          end
+        else
+          case ho.type do
+            "special" ->
+                  if dtr.daytype == "restday" do
+                    acc + ((%Patt.Payroll.Rates{}.specialrd.ot * minuterate) * dtr.overtime)
+                  else
+                    acc + ((%Patt.Payroll.Rates{}.special.ot * minuterate) * dtr.overtime)
+                  end
+
+            "regular" ->
+                  if dtr.daytype == "restday" do
+                    acc + ((%Patt.Payroll.Rates{}.reghord.ot * minuterate) * dtr.overtime)
+                  else
+                    acc + ((%Patt.Payroll.Rates{}.regho.ot * minuterate) * dtr.overtime)
+                  end
+          end
+        end
+      else
+        acc
+      end
+    end
+  end
+
   def compute_other_deductions(loan, fel, others) do
     loan = unless String.trim(loan) == "", do: String.to_integer(loan), else: 0
     fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
@@ -261,7 +294,7 @@ defmodule Patt.Payroll do
         regpay: (totals.totalwm * minuterate) - (vlpay + slpay),
         vlpay: vlpay,
         slpay: slpay,
-        otpay: totals.ot * (minuterate * 1.25),
+        otpay: overtime,
         hopay: 0,
         allowance: allowance,
         tardiness: 0,
@@ -298,6 +331,10 @@ defmodule Patt.Payroll do
   end
 
   def get_holiday!(id), do: Repo.get!(Holiday, id)
+
+  def get_holiday_bydate(date) do
+    Repo.get_by(Holiday, date: date)
+  end
 
   def create_holiday(attrs \\ %{}) do
     %Holiday{}

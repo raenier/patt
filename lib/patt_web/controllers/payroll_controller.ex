@@ -51,6 +51,7 @@ defmodule PattWeb.PayrollController do
     daytypes = Payroll.daytype_list(employee)
     totals = Attendance.overall_totals(employee.dtrs)
     usedleave = Payroll.used_leave(employee)
+
     #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
     payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
@@ -176,7 +177,7 @@ defmodule PattWeb.PayrollController do
     #update for loan and feliciana
     userinputs = Payroll.compute_other_deductions(loan, fel, others)
 
-    {:ok, payslip} = Payroll.compute_payslip(payslip, totals, userinputs)
+    {:ok, payslip} = Payroll.compute_payslip(payslip, totals, userinputs, employee.dtrs)
 
     render conn, "payslip.html",
     [
