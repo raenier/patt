@@ -205,7 +205,21 @@ defmodule Patt.Payroll do
     end
   end
 
-  def compute_payslip(payslip, totals, userinputs) do
+  def compute_sss(basic) do
+    {_, sss_table} = Map.pop %Patt.Payroll.SSS{}, :__struct__
+    keys = Map.keys(sss_table)
+    contrib =
+      Enum.reduce keys, 0, fn (key, acc) ->
+        if basic in sss_table[key].range do
+          sss_table[key].contrib + acc
+        else
+          acc
+        end
+      end
+    contrib/2
+  end
+
+  def compute_payslip(payslip, totals, userinputs, dtrs) do
     payslip = Repo.preload(payslip, employee: [:compensation, :contribution])
     minuterate = minute_rate(payslip.employee)
 
@@ -215,6 +229,14 @@ defmodule Patt.Payroll do
     allowance = compute_allowance(payslip.employee.compensation)/2
     philhealth = compute_philhealth(payslip.employee.compensation.basic)
     pagibig = compute_pagibig(payslip.employee.contribution)
+
+    sss =
+      if payslip.employee.contribution.sss_num do
+        compute_sss(compen.basic)
+      else
+        0
+      end
+
     absent = compute_absent(totals.totalabs, minuterate)
     undertime = compute_undertime(totals.ut, minuterate)
 
@@ -235,7 +257,7 @@ defmodule Patt.Payroll do
         absent: absent,
         pagibig: pagibig,
         philhealth: philhealth,
-        sss: 0,
+        sss: sss,
         wtax: 0,
         loan: userinputs.loan,
         feliciana: userinputs.fel,
