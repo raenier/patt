@@ -13,7 +13,7 @@
 
   <div class="form-group">
     <%= label f, :type, class: "control-label" %>
-    <%= select f, :type, ["Special": "special", "Legal": "legal"], class: "form-control"%>
+    <%= select f, :type, ["Special": "special", "Regular": "regular"], class: "form-control"%>
     <%= error_tag f, :type %>
   </div>
 
