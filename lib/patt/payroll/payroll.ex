@@ -188,20 +188,20 @@ defmodule Patt.Payroll do
     %{loan: loan, fel: fel, others: others}
   end
 
-  def compute_pagibig(contrib) do
-    if(contrib.pagibig_num, do: 100, else: 0)
+  def compute_pagibig() do
+    50
   end
 
   def compute_philhealth(basic) do
     cond do
       (basic <= 10000) ->
-        275/2
+        (275/2)/2
 
       (basic > 10000 and basic < 40000) ->
-        (basic * 0.0275)/2
+        ((basic * 0.0275)/2)/2
 
       (basic >= 40000) ->
-        11000/2
+        (1100/2)/2
     end
   end
 
@@ -226,9 +226,22 @@ defmodule Patt.Payroll do
     vlpay = totals.vl * minuterate
     slpay = totals.sl * minuterate
     compen = payslip.employee.compensation
-    allowance = compute_allowance(payslip.employee.compensation)/2
-    philhealth = compute_philhealth(payslip.employee.compensation.basic)
-    pagibig = compute_pagibig(payslip.employee.contribution)
+    allowance = compute_allowance(compen)/2
+
+    #ensure first that philhealthnum pagibignum sssnum are populated/present
+    philhealth =
+      if payslip.employee.contribution.philhealth_num do
+        compute_philhealth(compen.basic)
+      else
+        0
+      end
+
+    pagibig =
+      if payslip.employee.contribution.pagibig_num do
+        compute_pagibig()
+      else
+        0
+      end
 
     sss =
       if payslip.employee.contribution.sss_num do
@@ -239,10 +252,9 @@ defmodule Patt.Payroll do
 
     absent = compute_absent(totals.totalabs, minuterate)
     undertime = compute_undertime(totals.ut, minuterate)
+    overtime = compute_overtime_perday(dtrs, minuterate)
 
     #anticipate daytypes when computing,
-    #hopay consider hollidaytypes when computing, legal special - create table
-
     #consider tardiness rule for computing tardiness, subtract halfday/4hrs when late of > 30 minutes
 
     pschangeset = Payslip.changeset(payslip, %{
