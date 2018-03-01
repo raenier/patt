@@ -4,10 +4,8 @@ defmodule Patt.Repo.Migrations.CreateCompensations do
   def change do
     create table(:compensations) do
       add :basic, :bigint
-      add :cola, :bigint
-      add :clothing, :bigint
-      add :travel, :bigint
-      add :food, :bigint
+      add :allowance_ntaxable, :bigint
+      add :allowance_taxable, :bigint
       add :employee_id, references(:employees, on_delete: :delete_all)
 
       timestamps()

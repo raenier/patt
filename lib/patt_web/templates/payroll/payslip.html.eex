@@ -358,21 +358,21 @@
                 <tbody>
                     <tr>
                         <td><label>Regular Pay</label></td>
-                        <td><%= unless is_nil(@payslip.regpay), do: round(@payslip.regpay) %></td>
+                        <td><%= unless is_nil(@payslip.regpay), do: Float.ceil(@payslip.regpay, 2) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>VL Pay</label></td>
-                        <td><%= unless is_nil(@payslip.vlpay), do: round(@payslip.vlpay) %></td>
+                        <td><%= unless is_nil(@payslip.vlpay), do: Float.ceil(@payslip.vlpay, 2) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>SL Pay</label></td>
-                        <td><%= unless is_nil(@payslip.slpay), do: round(@payslip.slpay) %></td>
+                        <td><%= unless is_nil(@payslip.slpay), do: Float.ceil(@payslip.slpay, 2) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -386,28 +386,35 @@
                     </tr>
                     <tr>
                         <td><label>Overtime Pay</label></td>
-                        <td><%= unless is_nil(@payslip.otpay), do: round(@payslip.otpay) %></td>
+                        <td><%= unless is_nil(@payslip.otpay), do: Float.ceil(@payslip.otpay, 2) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Holiday Pay</label></td>
-                        <td><%= unless is_nil(@payslip.hopay), do: round(@payslip.hopay) %></td>
+                        <td><%= unless is_nil(@payslip.hopay), do: Float.ceil(@payslip.hopay, 2) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Restday Pay</label></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.rdpay), do: Float.ceil(@payslip.rdpay, 2) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td><label>Allowance</label></td>
-                        <td><%= unless is_nil(@payslip.allowance), do: round(@payslip.allowance) %></td>
+                        <td><label>Taxable Allowance</label></td>
+                        <td><%= unless is_nil(@payslip.tallowance), do: Float.ceil(@payslip.tallowance, 2) %></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Non Taxable Allowance</label></td>
+                        <td><%= unless is_nil(@payslip.ntallowance), do: Float.ceil(@payslip.ntallowance, 2) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -415,49 +422,63 @@
                     <tr>
                         <td><label>Tardiness</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.tardiness), do: round(@payslip.tardiness) %></td>
+                        <td><%= unless is_nil(@payslip.tardiness), do: Float.ceil(@payslip.tardiness, 2) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Undertime</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.undertime), do: round(@payslip.undertime) %></td>
+                        <td><%= unless is_nil(@payslip.undertime), do: Float.ceil(@payslip.undertime, 2) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Absent</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.absent), do: round(@payslip.absent) %></td>
+                        <td><%= unless is_nil(@payslip.absent), do: Float.ceil(@payslip.absent, 2) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Pagibig</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.pagibig), do: round(@payslip.pagibig) %></td>
+                        <td><%= unless is_nil(@payslip.pagibig), do: Float.ceil(@payslip.pagibig, 2) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Phil. Health</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.philhealth), do: round(@payslip.philhealth) %></td>
+                        <td><%= unless is_nil(@payslip.philhealth), do: Float.ceil(@payslip.philhealth, 2) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>SSS</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.sss), do: round(@payslip.sss) %></td>
+                        <td><%= unless is_nil(@payslip.sss), do: Float.ceil(@payslip.sss, 2) %></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="bg-success">
+                        <td>Total Compensation:</td>
+                        <td><%= unless is_nil(@payslip.totalcompen), do: round(@payslip.totalcompen) %></td>
+                        <td>Deduction:</td>
+                        <td><%= unless is_nil(@payslip.totaldeduction), do: round(@payslip.totaldeduction) %></td>
+                        <td></td>
+                    </tr>
+                    <tr class="bg-success">
+                        <td><label>Net Taxable</label></td>
+                        <td><%= unless is_nil(@payslip.net_taxable), do: round(@payslip.net_taxable) %></td>
+                        <td>- 30% (Tax Shield):</td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Witholding Tax</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.wtax), do: round(@payslip.wtax) %></td>
+                        <td><%= unless is_nil(@payslip.wtax), do: Float.ceil(@payslip.wtax, 2) %></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -484,9 +505,9 @@
                     </tr>
                     <tr class="bg-success">
                         <td><label>Totals</label></td>
-                        <td>Gross:</td>
-                        <td>Deduction:</td>
-                        <td>NETPAY: 0.00</td>
+                        <td></td>
+                        <td></td>
+                        <td>NETPAY: <%= unless is_nil(@payslip.wtax), do: Float.ceil(@payslip.net, 2) %></td>
                         <td></td>
                     </tr>
                 </tbody>

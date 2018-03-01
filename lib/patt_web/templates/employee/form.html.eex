@@ -175,27 +175,15 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-3">COLA:</label>
+            <label class="control-label col-sm-3">Non Taxable Allowance:</label>
             <div class="col-sm-9">
-              <%= number_input comp, :cola, class: "form-control", placeholder: "0.00", max: 1000000 %>
+              <%= number_input comp, :allowance_ntaxable, class: "form-control", placeholder: "0.00", max: 1000000 %>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-3">Clothing:</label>
+            <label class="control-label col-sm-3">Taxable Allowance:</label>
             <div class="col-sm-9">
-              <%= number_input comp, :clothing, class: "form-control", placeholder: "0.00", max: 1000000 %>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-3">Food:</label>
-            <div class="col-sm-9">
-              <%= number_input comp, :food, class: "form-control", placeholder: "0.00", max: 1000000 %>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="control-label col-sm-3">Travel:</label>
-            <div class="col-sm-9">
-              <%= number_input comp, :travel, class: "form-control", placeholder: "0.00", max: 1000000 %>
+              <%= number_input comp, :allowance_taxable, class: "form-control", placeholder: "0.00", max: 1000000 %>
             </div>
         </div>
         <% end %>

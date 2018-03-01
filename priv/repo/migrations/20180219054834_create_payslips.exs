@@ -4,10 +4,12 @@ defmodule Patt.Repo.Migrations.CreatePayslips do
   def change do
     create table(:payslips) do
       add :regpay, :float
-      add :allowance, :float
+      add :ntallowance, :float
+      add :tallowance, :float
       add :otpay, :float
       add :vlpay, :float
       add :slpay, :float
+      add :rdpay, :float
       add :hopay, :float
       add :gross, :float
       add :net, :float
@@ -23,6 +25,10 @@ defmodule Patt.Repo.Migrations.CreatePayslips do
       add :undertime, :float
       add :absent, :float
       add :tardiness, :float
+
+      add :net_taxable, :float
+      add :totalcompen, :float
+      add :totaldeduction, :float
 
       add :employee_id, references(:employees, on_delete: :nilify_all)
       add :payperiod_id, references(:payperiods, on_delete: :nilify_all)

@@ -648,7 +648,8 @@ defmodule Patt.Attendance do
     #count total minutes of absent
     absent =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
-        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || dtr.ho == true do
+        ho = Patt.Payroll.get_holiday_bydate(dtr.date)
+        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || ho do
           if (dtr.sched_in && dtr.sched_out) && (is_nil(dtr.in) && is_nil(dtr.out)) do
             absent = round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
             absent + acc
@@ -663,7 +664,8 @@ defmodule Patt.Attendance do
     #count total days of absent
     absentdays =
       Enum.count dtrs, fn dtr ->
-        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || dtr.ho == true do
+        ho = Patt.Payroll.get_holiday_bydate(dtr.date)
+        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || ho do
           if (dtr.sched_in && dtr.sched_out) && (is_nil(dtr.in) && is_nil(dtr.out)) do
             true
           else
@@ -675,10 +677,12 @@ defmodule Patt.Attendance do
       end
 
     #count total work minutes skipping restday that has no actual in and out
+    #and vl and sl
     totalwm =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        ho = Patt.Payroll.get_holiday_bydate(dtr.date)
         if dtr.sched_in && dtr.sched_out do
-          unless dtr.daytype == "restday" && is_nil(dtr.in) && is_nil(dtr.out) do
+          unless dtr.daytype == "restday" || dtr.daytype == "vl" || dtr.daytype == "sl" || ho  do
             twh = day_totalwh(dtr)
             twh + acc
           else

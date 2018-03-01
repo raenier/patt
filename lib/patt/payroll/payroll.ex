@@ -156,15 +156,6 @@ defmodule Patt.Payroll do
     ((employee.compensation.basic / employee.employee_sched.dpm)/8/60)
   end
 
-  def compute_allowance(compen) do
-    cola = unless is_nil(compen.cola), do: compen.cola, else: 0
-    clothing = unless is_nil(compen.clothing), do: compen.clothing, else: 0
-    food = unless is_nil(compen.food), do: compen.food, else: 0
-    travel = unless is_nil(compen.travel), do: compen.travel, else: 0
-
-    cola + clothing + food + travel
-  end
-
   def compute_absent(absentminutes, mrate) do
     unless is_nil(absentminutes) || absentminutes == 0 || absentminutes == "" do
       absentminutes * mrate
@@ -214,6 +205,60 @@ defmodule Patt.Payroll do
     end
   end
 
+  def compute_hoandrdpay(dtrs, minuterate) do
+    Enum.reduce dtrs, %{rdpay: 0, hopay: 0}, fn dtr, acc ->
+      ho = get_holiday_bydate(dtr.date)
+      if is_nil(ho) do
+        if dtr.daytype == "restday" do
+          if dtr.in && dtr.out do
+            Map.put(acc, :rdpay, acc.rdpay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.restday.daily)))
+          else
+            Map.put(acc, :rdpay, acc.rdpay)
+            Map.put(acc, :hopay, acc.hopay)
+          end
+        else
+            Map.put(acc, :rdpay, acc.rdpay)
+            Map.put(acc, :hopay, acc.hopay)
+        end
+      else
+        case ho.type do
+          "regular" ->
+            if dtr.daytype == "restday" do
+              if dtr.in && dtr.out do
+                Map.put(acc, :hopay, acc.hopay + ((480 * minuterate) + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.reghord.daily))))
+              else
+                Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+              end
+            else
+              if dtr.in && dtr.out do
+                Map.put(acc, :hopay, acc.hopay + ((480 * minuterate) + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.regho.daily))))
+              else
+                Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+              end
+            end
+
+          "special"->
+            if dtr.daytype == "restday" do
+              if dtr.in && dtr.out do
+                Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.specialrd.daily)))
+              else
+                Map.put(acc, :rdpay, acc.rdpay)
+                Map.put(acc, :hopay, acc.hopay)
+              end
+            else
+              if dtr.in && dtr.out do
+                Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.special.daily)))
+              else
+                Map.put(acc, :rdpay, acc.rdpay)
+                Map.put(acc, :hopay, acc.hopay)
+              end
+            end
+        end
+      end
+
+    end
+  end
+
   def compute_other_deductions(loan, fel, others) do
     loan = unless String.trim(loan) == "", do: String.to_integer(loan), else: 0
     fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
@@ -252,16 +297,35 @@ defmodule Patt.Payroll do
     contrib/2
   end
 
+  def compute_wtax(taxable) do
+    {_, tax_table} = Map.pop %Patt.Payroll.Wtax{}, :__struct__
+    keys = Map.keys(tax_table)
+    wtax =
+    Enum.reduce keys, 0, fn(key, acc) ->
+      if round(taxable) in tax_table[key].range do
+        overcl = taxable - tax_table[key].range.first
+        acc + tax_table[key].base + (overcl * tax_table[key].overcl)
+      else
+        acc
+      end
+    end
+
+    wtax/2
+  end
+
   def compute_payslip(payslip, totals, userinputs, dtrs) do
     payslip = Repo.preload(payslip, employee: [:compensation, :contribution])
     minuterate = minute_rate(payslip.employee)
+    compen = payslip.employee.compensation
 
+    %{rdpay: rdpay, hopay: hopay} = compute_hoandrdpay(dtrs, minuterate)
     vlpay = totals.vl * minuterate
     slpay = totals.sl * minuterate
-    compen = payslip.employee.compensation
-    allowance = compute_allowance(compen)/2
+    nontaxable_allowance = unless is_nil(compen.allowance_ntaxable), do: compen.allowance_ntaxable/2, else: 0
+    taxable_allowance = unless is_nil(compen.allowance_taxable), do: compen.allowance_taxable/2, else: 0
+    regpay = (totals.totalwm * minuterate)
+    overtime = compute_overtime_perday(dtrs, minuterate)
 
-    #ensure first that philhealthnum pagibignum sssnum are populated/present
     philhealth =
       if payslip.employee.contribution.philhealth_num do
         compute_philhealth(compen.basic)
@@ -285,28 +349,45 @@ defmodule Patt.Payroll do
 
     absent = compute_absent(totals.totalabs, minuterate)
     undertime = compute_undertime(totals.ut, minuterate)
-    overtime = compute_overtime_perday(dtrs, minuterate)
+    tardiness = (totals.tard * minuterate)
 
-    #anticipate daytypes when computing,
     #consider tardiness rule for computing tardiness, subtract halfday/4hrs when late of > 30 minutes
 
+    gross = vlpay + slpay + regpay + overtime + taxable_allowance + hopay + rdpay
+    deduction = sss + pagibig + philhealth + absent + tardiness + undertime
+
+    #total compensation - deduction
+    net_taxable = gross - deduction
+    taxshielded = net_taxable - (net_taxable * 0.3) #taxshield 30%
+    wtax = compute_wtax(taxshielded)
+
+    otherdeductions = userinputs.loan + userinputs.fel + userinputs.others + wtax
+
+    net = net_taxable + nontaxable_allowance - otherdeductions
+
     pschangeset = Payslip.changeset(payslip, %{
-        regpay: (totals.totalwm * minuterate) - (vlpay + slpay),
+        regpay: regpay,
         vlpay: vlpay,
         slpay: slpay,
         otpay: overtime,
-        hopay: 0,
-        allowance: allowance,
-        tardiness: 0,
+        rdpay: rdpay,
+        hopay: hopay,
+        ntallowance: nontaxable_allowance,
+        tallowance: taxable_allowance,
+        tardiness: tardiness,
         undertime: undertime,
         absent: absent,
         pagibig: pagibig,
         philhealth: philhealth,
         sss: sss,
-        wtax: 0,
+        wtax: wtax,
         loan: userinputs.loan,
         feliciana: userinputs.fel,
         other_deduction: userinputs.others,
+        totalcompen: gross,
+        totaldeduction: deduction,
+        net_taxable: net_taxable,
+        net: net,
       })
     if payslip.id do
       Repo.update(pschangeset)

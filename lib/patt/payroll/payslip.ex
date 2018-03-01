@@ -11,10 +11,12 @@ defmodule Patt.Payroll.Payslip do
     belongs_to :payperiod, Payperiod
 
     field :regpay, :float
-    field :allowance, :float
+    field :ntallowance, :float
+    field :tallowance, :float
     field :otpay, :float
     field :vlpay, :float
     field :slpay, :float
+    field :rdpay, :float
     field :hopay, :float
     field :gross, :float
     field :net, :float
@@ -31,6 +33,11 @@ defmodule Patt.Payroll.Payslip do
     field :absent, :float
     field :tardiness, :float
 
+    field :net_taxable, :float
+    field :totalcompen, :float
+    field :totaldeduction, :float
+
+
     timestamps()
   end
 
@@ -39,10 +46,11 @@ defmodule Patt.Payroll.Payslip do
     payslip
     |> cast(attrs,
             [
-              :gross, :net, :regpay, :otpay, :vlpay, :slpay,
+              :gross, :net, :regpay, :otpay, :vlpay, :slpay, :rdpay,
               :sss, :pagibig, :philhealth, :undertime,
-              :tardiness, :employee_id, :payperiod_id, :allowance,
-              :hopay, :healthcare, :wtax, :loan, :feliciana, :absent, :other_deduction
+              :tardiness, :employee_id, :payperiod_id, :tallowance, :ntallowance,
+              :hopay, :healthcare, :wtax, :loan, :feliciana, :absent, :other_deduction,
+              :net_taxable, :totalcompen, :totaldeduction
             ])
     |> validate_required([])
   end
