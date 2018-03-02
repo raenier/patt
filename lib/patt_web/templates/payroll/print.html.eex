@@ -61,57 +61,57 @@
       <td><%= Float.floor(@payslip.regpay, 2) %></td>
       <td></td>
       <td>SSS:</td>
-      <td>100</td>
+      <td><%= Float.floor(@payslip.sss, 2) %></td>
       <td></td>
-      <td>Days of work:</td>
+      <td>Days of work: </td>
       <td>13</td>
     </tr>
     <tr>
       <td>Regular OT:</td>
-      <td>7500</td>
+      <td><%= Float.floor(@payslip.otpay, 2) %></td>
       <td></td>
       <td>Philhealth:</td>
-      <td>100</td>
+      <td><%= Float.floor(@payslip.philhealth, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
       <td>Leave Pay:</td>
-      <td>7500</td>
+      <td><%= Float.floor(@payslip.slpay, 2) + Float.floor(@payslip.vlpay, 2)%></td>
       <td></td>
       <td>HDMF:</td>
-      <td>100</td>
+      <td><%= Float.floor(@payslip.pagibig, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
       <td>Holiday Pay:</td>
-      <td>7500</td>
+      <td><%= Float.floor(@payslip.hopay, 2) %></td>
       <td></td>
       <td>Tax W/held:</td>
-      <td>100</td>
+      <td><%= Float.floor(@payslip.wtax, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
       <td>Allowance:</td>
-      <td>500</td>
+      <td><%= Float.floor(@payslip.tallowance, 2) + Float.floor(@payslip.ntallowance, 2)%></td>
       <td></td>
       <td>Absences:</td>
-      <td>121</td>
+      <td><%= Float.floor(@payslip.absent, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
       <td>Restday Pay:</td>
-      <td>7500</td>
+      <td><%= Float.floor(@payslip.rdpay, 2) %></td>
       <td></td>
       <td>Tardiness:</td>
-      <td>100</td>
+      <td><%= Float.floor(@payslip.tardiness, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -121,7 +121,7 @@
       <td></td>
       <td></td>
       <td>Undertime:</td>
-      <td>100</td>
+      <td><%= Float.floor(@payslip.undertime, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -134,7 +134,7 @@
       <td></td>
       <td></td>
       <td>Loans:</td>
-      <td>100</td>
+      <td><%= Float.floor(@payslip.loan, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -144,7 +144,17 @@
       <td></td>
       <td></td>
       <td>Feliciana:</td>
-      <td>100</td>
+      <td><%= Float.floor(@payslip.feliciana, 2) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Other Deductions:</td>
+      <td><%= Float.floor(@payslip.other_deduction, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -156,17 +166,17 @@
   <tfoot>
     <tr>
       <td>Gross income:</td>
-      <td>14000</td>
+      <td><%= Float.floor(@payslip.totalcompen, 2) + Float.floor(@payslip.ntallowance, 2)%></td>
       <td></td>
       <td>Total deductions:</td>
-      <td>2300</td>
+      <td><%= Float.floor(@payslip.totaldeduction, 2) + Float.floor(@payslip.wtax, 2) + Float.floor(@payslip.loan, 2) + Float.floor(@payslip.feliciana, 2) + Float.floor(@payslip.other_deduction, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr style="font-size: 16px;">
       <td>NET PAY:</td>
-      <td>12000</td>
+      <td><%= Float.floor(@payslip.net, 2) %></td>
       <td></td>
       <td></td>
       <td></td>
