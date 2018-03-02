@@ -697,7 +697,8 @@ defmodule Patt.Attendance do
     daycount =
       Enum.count dtrs, fn dtr ->
         if dtr.sched_in && dtr.sched_out do
-          unless dtr.daytype == "restday" && is_nil(dtr.in) && is_nil(dtr.out) do
+          ho = Patt.Payroll.get_holiday_bydate(dtr.date)
+          unless dtr.daytype == "restday" || dtr.daytype == "vl" || dtr.daytype == "sl" || ho  do
             true
           else
             false
