@@ -29,6 +29,8 @@ defmodule PattWeb.Router do
     post "/payroll/:id/save", PayrollController, :gen_payslip
     post "/payroll/:id/save", PayrollController, :up_payslip
     get "/payroll/:payslip/print", PayrollController, :print
+    get "/payroll/payperiod", PayrollController, :print_index
+    get "/payroll/payperiod/:id", PayrollController, :print_bulk
 
     resources "/holidays", HolidayController
   end

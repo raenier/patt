@@ -209,4 +209,14 @@ defmodule PattWeb.PayrollController do
     ]
   end
 
+  def print_index(conn, _params) do
+    payperiods = Payroll.get_all_payperiod()
+    render conn, "print_index.html", payperiods: payperiods
+  end
+
+  def print_bulk(conn, %{"id" => id}) do
+    payperiod = Payroll.get_payperiod_payslip!(id)
+    conn = put_layout conn, false
+    render conn, "print_bulk.html", payperiod: payperiod
+  end
 end

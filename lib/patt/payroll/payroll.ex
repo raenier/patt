@@ -57,6 +57,12 @@ defmodule Patt.Payroll do
     |> Repo.all()
   end
 
+  def get_payperiod_payslip!(id) do
+    Payperiod
+    |> Repo.get!(id)
+    |> Repo.preload(payslips: [:employee, :payperiod])
+  end
+
   def create_payperiod(attrs \\ %{}) do
     %Payperiod{}
     |> Payperiod.changeset(attrs)

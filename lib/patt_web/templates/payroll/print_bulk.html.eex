@@ -1,0 +1,6 @@
+<br>
+<%= for payslip <- @payperiod.payslips do %>
+  <% payslip %>
+  <%= render "print.html", payslip: payslip %>
+  <br><br>
+<% end %>

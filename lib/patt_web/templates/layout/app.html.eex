@@ -55,7 +55,7 @@
               <% end %>
             </li>
             <li>
-              <%= link to: payroll_path(@conn, :index) do %>
+              <%= link to: payroll_path(@conn, :print_index) do %>
                 <span class="glyphicon glyphicon-print"></span>&nbsp;<%= " Bulk Print"%>
               <% end %>
             </li>
