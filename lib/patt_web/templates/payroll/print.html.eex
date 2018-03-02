@@ -58,20 +58,20 @@
   <tbody>
     <tr>
       <td>Regular Pay:</td>
-      <td><%= Float.floor(@payslip.regpay, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.regpay, [decimals: 2]) %></td>
       <td></td>
       <td>SSS:</td>
-      <td><%= Float.floor(@payslip.sss, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.sss, [decimals: 2]) %></td>
       <td></td>
       <td>Days of work: </td>
-      <td>13</td>
+      <td></td>
     </tr>
     <tr>
       <td>Regular OT:</td>
-      <td><%= Float.floor(@payslip.otpay, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.otpay, [decimals: 2]) %></td>
       <td></td>
       <td>Philhealth:</td>
-      <td><%= Float.floor(@payslip.philhealth, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.philhealth, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -81,37 +81,37 @@
       <td><%= Float.floor(@payslip.slpay, 2) + Float.floor(@payslip.vlpay, 2)%></td>
       <td></td>
       <td>HDMF:</td>
-      <td><%= Float.floor(@payslip.pagibig, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.pagibig, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
       <td>Holiday Pay:</td>
-      <td><%= Float.floor(@payslip.hopay, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.hopay, [decimals: 2]) %></td>
       <td></td>
       <td>Tax W/held:</td>
-      <td><%= Float.floor(@payslip.wtax, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.wtax, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
       <td>Allowance:</td>
-      <td><%= Float.floor(@payslip.tallowance, 2) + Float.floor(@payslip.ntallowance, 2)%></td>
+      <td><%= :erlang.float_to_binary((@payslip.tallowance + @payslip.ntallowance), [decimals: 2])%></td>
       <td></td>
       <td>Absences:</td>
-      <td><%= Float.floor(@payslip.absent, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.absent, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
     </tr>
     <tr>
       <td>Restday Pay:</td>
-      <td><%= Float.floor(@payslip.rdpay, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.rdpay, [decimals: 2]) %></td>
       <td></td>
       <td>Tardiness:</td>
-      <td><%= Float.floor(@payslip.tardiness, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.tardiness, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -121,7 +121,7 @@
       <td></td>
       <td></td>
       <td>Undertime:</td>
-      <td><%= Float.floor(@payslip.undertime, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.undertime, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -134,7 +134,7 @@
       <td></td>
       <td></td>
       <td>Loans:</td>
-      <td><%= Float.floor(@payslip.loan, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.loan, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -144,7 +144,7 @@
       <td></td>
       <td></td>
       <td>Feliciana:</td>
-      <td><%= Float.floor(@payslip.feliciana, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.feliciana, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -154,7 +154,7 @@
       <td></td>
       <td></td>
       <td>Other Deductions:</td>
-      <td><%= Float.floor(@payslip.other_deduction, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.other_deduction, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -176,7 +176,7 @@
     </tr>
     <tr style="font-size: 16px;">
       <td>NET PAY:</td>
-      <td><%= Float.floor(@payslip.net, 2) %></td>
+      <td><%= :erlang.float_to_binary(@payslip.net, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>

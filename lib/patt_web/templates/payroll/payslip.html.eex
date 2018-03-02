@@ -358,63 +358,56 @@
                 <tbody>
                     <tr>
                         <td><label>Regular Pay</label></td>
-                        <td><%= unless is_nil(@payslip.regpay), do: Float.ceil(@payslip.regpay, 2) %></td>
+                        <td><%= unless is_nil(@payslip.regpay), do: :erlang.float_to_binary(@payslip.regpay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>VL Pay</label></td>
-                        <td><%= unless is_nil(@payslip.vlpay), do: Float.ceil(@payslip.vlpay, 2) %></td>
+                        <td><%= unless is_nil(@payslip.vlpay), do: :erlang.float_to_binary(@payslip.vlpay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>SL Pay</label></td>
-                        <td><%= unless is_nil(@payslip.slpay), do: Float.ceil(@payslip.slpay, 2) %></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td><label>Other Leave Pay</label></td>
-                        <td></td>
+                        <td><%= unless is_nil(@payslip.slpay), do: :erlang.float_to_binary(@payslip.slpay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Overtime Pay</label></td>
-                        <td><%= unless is_nil(@payslip.otpay), do: Float.ceil(@payslip.otpay, 2) %></td>
+                        <td><%= unless is_nil(@payslip.otpay), do: :erlang.float_to_binary(@payslip.otpay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Holiday Pay</label></td>
-                        <td><%= unless is_nil(@payslip.hopay), do: Float.ceil(@payslip.hopay, 2) %></td>
+                        <td><%= unless is_nil(@payslip.hopay), do: :erlang.float_to_binary(@payslip.hopay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Restday Pay</label></td>
-                        <td><%= unless is_nil(@payslip.rdpay), do: Float.ceil(@payslip.rdpay, 2) %></td>
+                        <td><%= unless is_nil(@payslip.rdpay), do: :erlang.float_to_binary(@payslip.rdpay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Taxable Allowance</label></td>
-                        <td><%= unless is_nil(@payslip.tallowance), do: Float.ceil(@payslip.tallowance, 2) %></td>
+                        <td><%= unless is_nil(@payslip.tallowance), do: :erlang.float_to_binary(@payslip.tallowance, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Non Taxable Allowance</label></td>
-                        <td><%= unless is_nil(@payslip.ntallowance), do: Float.ceil(@payslip.ntallowance, 2) %></td>
+                        <td><%= unless is_nil(@payslip.ntallowance), do: :erlang.float_to_binary(@payslip.ntallowance, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -422,42 +415,42 @@
                     <tr>
                         <td><label>Tardiness</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.tardiness), do: Float.ceil(@payslip.tardiness, 2) %></td>
+                        <td><%= unless is_nil(@payslip.tardiness), do: :erlang.float_to_binary(@payslip.tardiness, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Undertime</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.undertime), do: Float.ceil(@payslip.undertime, 2) %></td>
+                        <td><%= unless is_nil(@payslip.undertime), do: :erlang.float_to_binary(@payslip.undertime, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Absent</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.absent), do: Float.ceil(@payslip.absent, 2) %></td>
+                        <td><%= unless is_nil(@payslip.absent), do: :erlang.float_to_binary(@payslip.absent, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Pagibig</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.pagibig), do: Float.ceil(@payslip.pagibig, 2) %></td>
+                        <td><%= unless is_nil(@payslip.pagibig), do: :erlang.float_to_binary(@payslip.pagibig, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Phil. Health</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.philhealth), do: Float.ceil(@payslip.philhealth, 2) %></td>
+                        <td><%= unless is_nil(@payslip.philhealth), do: :erlang.float_to_binary(@payslip.philhealth, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>SSS</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.sss), do: Float.ceil(@payslip.sss, 2) %></td>
+                        <td><%= unless is_nil(@payslip.sss), do: :erlang.float_to_binary(@payslip.sss, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -478,7 +471,7 @@
                     <tr>
                         <td><label>Witholding Tax</label></td>
                         <td></td>
-                        <td><%= unless is_nil(@payslip.wtax), do: Float.ceil(@payslip.wtax, 2) %></td>
+                        <td><%= unless is_nil(@payslip.wtax), do: :erlang.float_to_binary(@payslip.wtax, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -507,7 +500,7 @@
                         <td><label>Totals</label></td>
                         <td></td>
                         <td></td>
-                        <td>NETPAY: <%= unless is_nil(@payslip.wtax), do: Float.ceil(@payslip.net, 2) %></td>
+                        <td>NETPAY: <%= unless is_nil(@payslip.wtax), do: :erlang.float_to_binary(@payslip.net, [decimals: 2]) %></td>
                         <td></td>
                     </tr>
                 </tbody>
