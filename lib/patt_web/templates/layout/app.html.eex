@@ -44,7 +44,7 @@
                 <span class="glyphicon glyphicon-list-alt"></span>&nbsp;<%= " Holidays"%>
               <% end %>
             </li>
-            <li>
+            <li class="hide">
               <%= link to: payroll_path(@conn, :index) do %>
                 <span class="glyphicon glyphicon-sort-by-attributes-alt"></span>&nbsp;<%= " Loans"%>
               <% end %>
