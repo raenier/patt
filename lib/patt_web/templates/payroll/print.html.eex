@@ -40,7 +40,11 @@
     <tr>
       <th colspan=4>Name of employee: </th>
       <td colspan=4>
+      <%= unless is_nil(@payslip.employee) do %>
         <%= @payslip.employee.last_name %> <%= @payslip.employee.first_name %> <%= @payslip.employee.middle_name %>
+          <%= else %>
+        <%= "Employee Deleted" %>
+      <% end %>
       </td>
     </tr>
     <tr>
