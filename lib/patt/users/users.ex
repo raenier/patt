@@ -101,4 +101,10 @@ defmodule Patt.Users do
   def change_user(%User{} = user) do
     Ecto.Changeset.change(user)
   end
+
+  def get_by_username_password(username, password) do
+    User
+    |> Repo.get_by(username: username)
+    |> Comeonin.Bcrypt.check_pass(password)
+  end
 end
