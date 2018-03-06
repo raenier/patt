@@ -5,17 +5,35 @@ defmodule Patt.Users.User do
 
 
   schema "users" do
-    field :password_hash, :string
     field :username, :string
+    field :password_hash, :string
+    field :password, :string, virtual: true
 
     timestamps()
   end
 
   @doc false
-  def changeset(%User{} = user, attrs) do
+  def create_changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:username, :password_hash])
-    |> validate_required([:username, :password_hash])
+    |> cast(attrs, [:username, :password])
+    |> validate_required([:username, :password])
+    |> hash_password
+    |> unique_constraint(:username)
+  end
+
+  defp hash_password(%Ecto.Changeset{
+    valid?: true,
+    changes: %{password: password}
+  } = changeset) when byte_size(password) > 0 do
+    change(changeset, Comeonin.Bcrypt.add_hash(password))
+  end
+  defp hash_password(changeset), do: changeset
+
+  def update_changeset(%User{} = user, attrs) do
+    user
+    |> cast(attrs, [:username, :password])
+    |> validate_required([:username, :password])
+    |> hash_password
     |> unique_constraint(:username)
   end
 end
