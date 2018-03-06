@@ -159,7 +159,7 @@
             <div class="col-sm-8">
               <%= number_input tax, :tin, class: "form-control", placeholder: "TIN"%>
             </div>
-          <%= end %>
+          <% end %>
         </div>
       </div>
 
