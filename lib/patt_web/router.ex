@@ -33,6 +33,7 @@ defmodule PattWeb.Router do
     get "/payroll/payperiod/:id", PayrollController, :print_bulk
 
     resources "/holidays", HolidayController
+    resources "/users", UserController
   end
 
   # Other scopes may use custom stacks.
