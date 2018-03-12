@@ -183,15 +183,12 @@
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][in]",
                         type: "time", class: "form-control",
-                        value: if(dtr.data.in, do: time_string(dtr.data.in.hour, dtr.data.in.minute)),
-                        id: "#{dtr.index}timein"%>
+                        value: if(dtr.data.in, do: time_string(dtr.data.in.hour, dtr.data.in.minute)) %>
                 </td>
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][out]",
                         type: "time", class: "form-control",
-                        value: if(dtr.data.out, do: time_string(dtr.data.out.hour, dtr.data.out.minute)),
-                        id: "#{dtr.index}timeout",
-                        onchange: "validateTime('##{dtr.index}timein', '##{dtr.index}timeout');"%>
+                        value: if(dtr.data.out, do: time_string(dtr.data.out.hour, dtr.data.out.minute)) %>
                 </td>
                 <td>
                   <%= select dtr, :daytype, @daytypes, class: "form-control" %>
