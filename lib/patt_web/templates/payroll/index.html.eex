@@ -13,9 +13,9 @@
     </thead>
     <tbody>
     <%= for employee <- @employees do %>
-    <tr>
+    <tr class="text-left">
       <td><%= employee.id %></td>
-      <td><%= employee.first_name %> <%= employee.middle_name %> <%= employee.last_name %></td>
+      <td><%= employee.last_name %> <%= employee.first_name %> <%= employee.middle_name %></td>
       <td><%= String.capitalize(employee.emp_type) %></td>
       <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
       <td><%= if employee.position, do: employee.position.department.name, else: "No Department" %></td>

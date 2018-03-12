@@ -10,6 +10,7 @@ defmodule PattWeb.PayrollController do
 
   def index(conn, _params) do
     employees = Attendance.list_employees_post_dept()
+    employees = Enum.sort_by employees, &(&1.last_name)
     render conn, "index.html", employees: employees
   end
 

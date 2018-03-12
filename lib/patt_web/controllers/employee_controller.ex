@@ -8,6 +8,7 @@ defmodule PattWeb.EmployeeController do
 
   def index(conn, _params) do
     employees = Attendance.list_employees_wdassoc()
+    employees = Enum.sort_by employees, &(&1.last_name)
     positions = Attendance.list_departments_positions_kl()
     schedprofiles = Attendance.list_profiles_kl()
 
