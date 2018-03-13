@@ -708,11 +708,48 @@ defmodule Patt.Attendance do
         end
       end
 
-    tardiness =
+
+    tdgt30 =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
-        tard = unless is_nil(dtr.tardiness) || dtr.tardiness == "", do: dtr.tardiness, else: 0
-        tard + acc
+        td =
+          unless is_nil(dtr.tardiness) || dtr.tardiness == "" do
+            cond do
+              dtr.tardiness > 30 ->
+                dtr.tardiness
+
+              true ->
+                0
+            end
+          else
+            0
+          end
+
+        acc + td
       end
+
+    tdless30 =
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        td =
+          unless is_nil(dtr.tardiness) || dtr.tardiness == "" do
+            cond do
+              dtr.tardiness in 0..30 ->
+                dtr.tardiness
+
+              true ->
+                0
+            end
+          else
+            0
+          end
+
+        acc + td
+      end
+
+      tdless30 = tdless30 - 100
+      tdless30 = if tdless30 < 0, do: 0, else: tdless30
+
+    tardiness =
+      tdless30 + tdgt30
 
     vl =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->

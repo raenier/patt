@@ -371,8 +371,6 @@ defmodule Patt.Payroll do
     undertime = compute_undertime(totals.ut, minuterate)
     tardiness = (totals.tard * minuterate)
 
-    #consider tardiness rule for computing tardiness, subtract halfday/4hrs when late of > 30 minutes
-
     gross = vlpay + slpay + regpay + overtime + taxable_allowance + hopay + rdpay + userinputs.other_pay
     deduction = sss + pagibig + philhealth + absent + tardiness + undertime
 
