@@ -167,6 +167,16 @@
       <td></td>
       <td></td>
       <td></td>
+      <td>Bank Loan:</td>
+      <td><%= :erlang.float_to_binary(@payslip.bank_loan, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
       <td>Health Care:</td>
       <td><%= :erlang.float_to_binary(@payslip.healthcare, [decimals: 2]) %></td>
       <td></td>
@@ -204,7 +214,7 @@
       <td></td>
       <td>Total deductions:</td>
       <td>
-        <% loans = @payslip.sss_loan + @payslip.hdmf_loan + @payslip.office_loan %>
+        <% loans = @payslip.sss_loan + @payslip.hdmf_loan + @payslip.office_loan + @payslip.bank_loan %>
         <% otherdeductions = @payslip.healthcare + @payslip.feliciana + @payslip.other_deduction %>
         <%= :erlang.float_to_binary(@payslip.totaldeduction + @payslip.wtax + loans + otherdeductions,
             [decimals: 2]) %></td>

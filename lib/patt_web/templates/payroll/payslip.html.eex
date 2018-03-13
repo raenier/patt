@@ -501,6 +501,13 @@
                         <td></td>
                     </tr>
                     <tr>
+                        <td><label>Bank Loan</label></td>
+                        <td></td>
+                        <td><%= number_input f, :bank_loan, class: "form-control med-tright", value: unless(is_nil(@payslip.bank_loan), do: round(@payslip.bank_loan)) %></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td><label>Healthcare</label></td>
                         <td></td>
                         <td><%= number_input f, :healthcare, class: "form-control med-tright", value: unless(is_nil(@payslip.healthcare), do: round(@payslip.healthcare)) %></td>

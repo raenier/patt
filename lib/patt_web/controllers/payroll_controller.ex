@@ -156,6 +156,7 @@ defmodule PattWeb.PayrollController do
       "sss_loan" => sss_loan,
       "hdmf_loan" => pagibig_loan,
       "office_loan" => office_loan,
+      "bank_loan" => bank_loan,
       "healthcare" => healthcare,
       "other_pay" => other_pay,
       "feliciana" => fel,
@@ -185,7 +186,7 @@ defmodule PattWeb.PayrollController do
 
     #USER input values
     userinputs = Payroll.get_user_inputs(
-      sss_loan, pagibig_loan, office_loan, healthcare, other_pay, fel, others
+      sss_loan, pagibig_loan, office_loan, bank_loan, healthcare, other_pay, fel, others
     )
 
     {:ok, payslip} = Payroll.compute_payslip(payslip, totals, userinputs, employee.dtrs)

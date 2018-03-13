@@ -265,10 +265,11 @@ defmodule Patt.Payroll do
     end
   end
 
-  def get_user_inputs(sss_loan, pagibig_loan, office_loan, healthcare, other_pay, fel, others) do
+  def get_user_inputs(sss_loan, pagibig_loan, office_loan, bank_loan, healthcare, other_pay, fel, others) do
     sss_loan = unless String.trim(sss_loan) == "", do: String.to_integer(sss_loan), else: 0
     pagibig_loan = unless String.trim(pagibig_loan) == "", do: String.to_integer(pagibig_loan), else: 0
     office_loan = unless String.trim(office_loan) == "", do: String.to_integer(office_loan), else: 0
+    bank_loan = unless String.trim(bank_loan) == "", do: String.to_integer(bank_loan), else: 0
     healthcare = unless String.trim(healthcare) == "", do: String.to_integer(healthcare), else: 0
     other_pay = unless String.trim(other_pay) == "", do: String.to_integer(other_pay), else: 0
 
@@ -277,6 +278,7 @@ defmodule Patt.Payroll do
     %{sss_loan: sss_loan,
       pagibig_loan: pagibig_loan,
       office_loan: office_loan,
+      bank_loan: bank_loan,
       healthcare: healthcare,
       other_pay: other_pay,
       fel: fel,
@@ -381,7 +383,7 @@ defmodule Patt.Payroll do
     wtax = 0
 
     otherdeductions =
-      userinputs.sss_loan + userinputs.pagibig_loan + userinputs.office_loan + userinputs.healthcare + userinputs.fel + userinputs.others + wtax
+      userinputs.sss_loan + userinputs.pagibig_loan + userinputs.office_loan + userinputs.bank_loan + userinputs.healthcare + userinputs.fel + userinputs.others + wtax
 
     net = net_taxable + nontaxable_allowance - otherdeductions
 
@@ -405,6 +407,7 @@ defmodule Patt.Payroll do
         sss_loan: userinputs.sss_loan,
         hdmf_loan: userinputs.pagibig_loan,
         office_loan: userinputs.office_loan,
+        bank_loan: userinputs.bank_loan,
         healthcare: userinputs.healthcare,
         feliciana: userinputs.fel,
         other_deduction: userinputs.others,
