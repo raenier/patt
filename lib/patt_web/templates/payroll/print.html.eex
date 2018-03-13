@@ -42,7 +42,7 @@
       <td colspan=4>
       <%= unless is_nil(@payslip.employee) do %>
         <%= @payslip.employee.last_name %> <%= @payslip.employee.first_name %> <%= @payslip.employee.middle_name %>
-          <%= else %>
+          <% else %>
         <%= "Employee Deleted" %>
       <% end %>
       </td>
@@ -234,6 +234,15 @@
     </tr>
     <tr>
       <td colspan=8><hr></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><br><br></td>
+      <td></td>
     </tr>
     <tr>
       <td></td>
