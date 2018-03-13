@@ -24,6 +24,11 @@
             <span class="glyphicon glyphicon-print"></span>
           <% end %>
         </span>
+        <span>
+          <%= link [to: payroll_path(@conn, :print_summary, pp), class: "btn btn-default btn-sm", target: "_blank"] do %>
+            <span class="glyphicon glyphicon-list"></span> Summary
+          <% end %>
+        </span>
       </td>
     </tr>
 <% end %>

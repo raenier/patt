@@ -231,4 +231,12 @@ defmodule PattWeb.PayrollController do
     conn = put_layout conn, false
     render conn, "print_bulk.html", payperiod: payperiod
   end
+
+  def print_summary(conn, %{"id" => id}) do
+    payperiod = Payroll.get_payperiod_payslip!(id)
+    totalnet = Enum.reduce payperiod.payslips, 0, fn(p, acc) -> acc + p.net end
+    totalnet = if is_integer(totalnet), do: totalnet + 0.0, else: totalnet
+    conn = put_layout conn, false
+    render conn, "print_summary.html", payperiod: payperiod, totalnet: totalnet
+  end
 end
