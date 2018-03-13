@@ -26,7 +26,11 @@ defmodule Patt.Payroll.Payslip do
     field :philhealth, :float
     field :healthcare, :float
     field :wtax, :float
-    field :loan, :float
+    field :other_loan, :float
+    field :sss_loan, :float
+    field :hdmf_loan, :float
+    field :office_loan, :float
+    field :other_pay, :float
     field :feliciana, :float
     field :other_deduction, :float
     field :undertime, :float
@@ -47,10 +51,10 @@ defmodule Patt.Payroll.Payslip do
     |> cast(attrs,
             [
               :gross, :net, :regpay, :otpay, :vlpay, :slpay, :rdpay,
-              :sss, :pagibig, :philhealth, :undertime,
+              :sss, :pagibig, :philhealth, :undertime, :other_pay,
               :tardiness, :employee_id, :payperiod_id, :tallowance, :ntallowance,
-              :hopay, :healthcare, :wtax, :loan, :feliciana, :absent, :other_deduction,
-              :net_taxable, :totalcompen, :totaldeduction
+              :hopay, :healthcare, :wtax, :other_loan, :feliciana, :absent, :other_deduction,
+              :net_taxable, :totalcompen, :totaldeduction, :sss_loan, :hdmf_loan, :office_loan
             ])
     |> validate_required([])
   end
