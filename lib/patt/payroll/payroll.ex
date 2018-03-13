@@ -365,7 +365,8 @@ defmodule Patt.Payroll do
     #total compensation - deduction
     net_taxable = gross - deduction
     taxshielded = net_taxable - (net_taxable * 0.3) #taxshield 30%
-    wtax = compute_wtax(taxshielded)
+    #wtax = compute_wtax(taxshielded)
+    wtax = 0
 
     otherdeductions = userinputs.loan + userinputs.fel + userinputs.others + wtax
 
