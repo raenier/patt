@@ -396,6 +396,13 @@
                         <td></td>
                     </tr>
                     <tr>
+                        <td><label>Other Pay</label></td>
+                        <td><%= number_input f, :other_pay, class: "form-control med-tright", value: unless(is_nil(@payslip.other_pay), do: round(@payslip.other_pay)) %></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         <td><label>Taxable Allowance</label></td>
                         <td><%= unless is_nil(@payslip.tallowance), do: :erlang.float_to_binary(@payslip.tallowance, [decimals: 2]) %></td>
                         <td></td>
@@ -473,9 +480,30 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td><label>Loans</label></td>
+                        <td><label>SSS Loan</label></td>
                         <td></td>
-                        <td><%= number_input f, :loan, class: "form-control med-tright", value: unless(is_nil(@payslip.loan), do: round(@payslip.loan)) %></td>
+                        <td><%= number_input f, :sss_loan, class: "form-control med-tright", value: unless(is_nil(@payslip.sss_loan), do: round(@payslip.sss_loan)) %></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Pagibig Loan</label></td>
+                        <td></td>
+                        <td><%= number_input f, :hdmf_loan, class: "form-control med-tright", value: unless(is_nil(@payslip.hdmf_loan), do: round(@payslip.hdmf_loan)) %></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Office Loan</label></td>
+                        <td></td>
+                        <td><%= number_input f, :office_loan, class: "form-control med-tright", value: unless(is_nil(@payslip.office_loan), do: round(@payslip.office_loan)) %></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Healthcare</label></td>
+                        <td></td>
+                        <td><%= number_input f, :healthcare, class: "form-control med-tright", value: unless(is_nil(@payslip.healthcare), do: round(@payslip.healthcare)) %></td>
                         <td></td>
                         <td></td>
                     </tr>

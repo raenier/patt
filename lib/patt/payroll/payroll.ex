@@ -265,11 +265,23 @@ defmodule Patt.Payroll do
     end
   end
 
-  def compute_other_deductions(loan, fel, others) do
-    loan = unless String.trim(loan) == "", do: String.to_integer(loan), else: 0
+  def get_user_inputs(sss_loan, pagibig_loan, office_loan, healthcare, other_pay, fel, others) do
+    sss_loan = unless String.trim(sss_loan) == "", do: String.to_integer(sss_loan), else: 0
+    pagibig_loan = unless String.trim(pagibig_loan) == "", do: String.to_integer(pagibig_loan), else: 0
+    office_loan = unless String.trim(office_loan) == "", do: String.to_integer(office_loan), else: 0
+    healthcare = unless String.trim(healthcare) == "", do: String.to_integer(healthcare), else: 0
+    other_pay = unless String.trim(other_pay) == "", do: String.to_integer(other_pay), else: 0
+
     fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
     others = unless String.trim(others) == "", do: String.to_integer(others), else: 0
-    %{loan: loan, fel: fel, others: others}
+    %{sss_loan: sss_loan,
+      pagibig_loan: pagibig_loan,
+      office_loan: office_loan,
+      healthcare: healthcare,
+      other_pay: other_pay,
+      fel: fel,
+      others: others,
+    }
   end
 
   def compute_pagibig() do
@@ -359,7 +371,7 @@ defmodule Patt.Payroll do
 
     #consider tardiness rule for computing tardiness, subtract halfday/4hrs when late of > 30 minutes
 
-    gross = vlpay + slpay + regpay + overtime + taxable_allowance + hopay + rdpay
+    gross = vlpay + slpay + regpay + overtime + taxable_allowance + hopay + rdpay + userinputs.other_pay
     deduction = sss + pagibig + philhealth + absent + tardiness + undertime
 
     #total compensation - deduction
@@ -368,7 +380,8 @@ defmodule Patt.Payroll do
     #wtax = compute_wtax(taxshielded)
     wtax = 0
 
-    otherdeductions = userinputs.loan + userinputs.fel + userinputs.others + wtax
+    otherdeductions =
+      userinputs.sss_loan + userinputs.pagibig_loan + userinputs.office_loan + userinputs.healthcare + userinputs.fel + userinputs.others + wtax
 
     net = net_taxable + nontaxable_allowance - otherdeductions
 
@@ -379,6 +392,7 @@ defmodule Patt.Payroll do
         otpay: overtime,
         rdpay: rdpay,
         hopay: hopay,
+        other_pay: userinputs.other_pay,
         ntallowance: nontaxable_allowance,
         tallowance: taxable_allowance,
         tardiness: tardiness,
@@ -388,7 +402,10 @@ defmodule Patt.Payroll do
         philhealth: philhealth,
         sss: sss,
         wtax: wtax,
-        loan: userinputs.loan,
+        sss_loan: userinputs.sss_loan,
+        hdmf_loan: userinputs.pagibig_loan,
+        office_loan: userinputs.office_loan,
+        healthcare: userinputs.healthcare,
         feliciana: userinputs.fel,
         other_deduction: userinputs.others,
         totalcompen: gross,
