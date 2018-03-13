@@ -62,3 +62,7 @@
 .hide {
   visibility: hidden;
 }
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #E9967A;
+  }
