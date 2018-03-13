@@ -30,6 +30,7 @@ defmodule Patt.Payroll.Payslip do
     field :sss_loan, :float
     field :hdmf_loan, :float
     field :office_loan, :float
+    field :bank_loan, :float
     field :other_pay, :float
     field :feliciana, :float
     field :other_deduction, :float
@@ -54,7 +55,7 @@ defmodule Patt.Payroll.Payslip do
               :sss, :pagibig, :philhealth, :undertime, :other_pay,
               :tardiness, :employee_id, :payperiod_id, :tallowance, :ntallowance,
               :hopay, :healthcare, :wtax, :other_loan, :feliciana, :absent, :other_deduction,
-              :net_taxable, :totalcompen, :totaldeduction, :sss_loan, :hdmf_loan, :office_loan
+              :net_taxable, :totalcompen, :totaldeduction, :sss_loan, :hdmf_loan, :office_loan, :bank_loan
             ])
     |> validate_required([])
   end
