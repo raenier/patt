@@ -383,7 +383,7 @@ defmodule Patt.Attendance do
       if dtr.ot do
         if dtr.out && Time.compare(dtr.out, dtr.sched_out) == :gt do
           actual = round(minute_diff(dtr.out, dtr.sched_out))
-          if actual >= 60, do: actual-rem(actual, 60), else: 0
+          if actual >= 60, do: actual-rem(actual, 30), else: 0
         else
           0
         end
