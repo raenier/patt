@@ -173,7 +173,11 @@
       <td><%= Float.floor(@payslip.totalcompen, 2) + Float.floor(@payslip.ntallowance, 2)%></td>
       <td></td>
       <td>Total deductions:</td>
-      <td><%= Float.floor(@payslip.totaldeduction, 2) + Float.floor(@payslip.wtax, 2) + Float.floor(@payslip.loan, 2) + Float.floor(@payslip.feliciana, 2) + Float.floor(@payslip.other_deduction, 2) %></td>
+      <td>
+        <% loans = @payslip.sss_loan + @payslip.hdmf_loan + @payslip.office_loan %>
+        <% otherdeductions = @payslip.healthcare + @payslip.feliciana + @payslip.other_deduction %>
+        <%= :erlang.float_to_binary(@payslip.totaldeduction + @payslip.wtax + loans + otherdeductions,
+            [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
