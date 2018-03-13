@@ -432,11 +432,6 @@ defmodule Patt.Attendance do
     end
   end
 
-  #for computation of 100minutes allowance for whole month
-  def compute_allowable_tard() do
-
-  end
-
   def compute_tard(dtr) do
     if sched_and_in_present(dtr) do
       {mout, ain} = compute_mout_ain(dtr)
