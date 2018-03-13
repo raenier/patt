@@ -16,7 +16,7 @@
   table {
     width: 95%;
     margin: auto;
-    font-size: 14px;
+    font-size: 11px;
   }
 </style>
 <!--load automatically the print dialog when page loads-->
@@ -121,8 +121,8 @@
       <td></td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
+      <td>Other Pay:</td>
+      <td><%= :erlang.float_to_binary(@payslip.other_pay, [decimals: 2]) %></td>
       <td></td>
       <td>Undertime:</td>
       <td><%= :erlang.float_to_binary(@payslip.undertime, [decimals: 2]) %></td>
@@ -137,8 +137,38 @@
       <td></td>
       <td></td>
       <td></td>
-      <td>Loans:</td>
-      <td><%= :erlang.float_to_binary(@payslip.loan, [decimals: 2]) %></td>
+      <td>SSS Loan:</td>
+      <td><%= :erlang.float_to_binary(@payslip.sss_loan, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Pagibig Loan:</td>
+      <td><%= :erlang.float_to_binary(@payslip.hdmf_loan, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Office Loan:</td>
+      <td><%= :erlang.float_to_binary(@payslip.office_loan, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Health Care:</td>
+      <td><%= :erlang.float_to_binary(@payslip.healthcare, [decimals: 2]) %></td>
       <td></td>
       <td></td>
       <td></td>
@@ -170,7 +200,7 @@
   <tfoot>
     <tr>
       <td>Gross income:</td>
-      <td><%= Float.floor(@payslip.totalcompen, 2) + Float.floor(@payslip.ntallowance, 2)%></td>
+      <td><%= :erlang.float_to_binary((@payslip.totalcompen + @payslip.ntallowance), [decimals: 2])%></td>
       <td></td>
       <td>Total deductions:</td>
       <td>
