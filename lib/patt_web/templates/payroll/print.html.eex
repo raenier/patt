@@ -23,10 +23,8 @@
 <script type="text/javascript">
    window.onload = function() { window.print(); }
  </script>
- <br>
 
-
-<table style="border: 1px dash; font-family: sans-serif;">
+<table style="border: 1px dash; font-family: sans;">
       <thead>
     <tr>
       <th colspan=8 style="font-size: 18px;"><b>SOLIMAN E.C. GENERAL SERVICES<b></th>
