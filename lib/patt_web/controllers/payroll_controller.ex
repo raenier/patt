@@ -234,6 +234,9 @@ defmodule PattWeb.PayrollController do
 
   def print_summary(conn, %{"id" => id}) do
     payperiod = Payroll.get_payperiod_payslip!(id)
+    sorted = Enum.sort_by payperiod.payslips, &(&1.employee.last_name)
+    payperiod = Map.put(payperiod, :payslips, sorted)
+
     totalnet = Enum.reduce payperiod.payslips, 0, fn(p, acc) -> acc + p.net end
     totalnet = if is_integer(totalnet), do: totalnet + 0.0, else: totalnet
     totalfel = Enum.reduce payperiod.payslips, 0, fn(p, acc) -> acc + p.feliciana end
