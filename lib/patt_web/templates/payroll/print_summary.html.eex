@@ -9,9 +9,9 @@
     <style>
       @page {
         size: auto;
-        margin: 1mm;
-        margin-bottom: 0mm;
-        margin-top: 0mm;
+        margin: 5mm;
+        margin-bottom: 5mm;
+        margin-top: 5mm;
       }
       @media print{@page {size: landscape}}
 
@@ -30,8 +30,8 @@
     </style>
   </head>
 <br>
-<h3><b>SOLIMAN E.C. </b></h3>
-<span><b>Payperiod: </b><i><%= @payperiod.from %> to <%= @payperiod.to %></i></span>
+&nbsp;&nbsp;&nbsp;<div><h3><b>SOLIMAN E.C. </b></h3><div>
+&nbsp;&nbsp;&nbsp;<span><b>Payperiod: </b><i><%= @payperiod.from %> to <%= @payperiod.to %></i></span>
   <table border>
     <thead>
       <tr>
