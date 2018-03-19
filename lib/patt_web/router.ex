@@ -20,6 +20,21 @@ defmodule PattWeb.Router do
 
     post "/employees/search", EmployeeController, :search
     resources "/employees", EmployeeController, except: [:edit]
+
+    get "/payroll", PayrollController, :index
+    get "/payroll/:id/new", PayrollController, :new
+    post "/payroll/:id/new", PayrollController, :gen_dtr
+    put "/payroll/:id/new", PayrollController, :up_dtr
+    delete "/payroll/:id/new", PayrollController, :reset_dtrs
+    post "/payroll/:id/save", PayrollController, :gen_payslip
+    post "/payroll/:id/save", PayrollController, :up_payslip
+    get "/payroll/:payslip/print", PayrollController, :print
+    get "/payroll/payperiod", PayrollController, :print_index
+    get "/payroll/payperiod/:id", PayrollController, :print_bulk
+    get "/payroll/payperiod/:id/summary", PayrollController, :print_summary
+
+    resources "/holidays", HolidayController
+    resources "/users", UserController
   end
 
   # Other scopes may use custom stacks.

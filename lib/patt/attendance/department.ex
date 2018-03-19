@@ -17,6 +17,6 @@ defmodule Patt.Attendance.Department do
   def changeset(%Department{} = department, attrs) do
     department
     |> cast(attrs, [:name, :description])
-    |> validate_required([:name, :description])
+    |> validate_required([:name])
   end
 end

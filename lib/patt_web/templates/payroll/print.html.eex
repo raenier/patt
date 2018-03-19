@@ -1,0 +1,268 @@
+<!--For removal of date and url on printing page-->
+<style>
+  @page {
+    size: auto;
+    margin: 0mm;
+  }
+  td {
+    text-align: right;
+    padding: 0;
+  }
+  th {text-align: left;}
+  tr {
+    padding: 0;
+    margin: 0;
+  }
+  table {
+    width: 95%;
+    margin: auto;
+    font-size: 11px;
+  }
+</style>
+<!--load automatically the print dialog when page loads-->
+<script type="text/javascript">
+   window.onload = function() { window.print(); }
+ </script>
+ <br>
+
+
+<table style="border: 1px dash; font-family: sans-serif;">
+      <thead>
+    <tr>
+      <th colspan=8 style="font-size: 18px;"><b>SOLIMAN E.C. GENERAL SERVICES<b></th>
+    </tr>
+    <tr>
+      <td colspan=8>
+        Payroll Period: <i> <%= @payslip.payperiod.from %> To <%= @payslip.payperiod.to %> </i>
+        <hr>
+      </td>
+    </tr>
+    <tr>
+      <th colspan=4>Name of employee: </th>
+      <td colspan=4>
+      <%= unless is_nil(@payslip.employee) do %>
+        <%= @payslip.employee.last_name %> <%= @payslip.employee.first_name %> <%= @payslip.employee.middle_name %>
+          <% else %>
+        <%= "Employee Deleted" %>
+      <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan=8><hr><td>
+    </tr>
+    <tr>
+      <th colspan=8></th>
+    </tr>
+    <tr>
+      <th colspan=3>EARNINGS:</th>
+      <th colspan=3>DEDUCTIONS:</th>
+      <th colspan=2></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Regular Pay:</td>
+      <td><%= :erlang.float_to_binary(@payslip.regpay, [decimals: 2]) %></td>
+      <td></td>
+      <td>SSS:</td>
+      <td><%= :erlang.float_to_binary(@payslip.sss, [decimals: 2]) %></td>
+      <td></td>
+      <td>Days of work: </td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Regular OT:</td>
+      <td><%= :erlang.float_to_binary(@payslip.otpay, [decimals: 2]) %></td>
+      <td></td>
+      <td>Philhealth:</td>
+      <td><%= :erlang.float_to_binary(@payslip.philhealth, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Leave Pay:</td>
+      <td><%= Float.floor(@payslip.slpay, 2) + Float.floor(@payslip.vlpay, 2)%></td>
+      <td></td>
+      <td>HDMF:</td>
+      <td><%= :erlang.float_to_binary(@payslip.pagibig, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Holiday Pay:</td>
+      <td><%= :erlang.float_to_binary(@payslip.hopay, [decimals: 2]) %></td>
+      <td></td>
+      <td>Tax W/held:</td>
+      <td><%= :erlang.float_to_binary(@payslip.wtax, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Allowance:</td>
+      <td><%= :erlang.float_to_binary((@payslip.tallowance + @payslip.ntallowance), [decimals: 2])%></td>
+      <td></td>
+      <td>Absences:</td>
+      <td><%= :erlang.float_to_binary(@payslip.absent, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Restday Pay:</td>
+      <td><%= :erlang.float_to_binary(@payslip.rdpay, [decimals: 2]) %></td>
+      <td></td>
+      <td>Tardiness:</td>
+      <td><%= :erlang.float_to_binary(@payslip.tardiness, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Other Pay:</td>
+      <td><%= :erlang.float_to_binary(@payslip.other_pay, [decimals: 2]) %></td>
+      <td></td>
+      <td>Undertime:</td>
+      <td><%= :erlang.float_to_binary(@payslip.undertime, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan=8></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>SSS Loan:</td>
+      <td><%= :erlang.float_to_binary(@payslip.sss_loan, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Pagibig Loan:</td>
+      <td><%= :erlang.float_to_binary(@payslip.hdmf_loan, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Office Loan:</td>
+      <td><%= :erlang.float_to_binary(@payslip.office_loan, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Bank Loan:</td>
+      <td><%= :erlang.float_to_binary(@payslip.bank_loan, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Health Care:</td>
+      <td><%= :erlang.float_to_binary(@payslip.healthcare, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Feliciana:</td>
+      <td><%= :erlang.float_to_binary(@payslip.feliciana, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>Other Deductions:</td>
+      <td><%= :erlang.float_to_binary(@payslip.other_deduction, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan=8><hr></td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>Gross income:</td>
+      <td><%= :erlang.float_to_binary((@payslip.totalcompen + @payslip.ntallowance), [decimals: 2])%></td>
+      <td></td>
+      <td>Total deductions:</td>
+      <td>
+        <% loans = @payslip.sss_loan + @payslip.hdmf_loan + @payslip.office_loan + @payslip.bank_loan %>
+        <% otherdeductions = @payslip.healthcare + @payslip.feliciana + @payslip.other_deduction %>
+        <%= :erlang.float_to_binary(@payslip.totaldeduction + @payslip.wtax + loans + otherdeductions,
+            [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr style="font-size: 16px;">
+      <td>NET PAY:</td>
+      <td><%= :erlang.float_to_binary(@payslip.net, [decimals: 2]) %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td colspan=8><hr></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><br><br></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td><br><br></td>
+      <td colspan=2><hr></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td colspan=3>Employees Signature</td>
+    </tr>
+
+  </tfoot>
+</table>
+<br>
+<hr style="border-top: 1px dashed;">

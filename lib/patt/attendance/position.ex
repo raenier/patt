@@ -19,6 +19,6 @@ defmodule Patt.Attendance.Position do
   def changeset(%Position{} = position, attrs) do
     position
     |> cast(attrs, [:name, :description])
-    |> validate_required([:name, :description])
+    |> validate_required([:name])
   end
 end

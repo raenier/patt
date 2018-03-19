@@ -4,9 +4,12 @@ defmodule Patt.Attendance.Employee do
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Position
   alias Patt.Attendance.EmployeeSched
+  alias Patt.Attendance.Leave
   alias Patt.Payroll.Contribution
   alias Patt.Payroll.Compensation
   alias Patt.Payroll.Tax
+  alias Patt.Attendance.Dtr
+  alias Patt.Payroll.Payslip
 
 
   schema "employees" do
@@ -15,10 +18,14 @@ defmodule Patt.Attendance.Employee do
     has_one :contribution, Contribution
     has_one :compensation, Compensation
     has_one :tax, Tax
+    has_one :leave, Leave
+    has_many :dtrs, Dtr
+    has_many :payslips, Payslip
 
     field :first_name, :string
     field :middle_name, :string
     field :last_name, :string
+    field :gender, :string
     field :birth_date, :date
     field :birth_place, :string #notreq
     field :contact_num, :integer
@@ -34,10 +41,10 @@ defmodule Patt.Attendance.Employee do
   @doc false
   def changeset(%Employee{} = employee, attrs) do
     employee
-    |> cast(attrs, [:first_name, :middle_name, :last_name, :birth_date, :birth_place,
+    |> cast(attrs, [:first_name, :middle_name, :last_name, :birth_date, :birth_place, :gender,
                     :contact_num, :street, :brgy, :town, :province, :emp_type, :position_id])
     |> validate_required([:first_name, :middle_name, :last_name, :birth_date, :contact_num, :street,
-                          :brgy, :town, :province, :emp_type])
+                          :brgy, :town, :province, :emp_type, :gender])
   end
 
   def changeset_nested(%Employee{} = employee, attrs) do
@@ -46,5 +53,11 @@ defmodule Patt.Attendance.Employee do
     |> cast_assoc(:contribution)
     |> cast_assoc(:compensation)
     |> cast_assoc(:tax)
+    |> cast_assoc(:leave)
+  end
+
+  def changeset_dtr(%Employee{} = employee, attrs) do
+    Employee.changeset(employee, attrs)
+    |> cast_assoc(:dtrs)
   end
 end

@@ -1,19 +1,38 @@
-<!--<form class="form-horizontal" action="/searchemployee.php">-->
+  <!-- Search Form -->
   <%= form_for @conn, employee_path(@conn, :search), [as: :search, class: "form-horizontal"], fn f -> %>
     <div class="form-group">
         <div class="col-sm-5">
             <%= text_input f, :for, class: "form-control", placeholder: "Search Employee Name or Employee ID" %>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-3">
+          <%= select f, :attr,
+            [
+              ID: "id",
+              FIRSTNAME: "fname",
+              MIDDLENAME: "mname",
+              LASTNAME: "lname",
+              STREET: "street",
+              BRGY: "brgy",
+              TOWN: "town",
+              PROVINCE: "province",
+              EMPLOYEETYPE: "emptype",
+              DEPARTMENT: "department",
+              POSITION: "position",
+            ], class: "form-control" %>
+        </div>
+        <div class="col-sm-4">
              <%= submit class: "btn btn-info" do %>
                <span class="glyphicon glyphicon-search"></span><%=" SEARCH"%>
              <% end %>
-             <%= link "", to: "/employees", class: "glyphicon glyphicon-refresh btn btn-info" %>
+            <%= link to: "/employees", class: "btn btn-info" do %>
+              <span class="glyphicon glyphicon-refresh"></span>
+            <% end %>
         </div>
     </div>
-<% end %>
+  <% end %>
 <hr>
 
+<!-- Main Table -->
 <div class="table-responsive">
   <table id="tblSearchEmployeeRecords" class="table table-hover table-striped table-bordered">
     <thead class="bg-color-3c3c3c txt-color-FFFFFF">
@@ -24,52 +43,30 @@
       <th>Contact Number</th>
       <th>Type</th>
       <th>Position</th>
+      <th>Department</th>
       <th></th>
     </tr>
     </thead>
     <tbody>
     <%= for employee <- @employees do %>
-    <tr>
+    <tr class="text-left">
       <td><%= employee.id %></td>
-      <td><%= employee.first_name %> <%= employee.middle_name %> <%= employee.last_name %></td>
+      <td> <%= employee.last_name %>, <%= employee.first_name %> <%= employee.middle_name %></td>
       <td><%= employee.street %>, <%= employee.brgy %>, <%= employee.town %>, <%= employee.province %>.</td>
       <td><%= employee.contact_num %></td>
       <td><%= String.capitalize(employee.emp_type) %></td>
       <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
+      <td><%= if employee.position, do: String.upcase(employee.position.department.name), else: "Unknown"  %></td>
       <td>
-        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
+        <button class="btn btn-info btn-xs" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
             <span class="glyphicon glyphicon-edit"></span>
-        </button>
-        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#deleteEmpModal<%= employee.id %>">
-            <span class="glyphicon glyphicon-trash"></span>
         </button>
       </td>
       </tr>
 
-      <!-- Delete Employee -->
-      <div id="deleteEmpModal<%= employee.id %>" class="modal fade" role="dialog">
-        <div class="modal-dialog modal-md">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button class="close" data-dismiss="modal">&times;</button>
-              <h4><span class="glyphicon glyphicon-trash"></span>&nbsp;&nbsp;Delete Employee Record</h4>
-            </div>
-            <div class="modal-body">
-              <h4>Are you sure you want to delete this record?</h4>
-              <br>
-              <div class="text-right">
-                <%= button "Yes",class: "btn btn-info", method: :delete, to: employee_path(@conn, :delete, employee)%>
-                <button class="btn btn-info" data-dismiss="modal">No</button>
-              </div>
-            </div>
-            <div class="modal-footer"></div>
-          </div>
-        </div>
-      </div>
-
+      <!-- Edit Employee Information -->
       <tr>
         <td style="padding: 0">
-        <!-- Edit Employee Information -->
         <div id="editEmpModal<%= employee.id %>" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -85,14 +82,14 @@
                                                   schedprofiles: @schedprofiles %>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-info" data-dismiss="modal">Cancel</button>
+                    <div class="modal-footer" style="margin-left: 2px;">
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    </td>
+      </div>
+
+      </td>
     </tr>
     <% end %>
 

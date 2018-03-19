@@ -13,6 +13,8 @@ defmodule Patt.Repo.Migrations.CreateEmployeeScheds do
       add :saturday_id, references(:sched_profiles, on_delete: :nothing)
       add :sunday_id, references(:sched_profiles, on_delete: :nothing)
 
+      add :dpm, :integer
+
       timestamps()
     end
 

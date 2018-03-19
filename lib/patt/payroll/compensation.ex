@@ -9,10 +9,8 @@ defmodule Patt.Payroll.Compensation do
     belongs_to :employee, Employee
 
     field :basic, :integer
-    field :clothing, :integer
-    field :cola, :integer
-    field :food, :integer
-    field :travel, :integer
+    field :allowance_ntaxable, :integer
+    field :allowance_taxable, :integer
 
     timestamps()
   end
@@ -20,7 +18,7 @@ defmodule Patt.Payroll.Compensation do
   @doc false
   def changeset(%Compensation{} = compensation, attrs) do
     compensation
-    |> cast(attrs, [:basic, :cola, :clothing, :travel, :food])
+    |> cast(attrs, [:basic, :allowance_ntaxable, :allowance_taxable])
     |> validate_required([])
   end
 end

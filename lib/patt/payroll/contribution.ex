@@ -6,11 +6,8 @@ defmodule Patt.Payroll.Contribution do
 
 
   schema "contributions" do
-    field :pagibig_con, :integer
     field :pagibig_num, :integer
-    field :philhealth_con, :integer
     field :philhealth_num, :integer
-    field :sss_con, :integer
     field :sss_num, :integer
     belongs_to :employee, Employee
 
@@ -20,7 +17,7 @@ defmodule Patt.Payroll.Contribution do
   @doc false
   def changeset(%Contribution{} = contribution, attrs) do
     contribution
-    |> cast(attrs, [:sss_num, :sss_con, :pagibig_num, :pagibig_con, :philhealth_num, :philhealth_con])
+    |> cast(attrs, [:sss_num, :pagibig_num, :philhealth_num,])
     |> validate_required([])
   end
 end

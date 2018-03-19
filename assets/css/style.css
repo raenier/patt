@@ -46,3 +46,23 @@
 #tblSearchEmployeeRecords thead tr th, #tblGeneratePayslip thead tr th, #tblPayslipSummary thead tr th {
     text-align: center;
 }
+
+/*Input custome size*/
+.xs {
+  width: 50px;
+}
+
+.med-tright {
+  width: 100px;
+  margin: auto;
+  text-align: right;
+}
+
+/*hide elements but display space*/
+.hide {
+  visibility: hidden;
+}
+
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: #E9967A;
+  }
