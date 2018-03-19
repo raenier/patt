@@ -1,33 +1,28 @@
 <!--load automatically the print dialog when page loads-->
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
     <title>Soliman E.C. | Payroll System</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript">
-      window.onload = function() { window.print(); }
+      //window.onload = function() { window.print(); }
     </script>
     <style>
       @page {
         size: auto;
-        margin: 10mm;
+        margin: 1mm;
         margin-bottom: 0mm;
         margin-top: 0mm;
       }
+      @media print{@page {size: landscape}}
+
       table {
         padding: 0;
-        margin: 0;
+        margin: auto;
         font-size: 10px;
+        width: 98%;
       }
       tr, td {
-        padding: 0;
+        padding: 2;
       }
       th {
         font-size: 12px;
@@ -37,32 +32,79 @@
 <br>
 <h3><b>SOLIMAN E.C. </b></h3>
 <span><b>Payperiod: </b><i><%= @payperiod.from %> to <%= @payperiod.to %></i></span>
-  <table class="table">
+  <table border>
     <thead>
       <tr>
-        <th>Employee Name</th>
-        <th>Gross</th>
-        <th>Deductions</th>
-        <th>Net</th>
+        <th>NAME</th>
+        <td>REGULAR</td>
+        <td>OT</td>
+        <td>RD</td>
+        <td>LEAVE</td>
+        <td>HOLIDAY</td>
+        <td>ALLOWANCE</td>
+        <td>OTHERS</td>
+        <th>GROSS</th>
+
+        <td>SSS</td>
+        <td>PHILHEALTH</td>
+        <td>PAGIBIG</td>
+        <td>TD</td>
+        <td>UT</td>
+        <td>ABSENCES</td>
+        <td>TAXW/H</td>
+        <td>HMO</td>
+
+        <td>SSS Loan</td>
+        <td>Pagibig Loan</td>
+        <td>Office Loan</td>
+        <td>Bank Loan</td>
+
+        <td>FELICIANA</td>
+        <th>DEDUCTIONS</th>
+        <th>NET</th>
       </tr>
     </thead>
     <tbody>
-      <%= for payslip <- @payperiod.payslips do %>
+      <%= for ps <- @payperiod.payslips do %>
         <tr>
-          <td><%= payslip.employee.last_name %> <%= payslip.employee.middle_name %> <%= payslip.employee.first_name %></td>
-          <td><%= :erlang.float_to_binary((payslip.totalcompen + payslip.ntallowance), [decimals: 2])%></td>
+          <td><%= ps.employee.last_name %> <%= ps.employee.first_name %> <%= String.capitalize(String.first(ps.employee.middle_name)) %></td>
+          <td><%= :erlang.float_to_binary(ps.regpay, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.otpay, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.rdpay, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.slpay + ps.vlpay, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.hopay, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.tallowance + ps.ntallowance, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.other_pay, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary((ps.totalcompen + ps.ntallowance), [decimals: 2])%></td>
+
+          <td><%= :erlang.float_to_binary(ps.sss, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.philhealth, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.pagibig, [decimals: 1])%></td>
+          <td><%= :erlang.float_to_binary(ps.tardiness, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.undertime, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.absent, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.wtax, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.healthcare, [decimals: 1]) %></td>
+
+          <td><%= :erlang.float_to_binary(ps.sss_loan, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.hdmf_loan, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.office_loan, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.bank_loan, [decimals: 1]) %></td>
+          <td><%= :erlang.float_to_binary(ps.feliciana, [decimals: 1]) %></td>
           <td>
-            <% loans = payslip.sss_loan + payslip.hdmf_loan + payslip.office_loan + payslip.bank_loan %>
-            <% otherdeductions = payslip.healthcare + payslip.feliciana + payslip.other_deduction %>
-            <%= :erlang.float_to_binary(payslip.totaldeduction + payslip.wtax + loans + otherdeductions,
+            <!--ERROR on nil values-->
+            <% loans = ps.sss_loan + ps.hdmf_loan + ps.office_loan + ps.bank_loan %>
+            <% otherdeductions = ps.healthcare + ps.feliciana + ps.other_deduction %>
+            <%= :erlang.float_to_binary(ps.totaldeduction + ps.wtax + loans + otherdeductions,
                 [decimals: 2]) %>
           </td>
-          <td><%= :erlang.float_to_binary(payslip.net, [decimals: 2]) %></td>
+          <td><%= :erlang.float_to_binary(ps.net, [decimals: 2]) %></td>
         </tr>
       <% end %>
-      <tr>
-        <td colspan=2></td>
-        <th>NET TOTAL:</th>
+      <tr style="border-top: solid 2px;">
+        <th>TOTAL</th>
+        <td colspan=21></td>
+        <td></td>
         <td><%= :erlang.float_to_binary(@totalnet, [decimals: 2]) %></td>
       </tr>
     </tbody>

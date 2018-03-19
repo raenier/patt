@@ -236,7 +236,9 @@ defmodule PattWeb.PayrollController do
     payperiod = Payroll.get_payperiod_payslip!(id)
     totalnet = Enum.reduce payperiod.payslips, 0, fn(p, acc) -> acc + p.net end
     totalnet = if is_integer(totalnet), do: totalnet + 0.0, else: totalnet
+    totalfel = Enum.reduce payperiod.payslips, 0, fn(p, acc) -> acc + p.feliciana end
+
     conn = put_layout conn, false
-    render conn, "print_summary.html", payperiod: payperiod, totalnet: totalnet
+    render conn, "print_summary.html", payperiod: payperiod, totalnet: totalnet, totalfel: totalfel
   end
 end
