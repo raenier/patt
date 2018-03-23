@@ -162,6 +162,7 @@ defmodule PattWeb.PayrollController do
       "feliciana" => fel,
       "others" => others,
       "otherpay_remarks" => otherpay_remarks,
+      "otherded_remarks" => otherded_remarks,
       } = params
 
     range = Helper.gen_range(String.to_integer(range_params))
@@ -187,7 +188,9 @@ defmodule PattWeb.PayrollController do
 
     #USER input values
     userinputs = Payroll.get_user_inputs(
-      sss_loan, pagibig_loan, office_loan, bank_loan, healthcare, other_pay, fel, others, otherpay_remarks
+      sss_loan, pagibig_loan, office_loan, bank_loan,
+      healthcare, other_pay, fel, others, otherpay_remarks,
+      otherded_remarks
     )
 
     {:ok, payslip} = Payroll.compute_payslip(payslip, totals, userinputs, employee.dtrs)

@@ -527,8 +527,14 @@
                     <tr>
                         <td><label>Others</label></td>
                         <td></td>
-                        <td><%= number_input f, :others, class: "form-control med-tright", value: unless(is_nil(@payslip.other_deduction), do: round(@payslip.other_deduction)) %></td>
-                        <td></td>
+                        <td>
+                          <%= number_input f, :others, class: "form-control med-tright",
+                              value: unless(is_nil(@payslip.other_deduction), do: round(@payslip.other_deduction)) %>
+                        </td>
+                        <td>
+                          <%= text_input f, :otherded_remarks, class: "form-control",
+                              placeholder: "remarks", value: unless(is_nil(@payslip.otherded_remarks), do: @payslip.otherded_remarks )%>
+                        </td>
                         <td></td>
                     </tr>
                     <tr class="bg-success">

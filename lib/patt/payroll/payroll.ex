@@ -267,7 +267,7 @@ defmodule Patt.Payroll do
 
   def get_user_inputs(
     sss_loan, pagibig_loan, office_loan, bank_loan, healthcare,
-    other_pay, fel, others, otherpay_remarks
+    other_pay, fel, others, otherpay_remarks, otherded_remarks
   ) do
 
     sss_loan = unless String.trim(sss_loan) == "", do: String.to_integer(sss_loan), else: 0
@@ -279,6 +279,7 @@ defmodule Patt.Payroll do
     otherpay_remarks = unless String.trim(otherpay_remarks) == "", do: otherpay_remarks
     fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
     others = unless String.trim(others) == "", do: String.to_integer(others), else: 0
+    otherded_remarks = unless String.trim(otherded_remarks) == "", do: otherded_remarks
 
     %{sss_loan: sss_loan,
       pagibig_loan: pagibig_loan,
@@ -289,6 +290,7 @@ defmodule Patt.Payroll do
       otherpay_remarks: otherpay_remarks,
       fel: fel,
       others: others,
+      otherded_remarks: otherded_remarks,
     }
   end
 
@@ -416,6 +418,7 @@ defmodule Patt.Payroll do
         healthcare: userinputs.healthcare,
         feliciana: userinputs.fel,
         other_deduction: userinputs.others,
+        otherded_remarks: userinputs.otherded_remarks,
         totalcompen: gross,
         totaldeduction: deduction,
         net_taxable: net_taxable,
