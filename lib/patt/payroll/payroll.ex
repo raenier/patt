@@ -265,22 +265,28 @@ defmodule Patt.Payroll do
     end
   end
 
-  def get_user_inputs(sss_loan, pagibig_loan, office_loan, bank_loan, healthcare, other_pay, fel, others) do
+  def get_user_inputs(
+    sss_loan, pagibig_loan, office_loan, bank_loan, healthcare,
+    other_pay, fel, others, otherpay_remarks
+  ) do
+
     sss_loan = unless String.trim(sss_loan) == "", do: String.to_integer(sss_loan), else: 0
     pagibig_loan = unless String.trim(pagibig_loan) == "", do: String.to_integer(pagibig_loan), else: 0
     office_loan = unless String.trim(office_loan) == "", do: String.to_integer(office_loan), else: 0
     bank_loan = unless String.trim(bank_loan) == "", do: String.to_integer(bank_loan), else: 0
     healthcare = unless String.trim(healthcare) == "", do: String.to_integer(healthcare), else: 0
     other_pay = unless String.trim(other_pay) == "", do: String.to_integer(other_pay), else: 0
-
+    otherpay_remarks = unless String.trim(otherpay_remarks) == "", do: otherpay_remarks
     fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
     others = unless String.trim(others) == "", do: String.to_integer(others), else: 0
+
     %{sss_loan: sss_loan,
       pagibig_loan: pagibig_loan,
       office_loan: office_loan,
       bank_loan: bank_loan,
       healthcare: healthcare,
       other_pay: other_pay,
+      otherpay_remarks: otherpay_remarks,
       fel: fel,
       others: others,
     }
@@ -393,6 +399,7 @@ defmodule Patt.Payroll do
         rdpay: rdpay,
         hopay: hopay,
         other_pay: userinputs.other_pay,
+        otherpay_remarks: userinputs.otherpay_remarks,
         ntallowance: nontaxable_allowance,
         tallowance: taxable_allowance,
         tardiness: tardiness,

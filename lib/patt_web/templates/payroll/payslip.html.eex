@@ -398,7 +398,10 @@
                     <tr>
                         <td><label>Other Pay</label></td>
                         <td><%= number_input f, :other_pay, class: "form-control med-tright", value: unless(is_nil(@payslip.other_pay), do: round(@payslip.other_pay)) %></td>
-                        <td></td>
+                        <td>
+                          <%= text_input f, :otherpay_remarks, class: "form-control",
+                              placeholder: "remarks", value: unless(is_nil(@payslip.otherpay_remarks), do: @payslip.otherpay_remarks ) %>
+                        </td>
                         <td></td>
                         <td></td>
                     </tr>
