@@ -12,8 +12,13 @@
   tr {
     padding: 0;
     margin: 0;
+    vertical-align: top;
+  }
+  td[rowspan] {
+    text-align: left;
   }
   table {
+    table-layout: fixed;
     width: 95%;
     margin: auto;
     font-size: 11px;
@@ -133,8 +138,7 @@
     </tr>
     <tr>
       <td></td>
-      <td></td>
-      <td></td>
+      <td rowspan=8 colspan="2">&nbsp;&nbsp;<%= @payslip.otherpay_remarks %></td>
       <td>SSS Loan:</td>
       <td><%= :erlang.float_to_binary(@payslip.sss_loan, [decimals: 2]) %></td>
       <td></td>
@@ -142,8 +146,6 @@
       <td></td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
       <td></td>
       <td>Pagibig Loan:</td>
       <td><%= :erlang.float_to_binary(@payslip.hdmf_loan, [decimals: 2]) %></td>
@@ -153,8 +155,6 @@
     </tr>
     <tr>
       <td></td>
-      <td></td>
-      <td></td>
       <td>Office Loan:</td>
       <td><%= :erlang.float_to_binary(@payslip.office_loan, [decimals: 2]) %></td>
       <td></td>
@@ -162,8 +162,6 @@
       <td></td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
       <td></td>
       <td>Bank Loan:</td>
       <td><%= :erlang.float_to_binary(@payslip.bank_loan, [decimals: 2]) %></td>
@@ -173,8 +171,6 @@
     </tr>
     <tr>
       <td></td>
-      <td></td>
-      <td></td>
       <td>Health Care:</td>
       <td><%= :erlang.float_to_binary(@payslip.healthcare, [decimals: 2]) %></td>
       <td></td>
@@ -182,8 +178,6 @@
       <td></td>
     </tr>
     <tr>
-      <td></td>
-      <td></td>
       <td></td>
       <td>Feliciana:</td>
       <td><%= :erlang.float_to_binary(@payslip.feliciana, [decimals: 2]) %></td>
@@ -193,13 +187,9 @@
     </tr>
     <tr>
       <td></td>
-      <td></td>
-      <td></td>
       <td>Other Deductions:</td>
       <td><%= :erlang.float_to_binary(@payslip.other_deduction, [decimals: 2]) %></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td colspan=3 style="text-align: left;"> &nbsp;&nbsp;&nbsp; <%= @payslip.otherded_remarks %></td>
     </tr>
     <tr>
       <td colspan=8><hr></td>
@@ -242,25 +232,8 @@
       <td><br><br></td>
       <td></td>
     </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td><br><br></td>
-      <td colspan=2><hr></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td colspan=3>Employees Signature</td>
-    </tr>
 
   </tfoot>
 </table>
-<br>
+<br><br>
 <hr style="border-top: 1px dashed;">
