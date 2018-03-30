@@ -399,7 +399,7 @@
                         <td><label>Other Pay</label></td>
                         <td><%= number_input f, :other_pay, class: "form-control med-tright", value: unless(is_nil(@payslip.other_pay), do: round(@payslip.other_pay)) %></td>
                         <td>
-                          <%= text_input f, :otherpay_remarks, class: "form-control",
+                          <%= text_input f, :otherpay_remarks, class: "form-control", maxlength: "60",
                               placeholder: "remarks", value: unless(is_nil(@payslip.otherpay_remarks), do: @payslip.otherpay_remarks ) %>
                         </td>
                         <td></td>
@@ -532,7 +532,7 @@
                               value: unless(is_nil(@payslip.other_deduction), do: round(@payslip.other_deduction)) %>
                         </td>
                         <td>
-                          <%= text_input f, :otherded_remarks, class: "form-control",
+                          <%= text_input f, :otherded_remarks, class: "form-control", maxlength: "40",
                               placeholder: "remarks", value: unless(is_nil(@payslip.otherded_remarks), do: @payslip.otherded_remarks )%>
                         </td>
                         <td></td>
