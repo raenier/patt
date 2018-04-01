@@ -20,7 +20,7 @@
       <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
       <td><%= if employee.position, do: employee.position.department.name, else: "No Department" %></td>
       <td>
-        <%= link to: payroll_path(@conn, :new, employee), class: "btn btn-default" do %>
+        <%= link to: payroll_path(@conn, :new, employee), class: "btn btn-success btn-xs" do %>
           <span class="glyphicon glyphicon-book"></span> <%= "Generate Payslip" %>
         <% end %>
       </td>
