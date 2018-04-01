@@ -43,8 +43,7 @@ defmodule Patt.Attendance.Employee do
     employee
     |> cast(attrs, [:first_name, :middle_name, :last_name, :birth_date, :birth_place, :gender,
                     :contact_num, :street, :brgy, :town, :province, :emp_type, :position_id])
-    |> validate_required([:first_name, :middle_name, :last_name, :birth_date, :contact_num, :street,
-                          :brgy, :town, :province, :emp_type, :gender])
+    |> validate_required([:first_name, :last_name, :birth_date, :emp_type, :gender])
   end
 
   def changeset_nested(%Employee{} = employee, attrs) do

@@ -21,7 +21,7 @@
           <%= label f, :middle_name, class: "control-label col-sm-3"%>
           <div class="col-sm-9">
             <% error = if @changeset.errors[:middle_name] && @changeset.action, do: "alert-danger", else: "" %>
-            <%= text_input f, :middle_name, class: "form-control #{error}", placeholder: "Middle Name", required: "required"%>
+            <%= text_input f, :middle_name, class: "form-control #{error}", placeholder: "Middle Name"%>
           </div>
         </div>
 
@@ -45,13 +45,13 @@
             <label class="control-label col-sm-3">Address</label>
             <div class="col-sm-9">
               <% error = if @changeset.errors[:street] && @changeset.action, do: "alert-danger", else: "" %>
-              <%= text_input f, :street, class: "form-control margin-b-5 #{error}", placeholder: "Block/Street", required: "required" %>
+              <%= text_input f, :street, class: "form-control margin-b-5 #{error}", placeholder: "Block/Street" %>
               <% error = if @changeset.errors[:brgy] && @changeset.action, do: "alert-danger", else: "" %>
-              <%= text_input f, :brgy, class: "form-control margin-b-5 #{error}", placeholder: "Barangay", required: "required" %>
+              <%= text_input f, :brgy, class: "form-control margin-b-5 #{error}", placeholder: "Barangay" %>
               <% error = if @changeset.errors[:town] && @changeset.action, do: "alert-danger", else: "" %>
-              <%= text_input f, :town, class: "form-control margin-b-5 #{error}", placeholder: "Town", required: "required" %>
+              <%= text_input f, :town, class: "form-control margin-b-5 #{error}", placeholder: "Town" %>
               <% error = if @changeset.errors[:province] && @changeset.action, do: "alert-danger", else: "" %>
-              <%= text_input f, :province, class: "form-control margin-b-5 #{error}", placeholder: "Province", required: "required" %>
+              <%= text_input f, :province, class: "form-control margin-b-5 #{error}", placeholder: "Province" %>
             </div>
         </div>
 
@@ -59,8 +59,7 @@
           <%= label f, :contact_number, class: "control-label col-sm-3"%>
           <div class="col-sm-9">
             <% error = if @changeset.errors[:contact_num] && @changeset.action, do: "alert-danger", else: "" %>
-            <%= number_input f, :contact_num, class: "form-control #{error}", placeholder: "Contact Number",
-                                  required: "required"%>
+            <%= number_input f, :contact_num, class: "form-control #{error}", placeholder: "Contact Number" %>
           </div>
         </div>
 
