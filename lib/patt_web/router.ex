@@ -19,6 +19,7 @@ defmodule PattWeb.Router do
     get "/", PageController, :index
 
     post "/employees/search", EmployeeController, :search
+    get "/employees/delete", EmployeeController, :delete_employee
     resources "/employees", EmployeeController, except: [:edit]
 
     get "/payroll", PayrollController, :index

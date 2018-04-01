@@ -1,0 +1,26 @@
+<div class="table-responsive">
+  <table class="table table-hover table-striped table-bordered">
+    <thead class="bg-color-3c3c3c txt-color-FFFFFF">
+      <tr>
+        <th>Employee ID</th>
+        <th>Name</th>
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= for employee <- @employees do %>
+        <tr>
+          <td><%= employee.id %></td>
+          <td><%= employee.last_name %> <%= employee.first_name %> <%= employee.middle_name %></td>
+          <td>
+            <%= link to: employee_path(@conn, :delete, employee),
+                method: "delete", class: "btn btn-xs btn-danger", data: [confirm: "All employee info except payslip data will be deleted.\n Delete employee?"] do %>
+              <span class="glyphicon glyphicon-trash"></span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

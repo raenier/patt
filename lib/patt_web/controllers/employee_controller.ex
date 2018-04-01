@@ -81,7 +81,12 @@ defmodule PattWeb.EmployeeController do
       {:ok, employee} ->
         conn
         |> put_flash(:info, "successfully deleted employee #{employee.first_name}")
-        |> redirect(to: employee_path(conn, :index))
+        |> redirect(to: employee_path(conn, :delete_employee))
     end
+  end
+
+  def delete_employee(conn, _params) do
+    employees = Attendance.list_employees()
+    render conn, "delete_emp_index.html", employees: employees
   end
 end
