@@ -275,10 +275,22 @@ defmodule Patt.Payroll do
     office_loan = unless String.trim(office_loan) == "", do: String.to_integer(office_loan), else: 0
     bank_loan = unless String.trim(bank_loan) == "", do: String.to_integer(bank_loan), else: 0
     healthcare = unless String.trim(healthcare) == "", do: String.to_integer(healthcare), else: 0
-    other_pay = unless String.trim(other_pay) == "", do: String.to_integer(other_pay), else: 0
+    other_pay =
+      unless String.trim(other_pay) == "" do
+        {val, _rem} = Float.parse(other_pay)
+        val
+      else
+        0
+      end
     otherpay_remarks = unless String.trim(otherpay_remarks) == "", do: otherpay_remarks
     fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
-    others = unless String.trim(others) == "", do: String.to_integer(others), else: 0
+    others =
+      unless String.trim(others) == ""  do
+        {val, _rem} = Float.parse(others)
+        val
+      else
+        0
+      end
     otherded_remarks = unless String.trim(otherded_remarks) == "", do: otherded_remarks
 
     %{sss_loan: sss_loan,
