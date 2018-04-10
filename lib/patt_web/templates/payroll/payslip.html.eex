@@ -97,36 +97,33 @@
         </div>
         <div class="col-sm-6">
           <div class="form-group">
+
             <div class="col-sm-6">
-            <button class="btn btn-info hide" type="button" onclick="generateDTRForm()"><span class="glyphicon glyphicon-refresh"></span>&nbsp;&nbsp;Generate DTR Form</button>
+              <% month = Integer.to_string Date.utc_today.month%>
+              <% month = if String.length(month) > 1, do: month, else: "0" <> month %>
+              <input type="month" class="form-control" id="acinput" name="generated[month]" value="<%= @yearmonth %>"></input>
             </div>
 
-          <div class="col-sm-6 text-right">
-            <div class="col-sm-4">
-            <label class="control-label">Defaults:&nbsp;&nbsp;</label>
-            </div>
-
-              <div class="col-sm-4">
-              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
+              <div class="col-sm-6">
+              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
                 <%= number_input f, :range, value: 28, type: "hidden" %>
-                <%= submit class: "btn btn-warning " <> hide_ifnobasic(@employee.compensation.basic) do %>
-                  <span class="glyphicon glyphicon-plus"></span><%= " 28 to 12" %>
+                <%= text_input f, :yearmonth, type: "hidden", id: "inputa" %>
+                <%= submit class: "btn btn-warning " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
+                  <span class="glyphicon glyphicon-plus"></span><%= " 28 - 12" %>
                 <% end %>
               <% end %>
-              </div>
 
-              <div class="col-sm-4">
-              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
+              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
                 <%= number_input f, :range, value: 13, type: "hidden" %>
-                <%= submit class: "btn btn-warning " <> hide_ifnobasic(@employee.compensation.basic) do %>
-                  <span class="glyphicon glyphicon-plus"></span><%= " 13 to 27" %>
+                <%= text_input f, :yearmonth, type: "hidden", id: "inputb" %>
+                <%= submit class: "btn btn-warning " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
+                  <span class="glyphicon glyphicon-plus"></span><%= " 13 - 27" %>
                 <% end %>
               <% end %>
               </div>
 
               </div>
             </div>
-          </div>
         </div>
       </div>
 
@@ -219,7 +216,8 @@
 
        <div class="text-right">
           <%= text_input :generated, :range, value: @range, style: "display: none;"%>
-          <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary"%>
+          <%= text_input :generated, :yearmonth, type: "hidden", id: "inputc" %>
+          <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary", onclick: "getmonthInput()"%>
           <% end %>
 
           <%= form_for @conn, payroll_path(@conn, :reset_dtrs, @employee),
@@ -231,8 +229,9 @@
             ],
             fn f -> %>
             <%= text_input f, :range, style: "display: none;", value: @range %>
+            <%= text_input f, :yearmonth, type: "hidden", id: "inputd" %>
             <%= if assoc_loaded?(@employee.dtrs) do %>
-              <%= submit "Reset", class: "btn btn-warning"%>
+              <%= submit "Reset", class: "btn btn-warning", onclick: "getmonthInput()"%>
             <% end %>
           <% end %>
        </div>
@@ -553,9 +552,10 @@
 <hr>
 <div class="container-fluid text-right">
       <%= text_input f, :range, style: "display: none;", value: @range %>
+      <%= text_input f, :yearmonth, type: "hidden", id: "inpute" %>
 
       <%= if assoc_loaded?(@employee.dtrs) do %>
-        <%= submit [class: "btn btn-info", id: "sub"] do %>
+        <%= submit [class: "btn btn-info", id: "sub", onclick: "getmonthInput()"] do %>
           <span class="glyphicon glyphicon-save"></span>
           <%= if(is_nil(@payslip.id), do: " GENERATE", else: " UPDATE") %>
         <% end %>

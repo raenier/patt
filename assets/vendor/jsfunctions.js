@@ -96,3 +96,12 @@ function validateDateInput(inputFields){
     }
     return formValidate;
 }
+
+function getmonthInput() {
+ val = document.getElementById("acinput").value;
+ document.getElementById("inputa").value = val
+ document.getElementById("inputb").value = val
+ document.getElementById("inputc").value = val
+ document.getElementById("inputd").value = val
+ document.getElementById("inpute").value = val
+}

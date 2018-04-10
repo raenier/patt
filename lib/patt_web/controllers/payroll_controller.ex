@@ -20,6 +20,10 @@ defmodule PattWeb.PayrollController do
     range = ""
     usedleave = Payroll.used_leave(employee)
     payslip = %Payslip{}
+    yearmonth =
+      Date.utc_today
+      |> Date.to_string
+      |> String.slice(0, 7)
 
     render conn, "payslip.html",
       [
@@ -28,11 +32,13 @@ defmodule PattWeb.PayrollController do
         range: range,
         usedleave: usedleave,
         payslip: payslip,
+        yearmonth: yearmonth
       ]
   end
 
-  def gen_dtr(conn, %{"id" => id, "generated" => %{"range" => params}}) do
-    range = Helper.gen_range(String.to_integer(params))
+  def gen_dtr(conn, %{"id" => id, "generated" => %{"range" => range_params, "yearmonth" => yearmonth}}) do
+    [year, month] = String.split yearmonth, "-"
+    range = Helper.gen_range(String.to_integer(range_params), String.to_integer(year), String.to_integer(month))
     employee = Attendance.get_employee_wdtrs!(id, range)
     all_dtrs =
     Attendance.complete_dtr(employee.dtrs, range)
@@ -62,17 +68,19 @@ defmodule PattWeb.PayrollController do
     [
       employee: employee,
       changeset: changeset,
-      range: params,
+      range: range_params,
       daytypes: daytypes,
       totals: totals,
       usedleave: usedleave,
       holidays: holidays,
       payslip: payslip,
+      yearmonth: yearmonth,
     ]
   end
 
-  def up_dtr(conn, %{"id" => id, "employee" => emp_params, "generated" => %{"range" => range_params}}) do
-    range = Helper.gen_range(String.to_integer(range_params))
+  def up_dtr(conn, %{"id" => id, "employee" => emp_params, "generated" => %{"range" => range_params, "yearmonth" => yearmonth} }) do
+    [year, month] = String.split yearmonth, "-"
+    range = Helper.gen_range(String.to_integer(range_params), String.to_integer(year), String.to_integer(month))
     employee = Attendance.get_employee_wdtrs!(id, range)
     %{"dtrs" => dtrparams} = emp_params
 
@@ -109,11 +117,13 @@ defmodule PattWeb.PayrollController do
       usedleave: usedleave,
       payslip: payslip,
       holidays: holidays,
+      yearmonth: yearmonth,
     ]
   end
 
-  def reset_dtrs(conn, %{"id" => id, "reset_dtrs" => %{"range" => range_params}}) do
-    range = Helper.gen_range(String.to_integer(range_params))
+  def reset_dtrs(conn, %{"id" => id, "reset_dtrs" => %{"range" => range_params, "yearmonth" => yearmonth}}) do
+    [year, month] = String.split yearmonth, "-"
+    range = Helper.gen_range(String.to_integer(range_params), String.to_integer(year), String.to_integer(month))
     Attendance.reset_dtrs(id, range)
 
     #move onto context
@@ -148,11 +158,13 @@ defmodule PattWeb.PayrollController do
       usedleave: usedleave,
       payslip: payslip,
       holidays: holidays,
+      yearmonth: yearmonth,
     ]
   end
 
   def gen_payslip(conn, %{"id" => id, "gen_payslip" => params }) do
     %{"range" => range_params,
+      "yearmonth" => yearmonth,
       "sss_loan" => sss_loan,
       "hdmf_loan" => pagibig_loan,
       "office_loan" => office_loan,
@@ -165,7 +177,9 @@ defmodule PattWeb.PayrollController do
       "otherded_remarks" => otherded_remarks,
       } = params
 
-    range = Helper.gen_range(String.to_integer(range_params))
+    [year, month] = String.split yearmonth, "-"
+    range = Helper.gen_range(String.to_integer(range_params), String.to_integer(year), String.to_integer(month))
+
     employee = Attendance.get_employee_wdtrs!(id, range)
     all_dtrs =
       Attendance.complete_dtr(employee.dtrs, range)
@@ -205,6 +219,7 @@ defmodule PattWeb.PayrollController do
       usedleave: usedleave,
       payslip: payslip,
       holidays: holidays,
+      yearmonth: yearmonth,
     ]
   end
 
