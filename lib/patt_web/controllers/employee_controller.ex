@@ -71,6 +71,12 @@ defmodule PattWeb.EmployeeController do
                                 employee: employee,
                                 positions: positions,
                                 schedprofiles: schedprofiles)
+      {:error, changeset} ->
+        conn
+        |> render("edit.html", changeset: changeset,
+                                employee: employee,
+                                positions: positions,
+                                schedprofiles: schedprofiles)
     end
   end
 
