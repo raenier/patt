@@ -39,7 +39,7 @@ defmodule Patt.Attendance.Employee do
     field :civil_status, :string
     field :date_hired, :date
     field :branch, :string
-    field :employee_id, :integer
+    field :employee_number, :integer
 
     timestamps()
   end
@@ -50,7 +50,7 @@ defmodule Patt.Attendance.Employee do
     |> cast(attrs, [
       :first_name, :middle_name, :last_name, :birth_date, :birth_place, :gender,
       :contact_num, :street, :brgy, :town, :province, :emp_type, :position_id,
-      :maiden_name, :civil_status, :date_hired, :branch, :employee_id,
+      :maiden_name, :civil_status, :date_hired, :branch, :employee_number,
     ])
     |> validate_required([:first_name, :last_name, :birth_date, :emp_type, :gender])
   end

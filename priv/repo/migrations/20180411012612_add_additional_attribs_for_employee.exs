@@ -7,7 +7,7 @@ defmodule Patt.Repo.Migrations.AddAdditionalAttribsForEmployee do
       add :civil_status, :string
       add :date_hired, :date
       add :branch, :string
-      add :employee_id, :integer
+      add :employee_number, :integer
     end
   end
 end
