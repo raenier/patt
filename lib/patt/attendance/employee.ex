@@ -53,6 +53,7 @@ defmodule Patt.Attendance.Employee do
       :maiden_name, :civil_status, :date_hired, :branch, :employee_number,
     ])
     |> validate_required([:first_name, :last_name, :birth_date, :emp_type, :gender])
+    |> unsafe_validate_unique(:employee_number, Patt.Repo)
   end
 
   def changeset_nested(%Employee{} = employee, attrs) do
