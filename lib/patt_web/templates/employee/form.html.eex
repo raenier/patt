@@ -10,6 +10,14 @@
         <hr>
 
         <div class="form-group">
+          <%= label f, :employee_number, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:employee_number] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= number_input f, :employee_number, class: "form-control #{error}", placeholder: "Employee Number" %>
+          </div>
+        </div>
+
+        <div class="form-group">
           <%= label f, :first_name, class: "control-label col-sm-3"%>
           <div class="col-sm-9">
             <% error = if @changeset.errors[:first_name] && @changeset.action, do: "alert-danger", else: "" %>
@@ -34,10 +42,27 @@
         </div>
 
         <div class="form-group">
+          <%= label f, :maiden_name, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:maiden_name] && @changeset.action, do: "alert-danger", else: "" %>
+           <%= text_input f, :maiden_name, class: "form-control #{error}", placeholder: "Maiden Name" %>
+          </div>
+        </div>
+
+        <div class="form-group">
           <%= label f, :Gender, class: "control-label col-sm-3"%>
           <div class="col-sm-9">
             <% error = if @changeset.errors[:gender] && @changeset.action, do: "alert-danger", else: "" %>
            <%= select f, :gender,["Male": "male", "Female": "female"], class: "form-control #{error}", placeholder: "Gender", required: "required" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= label f, :civil_status, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:civil_status] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= select f, :civil_status, ["Single": "single", "Married": "married", "Separated": "separated", "Widowed": "widowed"],
+                          class: "form-control #{error}", placeholder: "Civil Status", required: "required" %>
           </div>
         </div>
 
@@ -72,7 +97,6 @@
               <div class="col-sm-5 padding-0"><%= b.(:month, [class: "form-control"]) %></div>
               <div class="col-sm-4 padding-0"><%= b.(:year, [class: "form-control", options: 1960..(Date.utc_today).year]) %></div>
             <% end %>
-
           </div>
         </div>
 
@@ -90,6 +114,20 @@
              <%= select f, :position_id, @positions,
                   class: "form-control" , prompt: "Choose Position for employee"%>
            </div>
+        </div>
+
+        <!--PUT branch input here-->
+
+        <div class="form-group">
+          <%= label f, :Date_hired, class: "control-label col-sm-3" %>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:date_hired] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= date_select f, :date_hired, builder: fn b -> %>
+              <div class="col-sm-3 padding-0"><%= b.(:day, [class: "form-control"]) %></div>
+              <div class="col-sm-5 padding-0"><%= b.(:month, [class: "form-control"]) %></div>
+              <div class="col-sm-4 padding-0"><%= b.(:year, [class: "form-control", options: 1960..(Date.utc_today).year]) %></div>
+            <% end %>
+          </div>
         </div>
     </div>
 

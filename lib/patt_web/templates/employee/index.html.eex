@@ -37,7 +37,7 @@
   <table id="tblSearchEmployeeRecords" class="table table-hover table-striped table-bordered">
     <thead class="bg-color-3c3c3c txt-color-FFFFFF">
     <tr>
-      <th>Employee ID</th>
+      <th>Employee No#</th>
       <th>Name</th>
       <th>Address</th>
       <th>Contact Number</th>
@@ -50,8 +50,8 @@
     <tbody>
     <%= for employee <- @employees do %>
     <tr class="text-left">
-      <td><%= employee.id %></td>
-      <td> <%= employee.last_name %>, <%= employee.first_name %> <%= employee.middle_name %></td>
+      <td><%= employee.employee_number %></td>
+      <td><%= employee.last_name %>, <%= employee.first_name %>, <%= employee.middle_name %></td>
       <td><%= employee.street %>, <%= employee.brgy %>, <%= employee.town %>, <%= employee.province %>.</td>
       <td><%= employee.contact_num %></td>
       <td><%= String.capitalize(employee.emp_type) %></td>
