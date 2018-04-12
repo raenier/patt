@@ -213,6 +213,7 @@ defmodule Patt.Payroll do
 
   def compute_hoandrdpay(dtrs, minuterate) do
     Enum.reduce dtrs, %{rdpay: 0, hopay: 0}, fn dtr, acc ->
+      dtr = Patt.Repo.preload(dtr, :employee)
       ho = get_holiday_bydate(dtr.date)
       if is_nil(ho) do
         if dtr.daytype == "restday" do
@@ -248,20 +249,47 @@ defmodule Patt.Payroll do
               if dtr.in && dtr.out do
                 Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.specialrd.daily)))
               else
-                Map.put(acc, :rdpay, acc.rdpay)
-                Map.put(acc, :hopay, acc.hopay)
+                #add condition on employee class
+                case dtr.employee.emp_class do
+                  "rnf" ->
+                    Map.put(acc, :rdpay, acc.rdpay)
+                    Map.put(acc, :hopay, acc.hopay)
+
+                  "mgr" ->
+                    Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+
+                  "spv" ->
+                    Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+
+                  true ->
+                    Map.put(acc, :rdpay, acc.rdpay)
+                    Map.put(acc, :hopay, acc.hopay)
+                end
               end
             else
               if dtr.in && dtr.out do
                 Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.special.daily)))
               else
-                Map.put(acc, :rdpay, acc.rdpay)
-                Map.put(acc, :hopay, acc.hopay)
+                #add condition on employee class
+                case dtr.employee.emp_class do
+                  "rnf" ->
+                    Map.put(acc, :rdpay, acc.rdpay)
+                    Map.put(acc, :hopay, acc.hopay)
+
+                  "mgr" ->
+                    Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+
+                  "spv" ->
+                    Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+
+                  true ->
+                    Map.put(acc, :rdpay, acc.rdpay)
+                    Map.put(acc, :hopay, acc.hopay)
+                end
               end
             end
         end
       end
-
     end
   end
 

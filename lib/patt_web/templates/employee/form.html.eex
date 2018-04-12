@@ -109,6 +109,14 @@
         </div>
 
         <div class="form-group">
+          <%= label f, :employment_class, class: "control-label col-sm-3"%>
+          <div class="col-sm-9">
+            <% error = if @changeset.errors[:emp_class] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= select f, :emp_class, ["Rank and File": "rnf", "Supervisor": "spv", "Manager": "mgr"], class: "form-control #{error}" %>
+          </div>
+        </div>
+
+        <div class="form-group">
            <label class="control-label col-sm-3" for="position">Position:</label>
            <div class="col-sm-9">
              <%= select f, :position_id, @positions,
