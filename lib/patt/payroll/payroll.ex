@@ -261,6 +261,10 @@ defmodule Patt.Payroll do
                   "spv" ->
                     Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
 
+                  _ ->
+                    Map.put(acc, :rdpay, acc.rdpay)
+                    Map.put(acc, :hopay, acc.hopay)
+
                   true ->
                     Map.put(acc, :rdpay, acc.rdpay)
                     Map.put(acc, :hopay, acc.hopay)
@@ -281,6 +285,10 @@ defmodule Patt.Payroll do
 
                   "spv" ->
                     Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+
+                  _ ->
+                    Map.put(acc, :rdpay, acc.rdpay)
+                    Map.put(acc, :hopay, acc.hopay)
 
                   true ->
                     Map.put(acc, :rdpay, acc.rdpay)
