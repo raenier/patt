@@ -29,6 +29,11 @@
             <span class="glyphicon glyphicon-list"></span>
           <% end %>
         </span>
+        <span>
+          <%= link [to: payroll_path(@conn, :print_atm, pp), class: "btn btn-info btn-xs"] do %>
+            <span class="glyphicon glyphicon-credit-card"></span>
+          <% end %>
+        </span>
       </td>
     </tr>
 <% end %>

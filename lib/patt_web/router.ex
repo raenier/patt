@@ -33,6 +33,7 @@ defmodule PattWeb.Router do
     get "/payroll/payperiod", PayrollController, :print_index
     get "/payroll/payperiod/:id", PayrollController, :print_bulk
     get "/payroll/payperiod/:id/summary", PayrollController, :print_summary
+    get "/payroll/payperiod/:id/atm", PayrollController, :print_atm
 
     resources "/holidays", HolidayController
     resources "/users", UserController

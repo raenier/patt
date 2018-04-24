@@ -263,4 +263,12 @@ defmodule PattWeb.PayrollController do
     conn = put_layout conn, false
     render conn, "print_summary.html", payperiod: payperiod, totalnet: totalnet, totalfel: totalfel
   end
+
+  def print_atm(conn, %{"id" => id}) do
+    payperiod = Payroll.get_payperiod_payslip!(id)
+    sorted = Enum.sort_by payperiod.payslips, fn ps -> unless is_nil(ps.employee), do: ps.employee.last_name end
+    payperiod = Map.put(payperiod, :payslips, sorted)
+
+    render conn, "print_atm.html", payperiod: payperiod
+  end
 end
