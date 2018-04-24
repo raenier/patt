@@ -194,18 +194,6 @@
               <%= number_input con, :pagibig_num, class: "form-control", placeholder: "Pagibig Number"%>
             </div>
         </div>
-
-        <br>
-        <h4><span class="glyphicon glyphicon-barcode"></span>&nbsp;&nbsp;Tax Identification Number</h4>
-        <hr>
-        <div class="form-group">
-          <%= inputs_for f, :tax, fn tax -> %>
-            <label class="col-sm-4"></label>
-            <div class="col-sm-8">
-              <%= number_input tax, :tin, class: "form-control", placeholder: "TIN"%>
-            </div>
-          <% end %>
-        </div>
       </div>
 
     <!--COMPENSATION-->
@@ -237,11 +225,40 @@
   </div>
   <% end %>
 
+  <div class="row">
+    <div class="col-sm-7">
+      <!--TIN-->
+      <br>
+      <h4><span class="glyphicon glyphicon-barcode"></span>&nbsp;&nbsp;Tax Identification Number</h4>
+      <hr>
+      <div class="form-group">
+        <%= inputs_for f, :tax, fn tax -> %>
+          <label class="col-sm-3"></label>
+          <div class="col-sm-8">
+            <%= number_input tax, :tin, class: "form-control", placeholder: "TIN"%>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="col-sm-5">
+      <!--ATM-->
+      <br>
+      <h4><span class="glyphicon glyphicon-credit-card"></span>&nbsp;&nbsp;ATM Acct Number</h4>
+      <hr>
+      <div class="form-group">
+          <label class="col-sm-3"></label>
+          <div class="col-sm-8">
+            <%= text_input f, :atm_acct, class: "form-control", placeholder: "ACCT NUM"%>
+          </div>
+      </div>
+    </div>
+  </div>
+
   <br><br>
 
   <hr>
   <div class="container-fluid text-right">
-      <button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save</button>
+    <button class="btn btn-info" type="submit"><span class="glyphicon glyphicon-save"></span>&nbsp;&nbsp;Save</button>
   </div>
   <br>
 <% end %>
