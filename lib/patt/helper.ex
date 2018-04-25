@@ -324,4 +324,17 @@ defmodule Patt.Helper do
       7 -> "sun"
     end
   end
+
+  def get_attributes(struct = %{}) do
+    struct
+      |> Map.pop(:__meta__)
+      |> elem(1)
+      |> Map.pop(:__struct__)
+      |> elem(1)
+      |> Map.pop(:inserted_at)
+      |> elem(1)
+      |> Map.pop(:updated_at)
+      |> elem(1)
+      |> Map.keys
+  end
 end
