@@ -11,8 +11,12 @@ defmodule Patt.Payroll.Payslip do
     belongs_to :payperiod, Payperiod
 
     field :regpay, :float
-    field :ntallowance, :float
-    field :tallowance, :float
+    field :rice, :float
+    field :communication, :float
+    field :meal, :float
+    field :transpo, :float
+    field :gasoline, :float
+    field :clothing, :float
     field :otpay, :float
     field :vlpay, :float
     field :slpay, :float
@@ -55,10 +59,10 @@ defmodule Patt.Payroll.Payslip do
             [
               :gross, :net, :regpay, :otpay, :vlpay, :slpay, :rdpay,
               :sss, :pagibig, :philhealth, :undertime, :other_pay,
-              :tardiness, :employee_id, :payperiod_id, :tallowance, :ntallowance,
+              :tardiness, :employee_id, :payperiod_id, :rice, :communication, :meal, :transpo, :gasoline,
               :hopay, :healthcare, :wtax, :other_loan, :feliciana, :absent, :other_deduction,
               :net_taxable, :totalcompen, :totaldeduction, :sss_loan, :hdmf_loan, :office_loan, :bank_loan,
-              :otherpay_remarks, :otherded_remarks,
+              :otherpay_remarks, :otherded_remarks, :clothing,
             ])
     |> validate_required([])
   end
