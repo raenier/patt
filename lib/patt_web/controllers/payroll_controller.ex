@@ -247,6 +247,8 @@ defmodule PattWeb.PayrollController do
 
   def print_bulk(conn, %{"id" => id}) do
     payperiod = Payroll.get_payperiod_payslip!(id)
+    sorted = Enum.sort_by payperiod.payslips, fn ps -> unless is_nil(ps.employee), do: ps.employee.last_name end
+    payperiod = Map.put(payperiod, :payslips, sorted)
     conn = put_layout conn, false
     render conn, "print_bulk.html", payperiod: payperiod
   end
