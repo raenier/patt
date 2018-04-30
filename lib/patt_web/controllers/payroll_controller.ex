@@ -230,7 +230,7 @@ defmodule PattWeb.PayrollController do
 
   def print(conn, %{"payslip" => pid}) do
     payslip = Payroll.get_payslip!(pid)
-    payslip = Patt.Repo.preload(payslip, [:employee, :payperiod])
+    payslip = Patt.Repo.preload(payslip, [:payperiod, employee: [:compensation]])
 
     conn = put_layout conn, false
 
