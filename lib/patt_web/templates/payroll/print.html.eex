@@ -79,7 +79,8 @@
       <td><%= :erlang.float_to_binary(@payslip.sss, [decimals: 2]) %></td>
       <td></td>
       <td>Basic: </td>
-      <td><%= unless is_nil(@payslip.employee.compensation.basic), do: :erlang.float_to_binary(@payslip.employee.compensation.basic/2, [decimals: 2]) %></td>
+      <td><%= unless is_nil(@payslip.employee) || is_nil(@payslip.employee.compensation) || not(Ecto.assoc_loaded?(@payslip.employee.compensation)),
+              do: :erlang.float_to_binary(@payslip.employee.compensation.basic/2, [decimals: 2]) %></td>
     </tr>
     <tr>
       <td>Regular OT:</td>
