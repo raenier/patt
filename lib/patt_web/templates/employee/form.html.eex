@@ -208,15 +208,39 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-3">Non Taxable Allowance:</label>
-            <div class="col-sm-9">
-              <%= number_input comp, :allowance_ntaxable, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            <label class="control-label col-sm-4">Rice:</label>
+            <div class="col-sm-8">
+              <%= number_input comp, :rice, class: "form-control", placeholder: "0.00", max: 1000000 %>
             </div>
         </div>
         <div class="form-group">
-            <label class="control-label col-sm-3">Taxable Allowance:</label>
-            <div class="col-sm-9">
-              <%= number_input comp, :allowance_taxable, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            <label class="control-label col-sm-4">Communication:</label>
+            <div class="col-sm-8">
+              <%= number_input comp, :communication, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4">Clothing:</label>
+            <div class="col-sm-8">
+              <%= number_input comp, :clothing, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4">Gasoline:</label>
+            <div class="col-sm-8">
+              <%= number_input comp, :gasoline, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4">Transportation:</label>
+            <div class="col-sm-8">
+              <%= number_input comp, :transpo, class: "form-control", placeholder: "0.00", max: 1000000 %>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-4">Meal:</label>
+            <div class="col-sm-8">
+              <%= number_input comp, :meal, class: "form-control", placeholder: "0.00", max: 1000000 %>
             </div>
         </div>
         <% end %>

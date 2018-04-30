@@ -397,8 +397,18 @@ defmodule Patt.Payroll do
     %{rdpay: rdpay, hopay: hopay} = compute_hoandrdpay(dtrs, minuterate)
     vlpay = totals.vl * minuterate
     slpay = totals.sl * minuterate
-    nontaxable_allowance = unless is_nil(compen.allowance_ntaxable), do: compen.allowance_ntaxable/2, else: 0
-    taxable_allowance = unless is_nil(compen.allowance_taxable), do: compen.allowance_taxable/2, else: 0
+
+    #Allowances
+    rice = unless is_nil(compen.rice), do: compen.rice/2, else: 0
+    communication = unless is_nil(compen.communication), do: compen.communication/2, else: 0
+    meal = unless is_nil(compen.meal), do: compen.meal/2, else: 0
+    transpo = unless is_nil(compen.transpo), do: compen.transpo/2, else: 0
+    gasoline = unless is_nil(compen.gasoline), do: compen.gasoline/2, else: 0
+    clothing = unless is_nil(compen.clothing), do: compen.clothing/2, else: 0
+
+    total_allowance = rice + communication + meal + transpo + gasoline + clothing
+    #########
+
     regpay = (totals.totalwm * minuterate)
     overtime = compute_overtime_perday(dtrs, minuterate)
 
@@ -427,9 +437,11 @@ defmodule Patt.Payroll do
     undertime = compute_undertime(totals.ut, minuterate)
     tardiness = (totals.tard * minuterate)
 
-    gross = vlpay + slpay + regpay + overtime + taxable_allowance + hopay + rdpay + userinputs.other_pay
+    gross = vlpay + slpay + regpay + overtime + hopay + rdpay + userinputs.other_pay
     deduction = sss + pagibig + philhealth + absent + tardiness + undertime
 
+    #TAX
+    #Compute also for fringe benefits excess
     #total compensation - deduction
     net_taxable = gross - deduction
     taxshielded = net_taxable - (net_taxable * 0.3) #taxshield 30%
@@ -439,7 +451,7 @@ defmodule Patt.Payroll do
     otherdeductions =
       userinputs.sss_loan + userinputs.pagibig_loan + userinputs.office_loan + userinputs.bank_loan + userinputs.healthcare + userinputs.fel + userinputs.others + wtax
 
-    net = net_taxable + nontaxable_allowance - otherdeductions
+    net = net_taxable + total_allowance - otherdeductions
 
     pschangeset = Payslip.changeset(payslip, %{
         regpay: regpay,
@@ -450,8 +462,12 @@ defmodule Patt.Payroll do
         hopay: hopay,
         other_pay: userinputs.other_pay,
         otherpay_remarks: userinputs.otherpay_remarks,
-        ntallowance: nontaxable_allowance,
-        tallowance: taxable_allowance,
+        rice: rice,
+        communication: communication,
+        meal: meal,
+        transpo: transpo,
+        gasoline: gasoline,
+        clothing: clothing,
         tardiness: tardiness,
         undertime: undertime,
         absent: absent,

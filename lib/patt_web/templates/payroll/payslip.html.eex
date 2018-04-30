@@ -406,15 +406,43 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <td><label>Taxable Allowance</label></td>
-                        <td><%= unless is_nil(@payslip.tallowance), do: :erlang.float_to_binary(@payslip.tallowance, [decimals: 2]) %></td>
+                        <td><label>Rice</label></td>
+                        <td><%= unless is_nil(@payslip.rice), do: :erlang.float_to_binary(@payslip.rice, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td><label>Non Taxable Allowance</label></td>
-                        <td><%= unless is_nil(@payslip.ntallowance), do: :erlang.float_to_binary(@payslip.ntallowance, [decimals: 2]) %></td>
+                        <td><label>Meal</label></td>
+                        <td><%= unless is_nil(@payslip.meal), do: :erlang.float_to_binary(@payslip.meal, [decimals: 2]) %></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Communication</label></td>
+                        <td><%= unless is_nil(@payslip.communication), do: :erlang.float_to_binary(@payslip.communication, [decimals: 2]) %></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Transportation</label></td>
+                        <td><%= unless is_nil(@payslip.transpo), do: :erlang.float_to_binary(@payslip.transpo, [decimals: 2]) %></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Gasoline</label></td>
+                        <td><%= unless is_nil(@payslip.gasoline), do: :erlang.float_to_binary(@payslip.gasoline, [decimals: 2]) %></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Clothing</label></td>
+                        <td><%= unless is_nil(@payslip.clothing), do: :erlang.float_to_binary(@payslip.clothing, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -462,16 +490,23 @@
                         <td></td>
                     </tr>
                     <tr class="bg-success">
-                        <td>Total Compensation:</td>
+                        <td>TOTAL COMPENSATION:</td>
                         <td><%= unless is_nil(@payslip.totalcompen), do: round(@payslip.totalcompen) %></td>
                         <td>Deduction:</td>
                         <td><%= unless is_nil(@payslip.totaldeduction), do: round(@payslip.totaldeduction) %></td>
                         <td></td>
                     </tr>
                     <tr class="bg-success">
-                        <td><label>Net Taxable</label></td>
+                        <td><label>NET TAXABLE</label></td>
                         <td><%= unless is_nil(@payslip.net_taxable), do: round(@payslip.net_taxable) %></td>
-                        <td>- 30% (Tax Shield):</td>
+                        <td><!--- 30% (Tax Shield):--></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr class="bg-success">
+                        <td><label>TOTAL ALLOWANCES</label></td>
+                        <td></td>
+                        <td></td>
                         <td></td>
                         <td></td>
                     </tr>
