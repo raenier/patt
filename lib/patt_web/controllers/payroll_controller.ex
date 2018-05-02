@@ -241,7 +241,9 @@ defmodule PattWeb.PayrollController do
   end
 
   def print_index(conn, _params) do
-    payperiods = Payroll.get_all_payperiod()
+    payperiods =
+      Payroll.get_all_payperiod()
+      |> Enum.sort_by fn pp -> Date.to_erl(pp.to) end
     render conn, "print_index.html", payperiods: payperiods
   end
 
