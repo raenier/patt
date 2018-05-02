@@ -9,12 +9,12 @@ defmodule Patt.Payroll.Compensation do
     belongs_to :employee, Employee
 
     field :basic, :integer
-    field :rice, :float
-    field :communication, :float
-    field :meal, :float
-    field :transpo, :float
-    field :gasoline, :float
-    field :clothing, :float
+    field :rice, :integer
+    field :communication, :integer
+    field :meal, :integer
+    field :transpo, :integer
+    field :gasoline, :integer
+    field :clothing, :integer
 
     timestamps()
   end
