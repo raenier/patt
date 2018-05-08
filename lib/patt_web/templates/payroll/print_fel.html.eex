@@ -1,0 +1,71 @@
+<html>
+  <head>
+    <title>FELICIANA</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <script type="text/javascript">
+      window.onload = function() { window.print(); }
+    </script>
+    <style>
+      @page {
+        size: auto;
+        margin-bottom: 0;
+        margin-top: 0;
+        margin-right: 3mm;
+        margin-left: 3mm;
+      }
+      table {
+        border: 1px solid black;
+        width: 100%;
+      }
+      thead {
+        border: 1px solid black;
+      }
+      tfoot {
+        border-top: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+    &nbsp;&nbsp;&nbsp;<div><h4><b>SOLIMAN E.C. SEPTIC TANK DISPOSAL</b></h4></div>
+    <span class="pull-left">FELICIANA</span><span class="pull-right"><b>Payperiod: </b><i><%= @payperiod.from %> to <%= @payperiod.to %></i></span>
+    </header>
+    <main>
+    <table>
+      <thead>
+        <tr>
+          <th>NAME</th>
+          <th>AMOUNT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for ps <- @payperiod.payslips do %>
+          <%= unless ps.feliciana <= 0 do %>
+          <tr>
+            <td>
+              <%= unless is_nil(ps.employee) do %>
+                <%= ps.employee.last_name %> <%= ps.employee.first_name %> <%= String.capitalize(String.first(ps.employee.middle_name)) %>
+              <%= else %>
+                DELETED EMPLOYEE INFO
+              <% end %>
+            </td>
+            <td><%= :erlang.float_to_binary(ps.feliciana, [decimals: 1]) %></td>
+          </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th>TOTAL</th>
+          <td><%= @totals.totalfel %></td>
+        </tr>
+      </tfoot>
+    </table>
+    </main>
+
+      <footer>
+      <i>This is computer generated.</i>
+      </footer>
+  </body>
+</html>

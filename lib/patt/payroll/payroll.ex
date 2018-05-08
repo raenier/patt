@@ -272,6 +272,7 @@ defmodule Patt.Payroll do
               end
             else
               if dtr.in && dtr.out do
+                #TODO Error on nil dtr.hw
                 Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.special.daily)))
               else
                 #add condition on employee class
@@ -437,7 +438,7 @@ defmodule Patt.Payroll do
     undertime = compute_undertime(totals.ut, minuterate)
     tardiness = (totals.tard * minuterate)
 
-    gross = vlpay + slpay + regpay + overtime + hopay + rdpay + userinputs.other_pay
+    gross = vlpay + slpay + regpay + overtime + hopay + rdpay + userinputs.other_pay + total_allowance
     deduction = sss + pagibig + philhealth + absent + tardiness + undertime
 
     #TAX
@@ -451,7 +452,7 @@ defmodule Patt.Payroll do
     otherdeductions =
       userinputs.sss_loan + userinputs.pagibig_loan + userinputs.office_loan + userinputs.bank_loan + userinputs.healthcare + userinputs.fel + userinputs.others + wtax
 
-    net = net_taxable + total_allowance - otherdeductions
+    net = net_taxable - otherdeductions
 
     pschangeset = Payslip.changeset(payslip, %{
         regpay: regpay,
@@ -493,6 +494,55 @@ defmodule Patt.Payroll do
     else
       Repo.insert(pschangeset)
     end
+  end
+
+  def get_total_for_attribute(enumerable, attrib) do
+    Enum.reduce enumerable, 0.0, fn(p, acc) ->
+      attrval = Map.get(p, attrib)
+      unless is_nil(attrval) do
+        acc + attrval
+      else
+        acc
+      end
+    end
+  end
+
+  def summary_totals(payslips) do
+    map =
+      %{}
+      |> Map.put(:totalreg, get_total_for_attribute(payslips, :regpay))
+      |> Map.put(:totalot, get_total_for_attribute(payslips, :otpay))
+      |> Map.put(:totalrd, get_total_for_attribute(payslips, :rdpay))
+      |> Map.put(:totalsl, get_total_for_attribute(payslips, :slpay))
+      |> Map.put(:totalvl, get_total_for_attribute(payslips, :vlay))
+      |> Map.put(:totalho, get_total_for_attribute(payslips, :hopay))
+
+      |> Map.put(:totalrice, get_total_for_attribute(payslips, :rice))
+      |> Map.put(:totalcomm, get_total_for_attribute(payslips, :communication))
+      |> Map.put(:totalmeal, get_total_for_attribute(payslips, :meal))
+      |> Map.put(:totaltranspo, get_total_for_attribute(payslips, :transpo))
+      |> Map.put(:totalgasoline, get_total_for_attribute(payslips, :gasoline))
+      |> Map.put(:totalclothing, get_total_for_attribute(payslips, :clothing))
+
+      |> Map.put(:totalop, get_total_for_attribute(payslips, :other_pay))
+      |> Map.put(:totalgross, get_total_for_attribute(payslips, :totalcompen))
+      |> Map.put(:totalsss, get_total_for_attribute(payslips, :sss))
+      |> Map.put(:totalphilhealth, get_total_for_attribute(payslips, :philhealth))
+      |> Map.put(:totalpagibig, get_total_for_attribute(payslips, :pagibig))
+      |> Map.put(:totaltardiness, get_total_for_attribute(payslips, :tardiness))
+      |> Map.put(:totalundertime, get_total_for_attribute(payslips, :undertime))
+      |> Map.put(:totalabsences, get_total_for_attribute(payslips, :absent))
+      |> Map.put(:totaltax, get_total_for_attribute(payslips, :wtax))
+      |> Map.put(:totalhmo, get_total_for_attribute(payslips, :healthcare))
+
+      |> Map.put(:totalsssloan, get_total_for_attribute(payslips, :sss_loan))
+      |> Map.put(:totalpagibigloan, get_total_for_attribute(payslips, :hdmf_loan))
+      |> Map.put(:totalofficeloan, get_total_for_attribute(payslips, :office_loan))
+
+      |> Map.put(:totaldeductions, get_total_for_attribute(payslips, :totaldeduction))
+      |> Map.put(:totalnet, get_total_for_attribute(payslips, :net))
+      |> Map.put(:totalfel, get_total_for_attribute(payslips, :feliciana))
+      |> Map.put(:totalbl, get_total_for_attribute(payslips, :bank_loan))
   end
 
   ###HOLIDAYS

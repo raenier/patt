@@ -244,7 +244,8 @@ defmodule PattWeb.PayrollController do
     payperiods =
       Payroll.get_all_payperiod()
       |> Enum.sort_by fn pp -> Date.to_erl(pp.to) end
-    render conn, "print_index.html", payperiods: payperiods
+    opt = %{ fel: :feliciana, bankloan: :bankloan, all: :all, totals: :totals}
+    render conn, "print_index.html", payperiods: payperiods, opt: opt
   end
 
   def print_bulk(conn, %{"id" => id}) do
@@ -255,17 +256,27 @@ defmodule PattWeb.PayrollController do
     render conn, "print_bulk.html", payperiod: payperiod
   end
 
-  def print_summary(conn, %{"id" => id}) do
+  def print_summary(conn, %{"id" => id, "opt" => opt}) do
     payperiod = Payroll.get_payperiod_payslip!(id)
     sorted = Enum.sort_by payperiod.payslips, fn ps -> unless is_nil(ps.employee), do: ps.employee.last_name end
     payperiod = Map.put(payperiod, :payslips, sorted)
 
-    totalnet = Enum.reduce payperiod.payslips, 0, fn(p, acc) -> acc + p.net end
-    totalnet = if is_integer(totalnet), do: totalnet + 0.0, else: totalnet
-    totalfel = Enum.reduce payperiod.payslips, 0, fn(p, acc) -> acc + p.feliciana end
+    totals = Payroll.summary_totals(payperiod.payslips)
 
     conn = put_layout conn, false
-    render conn, "print_summary.html", payperiod: payperiod, totalnet: totalnet, totalfel: totalfel
+    case opt do
+      "feliciana" ->
+        render conn, "print_fel.html", payperiod: payperiod, totals: totals
+
+      "bankloan" ->
+        render conn, "print_bankloan.html", payperiod: payperiod, totals: totals
+
+      "all" ->
+        render conn, "print_all.html", payperiod: payperiod, totals: totals
+
+      "totals" ->
+        render conn, "print_summary.html", payperiod: payperiod, totals: totals
+    end
   end
 
   def print_atm(conn, %{"id" => id}) do
