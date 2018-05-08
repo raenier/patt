@@ -1,34 +1,36 @@
-<!--For removal of date and url on printing page-->
-<style>
-  @page {
-    size: auto;
-    margin: 0mm;
-  }
-  td {
-    text-align: right;
-    padding: 0;
-  }
-  th {text-align: left;}
-  tr {
-    padding: 0;
-    margin: 0;
-    vertical-align: top;
-  }
-  td[rowspan] {
-    text-align: left;
-  }
-  table {
-    table-layout: fixed;
-    width: 1200px;
-    margin: 0;
-    font-size: 14px;
-  }
-</style>
-<!--load automatically the print dialog when page loads-->
-<script type="text/javascript">
-   window.onload = function() { window.print(); }
- </script>
-
+<html>
+  <head>
+    <!--For removal of date and url on printing page-->
+    <style>
+      @page {
+        size: auto;
+        margin: 5mm;
+      }
+      td {
+        text-align: right;
+        padding: 0;
+      }
+      th {text-align: left;}
+      tr {
+        padding: 0;
+        margin: 0;
+        vertical-align: top;
+      }
+      td[rowspan] {
+        text-align: left;
+      }
+      table {
+        table-layout: fixed;
+        width: 1200px;
+        margin: 0;
+        font-size: 14px;
+      }
+  </style>
+    <script type="text/javascript">
+      window.onload = function() { window.print(); }
+    </script>
+  </head>
+  <body>
  <br>
 <table style="border: 1px dash; font-family: sans;">
       <thead>
@@ -277,3 +279,5 @@
 <br><br>
 <br><br>
 <hr style="border-top: 1px dashed;">
+</body>
+</html>
