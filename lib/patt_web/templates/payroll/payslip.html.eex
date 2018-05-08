@@ -236,47 +236,6 @@
           <% end %>
        </div>
 
-    <h4 class="hide"><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-credit-card"></span>&nbsp;&nbsp;Other Pay</h4>
-    <div class="table-responsive hide">
-        <table id="tblOtherPay" class="table table-striped table-bordered">
-            <thead class="text-center bg-color-3c3c3c txt-color-FFFFFF">
-            <tr>
-                <th>DATE</th>
-                <th>IN</th>
-                <th>OUT</th>
-                <th>ADJUSTMENTS</th>
-                <th>TOTAL</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td><input type="text" class="form-control" value="Start by generating DTR form" disabled></td>
-                <td><input type="time" class="form-control" disabled></td>
-                <td><input type="time" class="form-control" disabled></td>
-                <td>
-                    <select class="form-control" disabled>
-                        <option>Regular Pay</option>
-                        <option>VL</option>
-                        <option>SL</option>
-                        <option>BL</option>
-                        <option>OB</option>
-                        <option>OT</option>
-                        <option>RD-OT</option>
-                        <option>HO-Pay</option>
-                        <option>HO-OT</option>
-                        <option>ND-OT</option>
-                        <option>Tardiness</option>
-                        <option>Absent</option>
-                    </select>
-                </td>
-                <td>
-                    <input type="text" class="form-control" placeholder="0.00" disabled>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-
     <!--DTR TOTALS-->
     <%= if assoc_loaded?(@employee.dtrs) do %>
       <div class= "table-responsive col-sm-6">
