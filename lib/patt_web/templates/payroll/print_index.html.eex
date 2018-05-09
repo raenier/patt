@@ -60,7 +60,7 @@
                     <b>FELICIANA</b>
                     </div>
                     <div class="col-sm-6">
-                    <%= radio_button f, :fel, @opt.fel, name: "opt" %>
+                    <%= radio_button f, :fel, @opt.fel, name: "opt" , checked: "checked" %>
                     </div>
                   </div>
 
