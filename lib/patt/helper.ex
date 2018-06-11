@@ -18,6 +18,16 @@ defmodule Patt.Helper do
         {:ok, startr} = Date.new(year, month-1, 28)
         {:ok, endr} = Date.new(year, month, 12)
         Date.range(startr, endr)
+
+      11 ->
+        {:ok, startr} = Date.new(year, month, 11)
+        {:ok, endr} = Date.new(year, month, 25)
+        Date.range(startr, endr)
+
+      26 ->
+        {:ok, startr} = Date.new(year, month-1, 26)
+        {:ok, endr} = Date.new(year, month, 10)
+        Date.range(startr, endr)
     end
   end
 

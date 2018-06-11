@@ -79,53 +79,52 @@
     </h4>
     <hr>
     <div class="row">
-        <div class="col-sm-3">
-            <div class="form-group hide">
-                <label class="control-label col-sm-5">Start Date:&nbsp;&nbsp;</label>
-                <div class="col-sm-7">
-                  <%= tag :input, type: "date", class: "form-control", id: "calDTRSDate" %>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="form-group hide">
-                <label class="control-label col-sm-5">End Date:&nbsp;&nbsp;</label>
-                <div class="col-sm-7">
-                  <%= tag :input, type: "date", class: "form-control", id: "calDTREDate" %>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-6">
+        <div class="col-sm-10">
           <div class="form-group">
-
-            <div class="col-sm-6">
+            <!--TODO: Error on blank, catch when no input given-->
+            <div class="col-sm-5">
               <% month = Integer.to_string Date.utc_today.month%>
               <% month = if String.length(month) > 1, do: month, else: "0" <> month %>
               <input type="month" class="form-control" id="acinput" name="generated[month]" value="<%= @yearmonth %>"></input>
             </div>
 
-              <div class="col-sm-6">
-              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
-                <%= number_input f, :range, value: 28, type: "hidden" %>
-                <%= text_input f, :yearmonth, type: "hidden", id: "inputa" %>
-                <%= submit class: "btn btn-warning " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
-                  <span class="glyphicon glyphicon-plus"></span><%= " 28 - 12" %>
+              <div class="col-sm-7">
+                <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
+                  <%= number_input f, :range, value: 26, type: "hidden" %>
+                  <%= text_input f, :yearmonth, type: "hidden", id: "inputa" %>
+                  <%= submit class: "btn btn-primary " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
+                    <span class="glyphicon glyphicon-sort-by-attributes"></span><%= " 26 - 10" %>
+                  <% end %>
                 <% end %>
-              <% end %>
 
-              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
-                <%= number_input f, :range, value: 13, type: "hidden" %>
-                <%= text_input f, :yearmonth, type: "hidden", id: "inputb" %>
-                <%= submit class: "btn btn-warning " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
-                  <span class="glyphicon glyphicon-plus"></span><%= " 13 - 27" %>
+                <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
+                  <%= number_input f, :range, value: 11, type: "hidden" %>
+                  <%= text_input f, :yearmonth, type: "hidden", id: "inputb" %>
+                  <%= submit class: "btn btn-primary " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
+                    <span class="glyphicon glyphicon-sort-by-attributes-alt"></span><%= " 11 - 25" %>
+                  <% end %>
                 <% end %>
-              <% end %>
-              </div>
 
+                <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
+                  <%= number_input f, :range, value: 28, type: "hidden" %>
+                  <%= text_input f, :yearmonth, type: "hidden", id: "inputc" %>
+                  <%= submit class: "btn btn-xs btn-warning " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
+                    <span class="glyphicon glyphicon-plus"></span><%= " 28 - 12" %>
+                  <% end %>
+                <% end %>
+
+                <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
+                  <%= number_input f, :range, value: 13, type: "hidden" %>
+                  <%= text_input f, :yearmonth, type: "hidden", id: "inputd" %>
+                  <%= submit class: "btn btn-xs btn-warning " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
+                    <span class="glyphicon glyphicon-plus"></span><%= " 13 - 27" %>
+                  <% end %>
+                <% end %>
               </div>
-            </div>
+          </div>
         </div>
       </div>
+    </div>
 
     <!--DTR Section Main-->
        <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-time"></span>
@@ -142,7 +141,7 @@
             <td colspan=6 style="background: white;"></td>
           </tr>
           <tr>
-              <th>DATE</th>
+              <th>DATE</td>
               <th>HO</th>
               <th>IN</th>
               <th>OUT</th>
@@ -216,7 +215,7 @@
 
        <div class="text-right">
           <%= text_input :generated, :range, value: @range, style: "display: none;"%>
-          <%= text_input :generated, :yearmonth, type: "hidden", id: "inputc" %>
+          <%= text_input :generated, :yearmonth, type: "hidden", id: "inpute" %>
           <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary", onclick: "getmonthInput()"%>
           <% end %>
 
@@ -229,60 +228,13 @@
             ],
             fn f -> %>
             <%= text_input f, :range, style: "display: none;", value: @range %>
-            <%= text_input f, :yearmonth, type: "hidden", id: "inputd" %>
+            <%= text_input f, :yearmonth, type: "hidden", id: "inputf" %>
             <%= if assoc_loaded?(@employee.dtrs) do %>
               <%= submit "Reset", class: "btn btn-warning", onclick: "getmonthInput()"%>
             <% end %>
           <% end %>
        </div>
 
-    <!--DTR TOTALS-->
-    <%= if assoc_loaded?(@employee.dtrs) do %>
-      <div class= "table-responsive col-sm-6">
-        <table class="table">
-          <thead>
-            <tr>
-              <th></th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Total Vacation Leave:</td>
-              <td><%= @totals.vl %></td>
-            </tr>
-            <tr>
-              <td>Total Sick Leave:</td>
-              <td><%= @totals.sl %></td>
-            </tr>
-            <tr>
-              <td>Total Overtime:</td>
-              <td><%= @totals.ot %></td>
-            </tr>
-            <tr>
-              <td>Total Undertime:</td>
-              <td><%= @totals.ut %></td>
-            </tr>
-            <tr>
-              <td>Total Tardiness:</td>
-              <td><%= @totals.tard %></td>
-            </tr>
-            <tr>
-              <td>Total Minutes Worked:</td>
-              <td><%= @totals.mw %></td>
-            </tr>
-            <tr>
-              <td>Total Absent:</td>
-              <td><%= @totals.absent %> day(s)</td>
-            </tr>
-            <tr>
-              <td>Total Work Days:</td>
-              <td><%= @totals.daysofwork %> day(s)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    <% end %>
 
 <%= form_for @conn, payroll_path(@conn, :gen_payslip, @employee),
       [
@@ -542,12 +494,60 @@
             </table>
         </div>
     </div>
-    <div class="col-sm-5"></div>
-</div>
+
+    <div class="col-sm-5">
+    <!--DTR TOTALS-->
+    <%= if assoc_loaded?(@employee.dtrs) do %>
+        <table class="table">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Total Vacation Leave:</td>
+              <td><%= @totals.vl %></td>
+            </tr>
+            <tr>
+              <td>Total Sick Leave:</td>
+              <td><%= @totals.sl %></td>
+            </tr>
+            <tr>
+              <td>Total Overtime:</td>
+              <td><%= @totals.ot %></td>
+            </tr>
+            <tr>
+              <td>Total Undertime:</td>
+              <td><%= @totals.ut %></td>
+            </tr>
+            <tr>
+              <td>Total Tardiness:</td>
+              <td><%= @totals.tard %></td>
+            </tr>
+            <tr>
+              <td>Total Minutes Worked:</td>
+              <td><%= @totals.mw %></td>
+            </tr>
+            <tr>
+              <td>Total Absent:</td>
+              <td><%= @totals.absent %> day(s)</td>
+            </tr>
+            <tr>
+              <td>Total Work Days:</td>
+              <td><%= @totals.daysofwork %> day(s)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+    </div>
+
 <hr>
 <div class="container-fluid text-right">
       <%= text_input f, :range, style: "display: none;", value: @range %>
-      <%= text_input f, :yearmonth, type: "hidden", id: "inpute" %>
+      <%= text_input f, :yearmonth, type: "hidden", id: "inputg" %>
 
       <%= if assoc_loaded?(@employee.dtrs) do %>
         <%= submit [class: "btn btn-info", id: "sub", onclick: "getmonthInput()"] do %>

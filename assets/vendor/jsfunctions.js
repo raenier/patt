@@ -104,4 +104,6 @@ function getmonthInput() {
  document.getElementById("inputc").value = val;
  document.getElementById("inputd").value = val;
  document.getElementById("inpute").value = val;
+ document.getElementById("inputf").value = val;
+ document.getElementById("inputg").value = val;
 }
