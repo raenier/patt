@@ -98,12 +98,12 @@ function validateDateInput(inputFields){
 }
 
 function getmonthInput() {
- val = document.getElementById("acinput").value;
- document.getElementById("inputa").value = val;
- document.getElementById("inputb").value = val;
- document.getElementById("inputc").value = val;
- document.getElementById("inputd").value = val;
- document.getElementById("inpute").value = val;
- document.getElementById("inputf").value = val;
- document.getElementById("inputg").value = val;
+  val = document.getElementById("acinput").value;
+  document.getElementById("inputa").value = val;
+  document.getElementById("inputb").value = val;
+  document.getElementById("inputc").value = val;
+  document.getElementById("inputd").value = val;
+  document.getElementById("inpute").value = val;
+  document.getElementById("inputf").value = val;
+  document.getElementById("inputg").value = val;
 }
