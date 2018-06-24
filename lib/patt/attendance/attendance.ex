@@ -632,8 +632,7 @@ defmodule Patt.Attendance do
 
     tardiness =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
-          #add another condition if day is holiday then dont compute tardiness
-          holiday = Payroll.get_holiday_bydate(dtr.date)
+        holiday = Payroll.get_holiday_bydate(dtr.date)
 
         td =
           if is_nil(holiday) do
