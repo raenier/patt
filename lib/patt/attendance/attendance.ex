@@ -12,6 +12,7 @@ defmodule Patt.Attendance do
   alias Patt.Attendance.Position
   alias Patt.Attendance.SchedProfile
   alias Patt.Attendance.Dtr
+  alias Patt.Payroll
 
   ###EMPLOYEE
 
@@ -631,14 +632,21 @@ defmodule Patt.Attendance do
 
     tardiness =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
-        td =
-          unless is_nil(dtr.tardiness) || dtr.tardiness == "" do
-            cond do
-              dtr.tardiness > 5 ->
-                dtr.tardiness
+          #add another condition if day is holiday then dont compute tardiness
+          holiday = Payroll.get_holiday_bydate(dtr.date)
 
-              true ->
-                0
+        td =
+          if is_nil(holiday) do
+            unless is_nil(dtr.tardiness) || dtr.tardiness == "" do
+              cond do
+                dtr.tardiness > 5 ->
+                  dtr.tardiness
+
+                true ->
+                  0
+              end
+            else
+              0
             end
           else
             0
