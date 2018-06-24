@@ -39,6 +39,15 @@
                   </label>
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label col-sm-3">Employment Class:</label>
+                <div class="col-sm-9">
+                  <label class="form-control">
+                    <%= String.capitalize(@employee.emp_class) %>
+                  </label>
+                </div>
+            </div>
+
         </div>
         <div class="col-sm-6">
             <div class="form-group">
