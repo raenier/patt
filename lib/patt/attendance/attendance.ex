@@ -331,12 +331,19 @@ defmodule Patt.Attendance do
 
   #########miscellaneous
   def minute_diff(timeend,timestart) do
-    Time.diff(timeend, timestart)/60
+    res = Time.diff(timeend, timestart)
+    if res < 0 do
+      (res * -1)/60 - 360
+    else
+      res/60
+    end
   end
 
   def fastforward(time, toadd) do
     {h, m, s} = Time.to_erl(time)
-    {:ok, time} = Time.from_erl {h + toadd, m, s}
+    sum = h + toadd
+    sum = unless(sum = 24, do: sum, else: 0)
+    {:ok, time} = Time.from_erl {sum, m, s}
     time
   end
 
@@ -362,20 +369,6 @@ defmodule Patt.Attendance do
     dtr.sched_in && dtr.sched_out && dtr.in
   end
 
-  def compute_mout_ain(dtr) do
-    totalhour = total_hour(dtr)
-    ahour = round(totalhour / 2)
-    mhour = totalhour - ahour
-
-    ain = backtrack(dtr.sched_out, ahour)
-    mout = fastforward(dtr.sched_in, mhour)
-    {mout, ain}
-  end
-
-  def total_hour(dtr) do
-    round(minute_diff(dtr.sched_out, dtr.sched_in)/60) - 1
-  end
-
   ###########
 
   def compute_ot(dtr) do
@@ -393,133 +386,68 @@ defmodule Patt.Attendance do
     end
   end
 
-
   def compute_ut(dtr) do
     if all_inputs_complete(dtr) do
-      {mout, ain} = compute_mout_ain(dtr)
-      aftotalwh = round(total_hour(dtr)/2) * 60
+      res =
+        cond do
+          Time.compare(dtr.out, dtr.sched_out) == :lt ->
+            round(minute_diff(dtr.sched_out, dtr.out))
 
-      cond do
-        Time.compare(dtr.out, dtr.sched_out) == :lt && Time.compare(dtr.out, ain) == :gt ->
-          round(minute_diff(dtr.sched_out, dtr.out))
-
-        Time.compare(dtr.out, ain) == :lt && Time.compare(dtr.out, mout) == :gt ->
-          aftotalwh
-
-        Time.compare(dtr.out, ain) == :eq || Time.compare(dtr.out, mout) == :eq ->
-          aftotalwh
-
-        Time.compare(dtr.out, mout) == :lt ->
-          round(minute_diff(mout, dtr.out)) + aftotalwh
-
-        true ->
-          0
+          true ->
+            0
       end
-    end
-  end
-
-  def compute_tard_deductable(dtr) do
-    actard = compute_tard(dtr)
-    cond do
-      actard in 31..240 ->
-        240
-
-      actard <= 30 ->
-        actard
-
-      true ->
-        actard
     end
   end
 
   def compute_tard(dtr) do
     if sched_and_in_present(dtr) do
-      {mout, ain} = compute_mout_ain(dtr)
-      total_hour = total_hour(dtr)
-      mtotalwh = (total_hour - round(total_hour/2)) * 60
+      res =
+        cond do
+          Time.compare(dtr.in, dtr.sched_in) == :gt ->
+            round(minute_diff(dtr.in, dtr.sched_in))
 
-      cond do
-        Time.compare(dtr.in, dtr.sched_in) == :gt && Time.compare(dtr.in, mout) == :lt ->
-          round(minute_diff(dtr.in, dtr.sched_in))
-
-        Time.compare(dtr.in, mout) == :gt && Time.compare(dtr.in, ain) == :lt ->
-          mtotalwh
-
-        Time.compare(dtr.in, mout) == :eq || Time.compare(dtr.in, ain) == :eq ->
-          mtotalwh
-
-        Time.compare(dtr.in, ain) == :gt ->
-          round(minute_diff(dtr.in, ain)) + mtotalwh
-
-        true ->
-          0
-      end
+          true ->
+            0
+        end
     end
   end
 
-  ###--COMPUTE TOTAL WORKING HOURS
-  def compute_morning_wh(dtr) do
+  # compute day totalwh
+  # PM to am is anticipated
+  def day_totalwh(dtr) do
+    case Time.compare(dtr.sched_out, dtr.sched_in) do
+      :gt ->
+        round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
+
+      :eq ->
+        round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
+
+      :lt ->
+        time1 = round((Time.diff(~T[23:59:59], dtr.sched_in)/60) - 60)
+        time2 = round((Time.diff(dtr.sched_out, ~T[00:00:00])/60))
+        time1 + time2
+
+      _matchany ->
+        round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
+    end
+  end
+
+  def actual_workhours(dtr, tardiness, undertime) do
     if all_inputs_complete(dtr) do
-      {mout, ain} = compute_mout_ain(dtr)
-      total_hour = total_hour(dtr)
-      mtotalwh = (total_hour - round(total_hour/2)) * 60
-
-      cond do
-        Time.compare(dtr.in, dtr.sched_in) == :lt || Time.compare(dtr.in, dtr.sched_in) == :eq ->
-          mtotalwh
-
-        Time.compare(dtr.in, dtr.sched_in) == :gt && Time.compare(dtr.in, mout) == :lt ->
-          round(minute_diff(mout, dtr.in))
-
-        Time.compare(dtr.in, ain) == :gt ->
-          round(minute_diff(ain, dtr.in))
-
-        true ->
-          0
-      end
+      tard = unless is_nil(tardiness), do: tardiness, else: 0
+      ut = unless is_nil(undertime), do: undertime, else: 0
+      day_totalwh(dtr) - (tard + ut)
     end
   end
-
-  def compute_afternoon_wh(dtr) do
-    if all_inputs_complete(dtr) do
-      {mout, ain} = compute_mout_ain(dtr)
-      aftotalwh = round(total_hour(dtr)/2) * 60
-
-      cond do
-        Time.compare(dtr.out, dtr.sched_out) == :gt || Time.compare(dtr.out, dtr.sched_out) == :eq ->
-          aftotalwh
-
-        Time.compare(dtr.out, dtr.sched_out) == :lt && Time.compare(dtr.out, ain) == :gt ->
-          round(minute_diff(dtr.out, ain))
-
-        Time.compare(dtr.out, mout) == :lt ->
-          round(minute_diff(dtr.out, mout))
-
-        true ->
-          0
-      end
-    end
-  end
-
-  def compute_total_wh(dtr) do
-    mwh = compute_morning_wh(dtr)
-    afwh = compute_afternoon_wh(dtr)
-    unless is_nil(mwh) || is_nil(afwh), do: mwh + afwh
-  end
-  ###--------------
 
   #compute based on daytypes
+  #TODO Edit restday and halfday computation
   def process_workhours(dtr) do
     case dtr.daytype do
       "regular" ->
-        tardiness = compute_tard_deductable(dtr)
+        tardiness = compute_tard(dtr)
         undertime = compute_ut(dtr)
-        totalwh =
-          if all_inputs_complete(dtr) do
-            tard = unless is_nil(tardiness), do: tardiness, else: 0
-            ut = unless is_nil(undertime), do: undertime, else: 0
-            day_totalwh(dtr) - (tard + ut)
-          end
+        totalwh = actual_workhours(dtr, tardiness, undertime)
 
         %{
           overtime: if(check_tardiness(tardiness), do: compute_ot(dtr), else: 0),
@@ -529,14 +457,9 @@ defmodule Patt.Attendance do
         }
 
       "ob" ->
-        tardiness = compute_tard_deductable(dtr)
+        tardiness = compute_tard(dtr)
         undertime = compute_ut(dtr)
-        totalwh =
-          if all_inputs_complete(dtr) do
-            tard = unless is_nil(tardiness), do: tardiness, else: 0
-            ut = unless is_nil(undertime), do: undertime, else: 0
-            day_totalwh(dtr) - (tard + ut)
-          end
+        totalwh = actual_workhours(dtr, tardiness, undertime)
 
         %{
           overtime: if(check_tardiness(tardiness), do: compute_ot(dtr), else: 0),
@@ -545,17 +468,16 @@ defmodule Patt.Attendance do
           hw: totalwh
         }
 
+      #undertime = tardiness + undertime
       "halfday" ->
-        total_hour = total_hour(dtr)
-        mtotalwh = (total_hour - round(total_hour/2)) * 60
+        mtotalwh = (day_totalwh(dtr) - round(day_totalwh(dtr)/2))
+
         tardiness = compute_tard(dtr) - mtotalwh
         tard = unless(tardiness < 0, do: tardiness, else: 0)
         undertime = compute_ut(dtr)
         ut = if(is_nil(undertime), do: 0 + mtotalwh, else: undertime + mtotalwh)
-        totalwh =
-          if all_inputs_complete(dtr) do
-            day_totalwh(dtr) - (tard + ut)
-          end
+
+        totalwh = actual_workhours(dtr, tard, ut)
 
         %{
           overtime: 0,
@@ -565,11 +487,15 @@ defmodule Patt.Attendance do
         }
 
       "restday" ->
+        tardiness = compute_tard(dtr)
+        undertime = compute_ut(dtr)
+        totalwh = actual_workhours(dtr, tardiness, undertime)
+
         %{
           overtime: compute_ot(dtr),
           undertime: 0,
           tardiness: 0,
-          hw: compute_total_wh(dtr)
+          hw: totalwh
         }
 
       "vl" ->
@@ -614,13 +540,12 @@ defmodule Patt.Attendance do
     Map.put(employee, :dtrs, dtrs)
   end
 
-  #compute day totalwh
-  def day_totalwh(dtr) do
-    round((Time.diff(dtr.sched_out, dtr.sched_in)/60) - 60)
-  end
 
-  #compute total for employee for that cutoff
-  #Tallying
+  # compute total for employee for that cutoff
+  # Tallying
+  # REVIEW
+  # move all tallying here even holidays
+
   def overall_totals(dtrs) do
     minutesworked =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
@@ -658,7 +583,7 @@ defmodule Patt.Attendance do
 
     #count total days of absent
     absentdays =
-      Enum.count dtrs, fn dtr ->
+     Enum.count dtrs, fn dtr ->
         ho = Patt.Payroll.get_holiday_bydate(dtr.date)
         unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || ho do
           if (dtr.sched_in && dtr.sched_out) && (is_nil(dtr.in) && is_nil(dtr.out)) do
@@ -672,7 +597,8 @@ defmodule Patt.Attendance do
       end
 
     #count total work minutes skipping restday that has no actual in and out
-    #and vl and sl
+    #Count actual work days and employee actual work in
+    #
     totalwm =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
         ho = Patt.Payroll.get_holiday_bydate(dtr.date)
@@ -703,48 +629,23 @@ defmodule Patt.Attendance do
         end
       end
 
-
-    tdgt30 =
-      Enum.reduce dtrs, 0, fn(dtr, acc) ->
-        td =
-          unless is_nil(dtr.tardiness) || dtr.tardiness == "" do
-            cond do
-              dtr.tardiness > 30 ->
-                dtr.tardiness
-
-              true ->
-                0
-            end
-          else
-            0
-          end
-
-        acc + td
-      end
-
-    tdless30 =
-      Enum.reduce dtrs, 0, fn(dtr, acc) ->
-        td =
-          unless is_nil(dtr.tardiness) || dtr.tardiness == "" do
-            cond do
-              dtr.tardiness in 0..30 ->
-                dtr.tardiness
-
-              true ->
-                0
-            end
-          else
-            0
-          end
-
-        acc + td
-      end
-
-      tdless30 = tdless30 - 100
-      tdless30 = if tdless30 < 0, do: 0, else: tdless30
-
     tardiness =
-      tdless30 + tdgt30
+      Enum.reduce dtrs, 0, fn(dtr, acc) ->
+        td =
+          unless is_nil(dtr.tardiness) || dtr.tardiness == "" do
+            cond do
+              dtr.tardiness > 5 ->
+                dtr.tardiness
+
+              true ->
+                0
+            end
+          else
+            0
+          end
+
+        acc + td
+      end
 
     vl =
       Enum.reduce dtrs, 0, fn(dtr, acc) ->
@@ -779,5 +680,4 @@ defmodule Patt.Attendance do
       totalabs: absent,
     }
   end
-
 end
