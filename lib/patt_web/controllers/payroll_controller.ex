@@ -207,6 +207,7 @@ defmodule PattWeb.PayrollController do
       otherded_remarks
     )
 
+    #TODO: Create condition that separates computation for mgr and spv
     {:ok, payslip} = Payroll.compute_payslip(payslip, totals, userinputs, employee.dtrs)
 
     render conn, "payslip.html",
@@ -244,7 +245,7 @@ defmodule PattWeb.PayrollController do
     payperiods =
       Payroll.get_all_payperiod()
       |> Enum.sort_by fn pp -> Date.to_erl(pp.to) end
-    opt = %{ fel: :feliciana, bankloan: :bankloan, all: :all, totals: :totals}
+    opt = %{ fel: :feliciana, bankloan: :bankloan, all: :all, totals: :totals, sign: :sign, ca: :ca}
     render conn, "print_index.html", payperiods: payperiods, opt: opt
   end
 
@@ -276,6 +277,12 @@ defmodule PattWeb.PayrollController do
 
       "totals" ->
         render conn, "print_summary.html", payperiod: payperiod, totals: totals
+
+      "ca" ->
+        render conn, "print_ca.html", payperiod: payperiod, totals: totals
+
+      "sign" ->
+        render conn, "print_sign.html", payperiod: payperiod, totals: totals
     end
   end
 

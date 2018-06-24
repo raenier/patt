@@ -56,38 +56,56 @@
                 <%= form_for @conn, payroll_path(@conn, :print_summary, pp), [as: :opt, target: "_blank"], fn f -> %>
                   <div class="container-fluid">
                   <div class=row>
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                     <b>FELICIANA</b>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                     <%= radio_button f, :fel, @opt.fel, name: "opt" , checked: "checked" %>
                     </div>
                   </div>
 
                   <div class=row>
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                     <b>LBP LOANS</b>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                     <%= radio_button f, :bankloan, @opt.bankloan, name: "opt" %>
                     </div>
                   </div>
 
                   <div class=row>
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
+                    <b>OFFICE LOANS</b>
+                    </div>
+                    <div class="col-sm-4">
+                    <%= radio_button f, :bankloan, @opt.ca, name: "opt" %>
+                    </div>
+                  </div>
+
+                  <div class=row>
+                    <div class="col-sm-8">
                     <b>ALL DETAILS</b>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                     <%= radio_button f, :all, @opt.all, name: "opt" %>
                     </div>
                   </div>
 
                   <div class=row>
-                    <div class="col-sm-6">
+                    <div class="col-sm-8">
                     <b>SUMMARY</b>
                     </div>
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                     <%= radio_button f, :totals, @opt.totals, name: "opt" %>
+                    </div>
+                  </div>
+
+                  <div class=row>
+                    <div class="col-sm-8">
+                    <b>RECEIVING</b>
+                    </div>
+                    <div class="col-sm-4">
+                    <%= radio_button f, :totals, @opt.sign, name: "opt" %>
                     </div>
                   </div>
                   </div>
