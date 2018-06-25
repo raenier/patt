@@ -43,7 +43,9 @@
                 <label class="control-label col-sm-3">Employment Class:</label>
                 <div class="col-sm-9">
                   <label class="form-control">
-                    <%= String.capitalize(@employee.emp_class) %>
+                    <%= unless is_nil(@employee.emp_class),
+                        do: @employee.emp_class,
+                        else: "Please choose employee class" %>
                   </label>
                 </div>
             </div>
