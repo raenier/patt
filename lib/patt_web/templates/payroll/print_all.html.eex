@@ -9,10 +9,10 @@
     <style>
       @page {
         size: auto;
-        margin-bottom: 0;
-        margin-top: 3mm;
-        margin-right: 3mm;
-        margin-left: 3mm;
+        margin-bottom: 3mm;
+        margin-top: 5mm;
+        margin-right: 5mm;
+        margin-left: 5mm;
       }
       @media print{@page {size: landscape}}
 
