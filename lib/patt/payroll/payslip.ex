@@ -22,6 +22,7 @@ defmodule Patt.Payroll.Payslip do
     field :slpay, :float
     field :rdpay, :float
     field :hopay, :float
+    field :ndpay, :float
     field :gross, :float
     field :net, :float
 
@@ -62,7 +63,7 @@ defmodule Patt.Payroll.Payslip do
               :tardiness, :employee_id, :payperiod_id, :rice, :communication, :meal, :transpo, :gasoline,
               :hopay, :healthcare, :wtax, :other_loan, :feliciana, :absent, :other_deduction,
               :net_taxable, :totalcompen, :totaldeduction, :sss_loan, :hdmf_loan, :office_loan, :bank_loan,
-              :otherpay_remarks, :otherded_remarks, :clothing,
+              :otherpay_remarks, :otherded_remarks, :clothing, :ndpay,
             ])
     |> validate_required([])
   end
