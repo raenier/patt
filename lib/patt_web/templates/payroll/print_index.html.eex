@@ -108,6 +108,15 @@
                     <%= radio_button f, :totals, @opt.sign, name: "opt" %>
                     </div>
                   </div>
+
+                  <div class=row>
+                    <div class="col-sm-8">
+                    <b>NET - ALLOWANCE</b>
+                    </div>
+                    <div class="col-sm-4">
+                    <%= radio_button f, :totals, @opt.net, name: "opt" %>
+                    </div>
+                  </div>
                   </div>
 
                   <%= submit class: "btn btn-default pull-right" do %>

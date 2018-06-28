@@ -245,7 +245,7 @@ defmodule PattWeb.PayrollController do
     payperiods =
       Payroll.get_all_payperiod()
       |> Enum.sort_by fn pp -> Date.to_erl(pp.to) end
-    opt = %{ fel: :feliciana, bankloan: :bankloan, all: :all, totals: :totals, sign: :sign, ca: :ca}
+    opt = %{ fel: :feliciana, bankloan: :bankloan, all: :all, totals: :totals, sign: :sign, ca: :ca, net: :net}
     render conn, "print_index.html", payperiods: payperiods, opt: opt
   end
 
@@ -283,6 +283,9 @@ defmodule PattWeb.PayrollController do
 
       "sign" ->
         render conn, "print_sign.html", payperiod: payperiod, totals: totals
+
+      "net" ->
+        render conn, "print_net.html", payperiod: payperiod, totals: totals
     end
   end
 
