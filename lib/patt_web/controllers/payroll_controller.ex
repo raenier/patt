@@ -2,7 +2,6 @@ defmodule PattWeb.PayrollController do
   use PattWeb, :controller
   alias Patt.Attendance
   alias Patt.Payroll
-  alias Patt.Payroll.Payperiod
   alias Patt.Payroll.Payslip
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Dtr
@@ -224,7 +223,7 @@ defmodule PattWeb.PayrollController do
     ]
   end
 
-  def up_payslip(conn, params) do
+  def up_payslip(conn, _params) do
     #for updating existing payslip
     redirect(conn, to: payroll_path(conn, :new, 4))
   end
@@ -244,7 +243,7 @@ defmodule PattWeb.PayrollController do
   def print_index(conn, _params) do
     payperiods =
       Payroll.get_all_payperiod()
-      |> Enum.sort_by fn pp -> Date.to_erl(pp.to) end
+      |> Enum.sort_by(fn pp -> Date.to_erl(pp.to) end)
     opt = %{ fel: :feliciana, bankloan: :bankloan, all: :all, totals: :totals, sign: :sign, ca: :ca, net: :net}
     render conn, "print_index.html", payperiods: payperiods, opt: opt
   end

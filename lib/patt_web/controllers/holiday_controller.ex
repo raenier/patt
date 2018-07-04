@@ -17,7 +17,7 @@ defmodule PattWeb.HolidayController do
 
   def create(conn, %{"holiday" => holiday_params}) do
     case Payroll.create_holiday(holiday_params) do
-      {:ok, holiday} ->
+      {:ok, _holiday} ->
         conn
         |> put_flash(:info, "Holiday created successfully.")
         |> redirect(to: holiday_path(conn, :index))
@@ -41,7 +41,7 @@ defmodule PattWeb.HolidayController do
     holiday = Payroll.get_holiday!(id)
 
     case Payroll.update_holiday(holiday, holiday_params) do
-      {:ok, holiday} ->
+      {:ok, _holiday} ->
         conn
         |> put_flash(:info, "Holiday updated successfully.")
         |> redirect(to: holiday_path(conn, :index))

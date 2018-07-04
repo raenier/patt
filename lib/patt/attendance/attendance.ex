@@ -674,7 +674,7 @@ defmodule Patt.Attendance do
         end
       end
 
-    totals = %{
+    %{
       ot: overtime,
       ut: undertime,
       tard: tardiness,
