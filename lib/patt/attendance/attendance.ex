@@ -429,28 +429,57 @@ defmodule Patt.Attendance do
     end
   end
 
-  # add condition here so that lunch/break in between is anticipated on tard and ut
   def compute_ut(dtr) do
     if all_inputs_complete(dtr) do
+      res =
         cond do
           Time.compare(dtr.out, dtr.sched_out) == :lt ->
             round(minute_diff(dtr.sched_out, dtr.out))
 
+          Time.compare(dtr.out, dtr.sched_out) == :gt && Time.compare(dtr.sched_out, ~T[12:00:00]) == :lt ->
+            round(minute_diff(dtr.sched_out, ~T[00:00:00])) + round(minute_diff(~T[23:59:59], dtr.out))
+
           true ->
             0
         end
+
+      cond do
+        res > 240 and res <= 300 ->
+          240
+
+        res > 300 ->
+          res - 60
+
+        true ->
+          res
+      end
     end
   end
 
   def compute_tard(dtr) do
     if sched_and_in_present(dtr) do
+      res =
         cond do
           Time.compare(dtr.in, dtr.sched_in) == :gt ->
             round(minute_diff(dtr.in, dtr.sched_in))
 
+          Time.compare(dtr.in, dtr.sched_in) == :lt && Time.compare(dtr.sched_in, ~T[12:00:00]) == :gt ->
+            round(minute_diff(~T[23:59:59], dtr.sched_in)) + round(minute_diff(dtr.in, ~T[00:00:00]))
+
           true ->
             0
         end
+
+      cond do
+        res > 240 and res <= 300 ->
+          240
+
+        res > 300 ->
+          res - 60
+
+        true ->
+          res
+      end
     end
   end
 
