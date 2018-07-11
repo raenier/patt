@@ -463,8 +463,13 @@ defmodule Patt.Attendance do
           Time.compare(dtr.in, dtr.sched_in) == :gt ->
             round(minute_diff(dtr.in, dtr.sched_in))
 
-          Time.compare(dtr.in, dtr.sched_in) == :lt && Time.compare(dtr.sched_in, ~T[12:00:00]) == :gt ->
-            round(minute_diff(~T[23:59:59], dtr.sched_in)) + round(minute_diff(dtr.in, ~T[00:00:00]))
+          Time.compare(dtr.in, ~T[12:00:00]) == :gt && Time.compare(dtr.in, dtr.sched_in) == :lt ->
+            0
+
+          Time.compare(dtr.in, dtr.sched_in) == :lt &&
+            Time.compare(dtr.sched_in, ~T[12:00:00]) == :gt ->
+            round(minute_diff(~T[23:59:59], dtr.sched_in)) +
+              round(minute_diff(dtr.in, ~T[00:00:00]))
 
           true ->
             0
