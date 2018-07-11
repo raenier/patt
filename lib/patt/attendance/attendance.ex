@@ -433,8 +433,19 @@ defmodule Patt.Attendance do
     if all_inputs_complete(dtr) do
       res =
         cond do
+          Time.compare(dtr.sched_out, ~T[12:00:00]) == :gt && Time.compare(dtr.out, ~T[12:00:00]) == :lt &&
+            Time.compare(dtr.in, dtr.out) == :gt ->
+            0
+
+          Time.compare(dtr.sched_out, ~T[12:00:00]) == :lt && Time.compare(dtr.out, ~T[12:00:00]) == :gt &&
+            Time.compare(dtr.in, dtr.out) == :gt ->
+            0
+
           Time.compare(dtr.out, dtr.sched_out) == :lt ->
             round(minute_diff(dtr.sched_out, dtr.out))
+
+          Time.compare(dtr.out, dtr.sched_out) == :gt && Time.compare(dtr.out, ~T[12:00:00]) == :lt ->
+            0
 
           Time.compare(dtr.out, dtr.sched_out) == :gt && Time.compare(dtr.sched_out, ~T[12:00:00]) == :lt ->
             round(minute_diff(dtr.sched_out, ~T[00:00:00])) + round(minute_diff(~T[23:59:59], dtr.out))
