@@ -413,7 +413,8 @@ defmodule Patt.Attendance do
   end
 
   ###########
-
+  # anticipate ot when am out
+  #
   def compute_ot(dtr) do
     if all_inputs_complete(dtr) do
       if dtr.ot do
@@ -464,6 +465,8 @@ defmodule Patt.Attendance do
         true ->
           res
       end
+    else
+      0
     end
   end
 
@@ -496,6 +499,8 @@ defmodule Patt.Attendance do
         true ->
           res
       end
+    else
+      0
     end
   end
 
