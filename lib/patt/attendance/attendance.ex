@@ -536,6 +536,8 @@ defmodule Patt.Attendance do
       tard = unless is_nil(tardiness), do: tardiness, else: 0
       ut = unless is_nil(undertime), do: undertime, else: 0
       day_totalwh(dtr) - (tard + ut)
+    else
+      0
     end
   end
 
