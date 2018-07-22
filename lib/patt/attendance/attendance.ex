@@ -412,21 +412,28 @@ defmodule Patt.Attendance do
     dtr.sched_in && dtr.sched_out && dtr.in
   end
 
-  ###########
-  # anticipate ot when am out
-  #
   def compute_ot(dtr) do
     if all_inputs_complete(dtr) do
       if dtr.ot do
-        if dtr.out && Time.compare(dtr.out, dtr.sched_out) == :gt do
-          actual = round(minute_diff(dtr.out, dtr.sched_out))
-          if actual >= 60, do: actual - rem(actual, 30), else: 0
-        else
-          0
+        cond do
+          dtr.out && Time.compare(dtr.out, dtr.sched_out) == :gt ->
+            actual = round(minute_diff(dtr.out, dtr.sched_out))
+            if actual >= 60, do: actual - rem(actual, 30), else: 0
+
+          dtr.out && Time.compare(dtr.out, dtr.sched_out) == :lt && Time.compare(dtr.out, ~T[12:00:00]) == :lt ->
+            actual1 = round(minute_diff(~T[23:59:59], dtr.sched_out))
+            actual2 = round(minute_diff(dtr.out, ~T[00:00:00]))
+            actual = actual1 + actual2
+            if actual >= 60, do: actual - rem(actual, 30), else: 0
+
+          true ->
+            0
         end
       else
         0
       end
+    else
+      0
     end
   end
 
