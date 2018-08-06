@@ -557,6 +557,30 @@ defmodule Patt.Attendance do
           hw: totalwh
         }
 
+      "absent" ->
+        tardiness = compute_tard(dtr)
+        undertime = compute_ut(dtr)
+        totalwh = actual_workhours(dtr, tardiness, undertime)
+
+        %{
+          overtime: compute_ot(dtr),
+          undertime: undertime,
+          tardiness: tardiness,
+          hw: totalwh
+        }
+
+      "lwop" ->
+        tardiness = compute_tard(dtr)
+        undertime = compute_ut(dtr)
+        totalwh = actual_workhours(dtr, tardiness, undertime)
+
+        %{
+          overtime: compute_ot(dtr),
+          undertime: undertime,
+          tardiness: tardiness,
+          hw: totalwh
+        }
+
       "ob" ->
         tardiness = compute_tard(dtr)
         undertime = compute_ut(dtr)
