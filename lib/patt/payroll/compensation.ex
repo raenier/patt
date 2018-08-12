@@ -15,6 +15,7 @@ defmodule Patt.Payroll.Compensation do
     field :transpo, :integer
     field :gasoline, :integer
     field :clothing, :integer
+    field :paymode, :string
 
     timestamps()
   end
@@ -23,8 +24,8 @@ defmodule Patt.Payroll.Compensation do
   def changeset(%Compensation{} = compensation, attrs) do
     compensation
     |> cast(attrs, [
-      :basic, :rice, :communication, :meal, :transpo, :gasoline, :clothing
+      :basic, :rice, :communication, :meal, :transpo, :gasoline, :clothing, :paymode
     ])
-    |> validate_required([])
+    |> validate_required([:paymode])
   end
 end
