@@ -10,6 +10,8 @@ defmodule Patt.Payroll do
   alias Patt.Payroll.Payperiod
   alias Patt.Payroll.Payslip
   alias Patt.Payroll.Holiday
+  alias Patt.Payroll
+  alias Patt.Attendance
 
   def list_contributions do
     Repo.all(Contribution)
@@ -159,7 +161,22 @@ defmodule Patt.Payroll do
 
   def minute_rate(employee) do
     employee = Repo.preload(employee, [:compensation, :employee_sched])
-    ((employee.compensation.basic / employee.employee_sched.dpm)/8/60)
+    case employee.compensation.paymode do
+      "daily" ->
+        ((employee.compensation.basic / employee.employee_sched.dpm)/8/60)
+
+      "365" ->
+        ((employee.compensation.basic * 12)/365)/8/60
+
+      "313" ->
+        ((employee.compensation.basic * 12)/313)/8/60
+
+      "261" ->
+        ((employee.compensation.basic * 12)/261)/8/60
+
+      _ ->
+        ((employee.compensation.basic / employee.employee_sched.dpm)/8/60)
+    end
   end
 
   def compute_absent(absentminutes, mrate) do
@@ -395,7 +412,12 @@ defmodule Patt.Payroll do
     minuterate = minute_rate(payslip.employee)
     compen = payslip.employee.compensation
 
-    %{rdpay: rdpay, hopay: hopay} = compute_hoandrdpay(dtrs, minuterate)
+    %{rdpay: rdpay, hopay: hopay} =
+      if payslip.employee.emp_class == "rnf" do
+        compute_hoandrdpay(dtrs, minuterate)
+      else
+        %{rdpay: 0, hopay: 0}
+      end
     vlpay = totals.vl * minuterate
     slpay = totals.sl * minuterate
 
@@ -408,10 +430,34 @@ defmodule Patt.Payroll do
     clothing = unless is_nil(compen.clothing), do: compen.clothing/2, else: 0
 
     total_allowance = rice + communication + meal + transpo + gasoline + clothing
+    total_leavepay = vlpay + slpay
     #########
 
-    regpay = (totals.totalwm * minuterate)
-    overtime = compute_overtime_perday(dtrs, minuterate)
+    regpay =
+      case compen.paymode do
+        "daily" ->
+          (totals.totalwm * minuterate)
+
+        "365" ->
+          compen.basic/2 - total_leavepay
+
+        "313" ->
+          compen.basic/2 - total_leavepay
+
+        "261" ->
+          compen.basic/2 - total_leavepay
+
+         _ ->
+          (totals.totalwm * minuterate)
+      end
+
+    #case: if rnf compute else if spv or mgr dont
+    overtime =
+      if payslip.employee.emp_class == "rnf" do
+        compute_overtime_perday(dtrs, minuterate)
+      else
+        0
+      end
 
     philhealth =
       if payslip.employee.contribution.philhealth_num do

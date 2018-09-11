@@ -15,7 +15,7 @@ defmodule Patt.Payroll.Compensation do
     field :transpo, :integer
     field :gasoline, :integer
     field :clothing, :integer
-    field :paymode, :string
+    field :paymode, :string, default: "daily"
 
     timestamps()
   end
