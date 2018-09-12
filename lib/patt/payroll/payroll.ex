@@ -249,15 +249,16 @@ defmodule Patt.Payroll do
           "regular" ->
             if dtr.daytype == "restday" do
               if dtr.in && dtr.out do
-                Map.put(acc, :hopay, acc.hopay + ((480 * minuterate) + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.reghord.daily))))
+                Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.reghord.daily)))
               else
-                Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+                Map.put(acc, :hopay, acc.hopay)
               end
             else
+              #ERROR on no schedule
               if dtr.in && dtr.out do
-                Map.put(acc, :hopay, acc.hopay + ((480 * minuterate) + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.regho.daily))))
+                Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.regho.daily)))
               else
-                Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+                Map.put(acc, :hopay, acc.hopay)
               end
             end
 
@@ -266,52 +267,16 @@ defmodule Patt.Payroll do
               if dtr.in && dtr.out do
                 Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.specialrd.daily)))
               else
-                #add condition on employee class
-                case dtr.employee.emp_class do
-                  "rnf" ->
-                    Map.put(acc, :rdpay, acc.rdpay)
-                    Map.put(acc, :hopay, acc.hopay)
-
-                  "mgr" ->
-                    Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
-
-                  "spv" ->
-                    Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
-
-                  _ ->
-                    Map.put(acc, :rdpay, acc.rdpay)
-                    Map.put(acc, :hopay, acc.hopay)
-
-                  true ->
-                    Map.put(acc, :rdpay, acc.rdpay)
-                    Map.put(acc, :hopay, acc.hopay)
-                end
+                Map.put(acc, :rdpay, acc.rdpay)
+                Map.put(acc, :hopay, acc.hopay)
               end
             else
               if dtr.in && dtr.out do
                 #TODO Error on nil dtr.hw
                 Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.special.daily)))
               else
-                #add condition on employee class
-                case dtr.employee.emp_class do
-                  "rnf" ->
-                    Map.put(acc, :rdpay, acc.rdpay)
-                    Map.put(acc, :hopay, acc.hopay)
-
-                  "mgr" ->
-                    Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
-
-                  "spv" ->
-                    Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
-
-                  _ ->
-                    Map.put(acc, :rdpay, acc.rdpay)
-                    Map.put(acc, :hopay, acc.hopay)
-
-                  true ->
-                    Map.put(acc, :rdpay, acc.rdpay)
-                    Map.put(acc, :hopay, acc.hopay)
-                end
+                Map.put(acc, :rdpay, acc.rdpay)
+                Map.put(acc, :hopay, acc.hopay)
               end
             end
         end
