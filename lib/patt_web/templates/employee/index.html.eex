@@ -1,50 +1,65 @@
   <!-- Search Form -->
-  <%= form_for @conn, employee_path(@conn, :search), [as: :search, class: "form-horizontal"], fn f -> %>
-    <div class="form-group">
-        <div class="col-sm-5">
-            <%= text_input f, :for, class: "form-control", placeholder: "Search Employee Name or Employee ID" %>
-        </div>
-        <div class="col-sm-3">
-          <%= select f, :attr,
-            [
-              ID: "id",
-              FIRSTNAME: "fname",
-              MIDDLENAME: "mname",
-              LASTNAME: "lname",
-              STREET: "street",
-              BRGY: "brgy",
-              TOWN: "town",
-              PROVINCE: "province",
-              EMPLOYEETYPE: "emptype",
-              DEPARTMENT: "department",
-              POSITION: "position",
-            ], class: "form-control" %>
-        </div>
-        <div class="col-sm-4">
-             <%= submit class: "btn btn-info" do %>
-               <span class="glyphicon glyphicon-search"></span><%=" SEARCH"%>
-             <% end %>
-            <%= link to: "/employees", class: "btn btn-info" do %>
-              <span class="glyphicon glyphicon-refresh"></span>
-            <% end %>
-        </div>
-    </div>
-  <% end %>
-<hr>
+<div class="card">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+          <a class="nav-link active" href="#">Active</a>
+      </li>
+      <li class="nav-item">
+          <a class="nav-link" href="#">Inactive</a>
+      </li>
+      <div class="ml-auto">
+          <%= form_for @conn, employee_path(@conn, :search), [as: :search], fn f -> %>
+                  <div class="input-group input-group-sm">
+                      <%= text_input f, :for, class: "form-control input-sm", placeholder: "Search Name or ID" %>
 
+                        <div class="input-group-append">
+                      <%= select f, :attr,
+                        [
+                          ID: "id",
+                          FIRSTNAME: "fname",
+                          MIDDLENAME: "mname",
+                          LASTNAME: "lname",
+                          STREET: "street",
+                          BRGY: "brgy",
+                          TOWN: "town",
+                          PROVINCE: "province",
+                          EMPLOYEETYPE: "emptype",
+                          DEPARTMENT: "department",
+                          POSITION: "position",
+                        ], class: "btn" %>
+
+                        <%= submit class: "btn btn-info" do %>
+                          <i class="fas fa-search"></i>
+                        <% end %>
+                        <%= link to: "/employees", class: "btn btn-secondary" do %>
+                          <i class="fas fa-redo"></i>
+                        <% end %>
+                        <%= link to: employee_path(@conn, :new), class: "btn btn-success btn-sm" do %>
+                          <i class="fas fa-plus"></i>&nbsp;
+                          <i class="fas fa-user"></i>&nbsp;
+                        <% end %>
+                        </div>
+                  </div>
+          <% end %>
+
+      </div>
+    </ul>
+  </div>
+
+<div class="card-body">
 <!-- Main Table -->
-<div class="table-responsive">
-  <table id="tblSearchEmployeeRecords" class="table table-hover table-striped table-bordered">
-    <thead class="bg-color-3c3c3c txt-color-FFFFFF">
+  <table id="tblSearchEmployeeRecords" class="hide-text-overflow table table-sm table-hover no-top-border">
+    <thead>
     <tr>
-      <th>Employee No#</th>
-      <th>Name</th>
-      <th>Address</th>
-      <th>Contact Number</th>
-      <th>Type</th>
-      <th>Position</th>
-      <th>Department</th>
-      <th></th>
+      <th class="wdth-5">Emp #</th>
+      <th class="wdth-20">Name</th>
+      <th class="wdth-30">Address</th>
+      <th class="wdth-10">Contact Number</th>
+      <th class="wdth-10">Type</th>
+      <th class="wdth-10">Position</th>
+      <th class="wdth-10">Department</th>
+      <th class="wdth-5"></th>
     </tr>
     </thead>
     <tbody>
@@ -58,29 +73,28 @@
       <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
       <td><%= if employee.position, do: String.upcase(employee.position.department.name), else: "Unknown"  %></td>
       <td>
-        <button class="btn btn-info btn-xs" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
-            <span class="glyphicon glyphicon-edit"></span>
+        <button class="btn btn-outline-info btn-xs" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
+          <i class="fas fa-pen"></i>
         </button>
       </td>
-      </tr>
 
       <!-- Edit Employee Information -->
-      <tr>
         <td style="padding: 0">
         <div id="editEmpModal<%= employee.id %>" class="modal fade" role="dialog">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
+                        <h3 class="modal-title">
+                          <i class="fas fa-user-edit"></i>
+                        </h3>
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title lead"><span class="glyphicon glyphicon-edit"></span>&nbsp;&nbsp;Edit Employee Information</h4>
                     </div>
+
                     <div class="modal-body">
-                        <div class="container-fluid">
                           <%= render "form.html", changeset: Patt.Attendance.change_employee(employee),
                                                   action: employee_path(@conn, :update, employee),
                                                   positions: @positions,
                                                   schedprofiles: @schedprofiles %>
-                        </div>
                     </div>
                     <div class="modal-footer" style="margin-left: 2px;">
                     </div>
@@ -96,3 +110,5 @@
     </tbody>
   </table>
 
+</div>
+</div>

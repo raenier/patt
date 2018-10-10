@@ -1,235 +1,250 @@
-<div class = "row">
-<div class = "col-sm-6"><h4><span class="glyphicon glyphicon-folder-open"></span>&nbsp;&nbsp;&nbsp;Generate Payslip
-  </h4>
-</div>
-<div class="col-sm-6">
-  <div class="text-right">
-  <%= button class: "btn btn-default", to: payroll_path(@conn, :index), method: :get do %>
-    <span class="glyphicon glyphicon-circle-arrow-left"></span><%= " Back" %>
-  <% end %>
+<div class="card">
+<div class="card-header text-right">
+  <div class="ml-auto">
+    <%= button class: "btn btn-sm btn-outline-info", to: payroll_path(@conn, :index), method: :get do %>
+      <i class="fas fa-backward"></i> Back
+    <% end %>
   </div>
 </div>
+
+<div class="card-body">
+
+<div class = "row">
+  <div class = "col-sm-6">
+    <h5>
+      <i class="fas fa-user-circle"></i>
+      <i class="fas fa-clipboard-list"></i>
+      <%= "#{@employee.first_name} #{@employee.middle_name} #{@employee.last_name}"%>
+    </h5>
+  </div>
 </div>
+
 <hr>
 
-<form class="form-horizontal">
-    <div class="row">
-        <div class="col-sm-6">
+  <div class="container">
+    <form class="form-horizontal">
+      <div class="row">
+        <div class="col-sm-4">
             <div class="form-group">
-                <label class="control-label col-sm-3">Employee ID:</label>
-                <div class="col-sm-9">
-                  <label class="form-control">
-                    <%= @employee.id %>
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <label class="input-group-text">
+                    ID
                   </label>
                 </div>
+                <label class="form-control">
+                  <%= @employee.id %>
+                </label>
+              </div>
             </div>
+
             <div class="form-group">
-                <label class="control-label col-sm-3">Employee Name:</label>
-                <div class="col-sm-9">
-                  <label class="form-control">
-                    <%= "#{@employee.first_name} #{@employee.middle_name} #{@employee.last_name}"%>
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <label class="input-group-text">
+                    Type
                   </label>
                 </div>
+                <label class="form-control">
+                  <%= String.capitalize(@employee.emp_type) %>
+                </label>
+              </div>
             </div>
+
             <div class="form-group">
-                <label class="control-label col-sm-3">Employment Type:</label>
-                <div class="col-sm-9">
-                  <label class="form-control">
-                    <%= String.capitalize(@employee.emp_type) %>
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <label class="input-group-text">
+                    Class
                   </label>
                 </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-3">Employment Class:</label>
-                <div class="col-sm-9">
-                  <label class="form-control">
-                    <%= unless is_nil(@employee.emp_class),
-                        do: @employee.emp_class,
-                        else: "Please choose employee class" %>
-                  </label>
-                </div>
+                <label class="form-control">
+                  <%= unless is_nil(@employee.emp_class),
+                      do: @employee.emp_class,
+                      else: "Please choose employee class" %>
+                </label>
+              </div>
             </div>
 
         </div>
-        <div class="col-sm-6">
+
+        <div class="col-sm-3">
             <div class="form-group">
-                <label class="control-label col-sm-3">Basic Pay:</label>
-                <div class="col-sm-6">
-                  <label class="form-control <%= if(no_basic(@employee.compensation.basic), do: "alert-danger")%>">
-                    <%= @employee.compensation.basic %>
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <label class="input-group-text">
+                    Basic
                   </label>
                 </div>
-                <div class="col-sm-3"></div>
+                <label class="form-control <%= if(no_basic(@employee.compensation.basic), do: "alert-danger")%>">
+                  <%= @employee.compensation.basic %>
+                </label>
+              </div>
             </div>
+
             <div class="form-group">
-                <label class="control-label col-sm-3">VL Credits:</label>
-                <div class="col-sm-6">
-                  <label class="form-control">
-                    <%= @usedleave.rem_vl %>
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <label class="input-group-text">
+                    VL
                   </label>
                 </div>
-                <div class="col-sm-3"></div>
+                <label class="form-control">
+                  <%= @usedleave.rem_vl %>
+                </label>
+              </div>
             </div>
+
             <div class="form-group">
-                <label class="control-label col-sm-3">SL Credits:</label>
-                <div class="col-sm-6">
-                  <label class="form-control">
-                    <%= @usedleave.rem_sl %>
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <label class="input-group-text">
+                    SL
                   </label>
                 </div>
-                <div class="col-sm-3"></div>
+                <label class="form-control">
+                  <%= @usedleave.rem_sl %>
+                </label>
+              </div>
             </div>
+          </div>
         </div>
-    </div>
+
+        <div class="col-sm-5">
+        </div>
     </form>
+  </div>
+  <hr>
 
     <!--DTR Section Generate-->
-    <br><br>
-    <h4><span class="glyphicon glyphicon-calendar">
-            </span>&nbsp;&nbsp;&nbsp;Daily Time Record
-    </h4>
-    <hr>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-sm-7">
+          <h5>
+            <i class="fas fa-clock"></i>
+            Daily Time Record
+          </h5>
         </div>
-        <div class="col-sm-8">
+
+        <div class="col-sm-5">
           <div class="form-group">
+            <div class="input-group mb-3">
             <!--TODO: Error on blank, catch when no input given-->
-            <div class="col-sm-6">
               <% month = Integer.to_string Date.utc_today.month%>
               <% month = if String.length(month) > 1, do: month, else: "0" <> month %>
               <input type="month" class="form-control" id="acinput" name="generated[month]" value="<%= @yearmonth %>"></input>
+
+              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
+                <%= number_input f, :range, value: 26, type: "hidden" %>
+                <%= text_input f, :yearmonth, type: "hidden", id: "inputa" %>
+                <%= submit class: "btn btn-outline-primary " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
+                  <span class="glyphicon glyphicon-sort-by-attributes"></span><%= " 26 - 10" %>
+                <% end %>
+              <% end %>
+
+              <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated], fn f -> %>
+                <%= number_input f, :range, value: 11, type: "hidden" %>
+                <%= text_input f, :yearmonth, type: "hidden", id: "inputb" %>
+                <%= submit class: "btn btn-outline-primary " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
+                  <span class="glyphicon glyphicon-sort-by-attributes-alt"></span><%= " 11 - 25" %>
+                <% end %>
+              <% end %>
             </div>
-
-              <div class="col-sm-6">
-                <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
-                  <%= number_input f, :range, value: 26, type: "hidden" %>
-                  <%= text_input f, :yearmonth, type: "hidden", id: "inputa" %>
-                  <%= submit class: "btn btn-primary " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
-                    <span class="glyphicon glyphicon-sort-by-attributes"></span><%= " 26 - 10" %>
-                  <% end %>
-                <% end %>
-
-                <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
-                  <%= number_input f, :range, value: 11, type: "hidden" %>
-                  <%= text_input f, :yearmonth, type: "hidden", id: "inputb" %>
-                  <%= submit class: "btn btn-primary " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
-                    <span class="glyphicon glyphicon-sort-by-attributes-alt"></span><%= " 11 - 25" %>
-                  <% end %>
-                <% end %>
-
-                <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
-                  <%= number_input f, :range, value: 28, type: "hidden" %>
-                  <%= text_input f, :yearmonth, type: "hidden", id: "inputc" %>
-                  <%= submit class: "btn btn-xs btn-warning " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
-                    <span class="glyphicon glyphicon-plus"></span><%= " 28 - 12" %>
-                  <% end %>
-                <% end %>
-
-                <%= form_for @conn, payroll_path(@conn, :gen_dtr, @employee), [as: :generated, style: "display: inline;"], fn f -> %>
-                  <%= number_input f, :range, value: 13, type: "hidden" %>
-                  <%= text_input f, :yearmonth, type: "hidden", id: "inputd" %>
-                  <%= submit class: "btn btn-xs btn-warning " <> hide_ifnobasic(@employee.compensation.basic), onclick: "getmonthInput()" do %>
-                    <span class="glyphicon glyphicon-plus"></span><%= " 13 - 27" %>
-                  <% end %>
-                <% end %>
-              </div>
           </div>
         </div>
-      </div>
+
     </div>
 
     <!--DTR Section Main-->
-       <h4><span class="glyphicon glyphicon-user"></span><span class="glyphicon glyphicon-time"></span>
-       &nbsp;&nbsp;Attendance
-       </h4>
        <div class="table-responsive">
-       <table id="tblAttendance" class="table table-striped table-bordered">
+       <table id="tblAttendance" class="table table-sm table-hover no-bottom-border no-top-border no-border">
         <thead class="text-center bg-color-3c3c3c txt-color-FFFFFF">
-          <tr style="background: maroon;">
-            <td colspan=2 style="background: white;"></td>
-            <td colspan=2>Scheduled</td>
-            <td style="background: white;"></td>
-            <td colspan=2>Actual</td>
-            <td colspan=6 style="background: white;"></td>
+          <tr>
+            <td colspan=2 class="bg-light"></td>
+            <th colspan=2 class="bg-success">Scheduled</th>
+            <td class="bg-white"></td>
+            <th colspan=2 class="bg-success">Actual</th>
+            <td colspan=6 class="bg-light"></td>
           </tr>
           <tr>
-              <th>DATE</td>
-              <th>HO</th>
-              <th>IN</th>
-              <th>OUT</th>
-              <th style="background: white;"></th>
-              <th>IN</th>
-              <th>OUT</th>
-              <th>ADJUSTMENTS</th>
-              <th colspan=2>OT</th>
-              <th>UT</th>
-              <th>TD</th>
-              <th>HW</th>
+              <th class="wdth-12">DATE</th>
+              <th class="wdth-2">HO</th>
+              <th class="wdth-10">IN</th>
+              <th class="wdth-10">OUT</th>
+              <th class="bg-light wdth-5"></th>
+              <th class="wdth-10">IN</th>
+              <th class="wdth-10">OUT</th>
+              <th class="wdth-10">ADJUSTMENTS</th>
+              <th class="wdth-2"></th>
+              <th class="wdth-5">OT</th>
+              <th class="wdth-5">UT</th>
+              <th class="wdth-5">TD</th>
+              <th class="wdth-5">HW</th>
           </tr>
         </thead>
         <tbody>
           <%= form_for @changeset, payroll_path(@conn, :up_dtr, @employee), [onsubmit: "return confirm('Save dtrs?')"], fn f -> %>
             <%= inputs_for f, :dtrs, fn dtr -> %>
-              <tr>
+              <tr class="text-center">
+                  <td>
+                    <%= label dtr, return_date_and_day(dtr.data.date), class: "form-control form-control-sm" %>
+                  </td>
+                  <td>
+                    <%= checkbox dtr, :ho, class: unless(dtr.data.date in @holidays, do: "hide", else: "") %>
+                  </td>
+                  <td>
+                    <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_in]",
+                          type: "time", class: "form-control form-control-sm",
+                          value:  return_time_string(dtr.data.sched_in)%>
+                  </td>
+                  <td>
+                    <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_out]",
+                          type: "time", class: "form-control form-control-sm",
+                          value:  return_time_string(dtr.data.sched_out)%>
+                  </td>
+                <td></td>
                 <td>
-                  <%= label dtr, return_date_and_day(dtr.data.date), class: "form-control" %>
-                </td>
-                <td>
-                  <%= checkbox dtr, :ho, class: unless(dtr.data.date in @holidays, do: "hide", else: "") %>
-                </td>
-                <td>
-                  <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_in]",
-                        type: "time", class: "form-control",
-                        value:  return_time_string(dtr.data.sched_in)%>
-                </td>
-                <td>
-                  <%= tag :input, name: "employee[dtrs][#{dtr.index}][sched_out]",
-                        type: "time", class: "form-control",
-                        value:  return_time_string(dtr.data.sched_out)%>
-                </td>
-                <td style="background: grey;"></td>
-                <td>
+
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][in]",
-                        type: "time", class: "form-control",
+                        type: "time", class: "form-control form-control-sm",
                         value: if(dtr.data.in, do: time_string(dtr.data.in.hour, dtr.data.in.minute)) %>
                 </td>
                 <td>
                   <%= tag :input, name: "employee[dtrs][#{dtr.index}][out]",
-                        type: "time", class: "form-control",
+                        type: "time", class: "form-control form-control-sm",
                         value: if(dtr.data.out, do: time_string(dtr.data.out.hour, dtr.data.out.minute)) %>
                 </td>
                 <td>
-                  <%= select dtr, :daytype, @daytypes, class: "form-control" %>
+                  <%= select dtr, :daytype, @daytypes, class: "form-control btn btn-sm btn-outline-info form-control-sm" %>
                 </td>
                 <td>
                   <%= checkbox dtr, :ot %>
                 </td>
                 <td>
-                  <%= text_input dtr, :overtime, class: "form-control xs", disabled: "disabled" %>
+                  <%= text_input dtr, :overtime, class: "form-control form-control-sm", disabled: "disabled" %>
                 </td>
                 <td>
-                  <%= text_input dtr, :undertime, class: "form-control xs", disabled: "disabled" %>
+                  <%= text_input dtr, :undertime, class: "form-control form-control-sm", disabled: "disabled" %>
                 </td>
                 <td>
-                  <%= text_input dtr, :tardiness, class: "form-control xs", disabled: "disabled" %>
+                  <%= text_input dtr, :tardiness, class: "form-control form-control-sm", disabled: "disabled" %>
                 </td>
                 <td>
-                  <%= text_input dtr, :hw, class: "form-control xs", disabled: "disabled" %>
+                  <%= text_input dtr, :hw, class: "form-control form-control-sm", disabled: "disabled" %>
                 </td>
               </tr>
             <% end %>
-          <tr>
-            <td colspan=13 style="background: black;"></td>
-          </tr>
+            <tr>
+              <td colspan="13" class="bg-secondary"></td>
+            </tr>
         </tbody>
        </table>
        </div>
 
-       <div class="text-right">
+
+      <div class="text-right">
           <%= text_input :generated, :range, value: @range, style: "display: none;"%>
           <%= text_input :generated, :yearmonth, type: "hidden", id: "inpute" %>
-          <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-primary", onclick: "getmonthInput()"%>
+          <%= if assoc_loaded?(@employee.dtrs), do: submit "Save", class: "btn btn-outline-primary", onclick: "getmonthInput()"%>
           <% end %>
 
           <%= form_for @conn, payroll_path(@conn, :reset_dtrs, @employee),
@@ -243,10 +258,11 @@
             <%= text_input f, :range, style: "display: none;", value: @range %>
             <%= text_input f, :yearmonth, type: "hidden", id: "inputf" %>
             <%= if assoc_loaded?(@employee.dtrs) do %>
-              <%= submit "Reset", class: "btn btn-warning", onclick: "getmonthInput()"%>
+              <%= submit "Reset", class: "btn btn-outline-warning", onclick: "getmonthInput()"%>
             <% end %>
           <% end %>
-       </div>
+      </div>
+      <hr>
 
 
 <%= form_for @conn, payroll_path(@conn, :gen_payslip, @employee),
@@ -256,23 +272,22 @@
       ],
       fn f -> %>
       <div class="col-sm-12">
-        <h4>
-          <span class="glyphicon glyphicon-user"></span>
-          <span class="glyphicon glyphicon-list-alt"></span>
-          &nbsp;&nbsp;Summary
-        </h4>
+        <h5>
+          <i class="fas fa-calculator"></i>
+          <i class="fas fa-dollar-sign"></i>
+          &nbsp;&nbsp; Computations
+        </h5>
       </div>
 <div class="row">
-    <div class="col-sm-7">
+    <div class="col-sm-8">
         <div class="table-responsive">
-            <table id="tblPayslipSummary" class="table table-bordered table-condensed">
+            <table id="tblPayslipSummary" class="table table-sm table-striped">
                 <thead class="bg-color-3c3c3c txt-color-FFFFFF">
                     <tr>
-                        <th>&nbsp;</th>
-                        <th>Earnings</th>
-                        <th>Deductions</th>
-                        <th>This Period</th>
-                        <th>Year to Date</th>
+                        <th class="wdth-15">&nbsp;</th>
+                        <th class="wdth-10">Earnings</th>
+                        <th class="wdth-15">Deductions</th>
+                        <th class="wdth-15">This Period</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -281,12 +296,10 @@
                         <td><%= unless is_nil(@payslip.regpay), do: :erlang.float_to_binary(@payslip.regpay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>VL Pay</label></td>
                         <td><%= unless is_nil(@payslip.vlpay), do: :erlang.float_to_binary(@payslip.vlpay, [decimals: 2]) %></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -295,12 +308,10 @@
                         <td><%= unless is_nil(@payslip.slpay), do: :erlang.float_to_binary(@payslip.slpay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Overtime Pay</label></td>
                         <td><%= unless is_nil(@payslip.otpay), do: :erlang.float_to_binary(@payslip.otpay, [decimals: 2]) %></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -309,30 +320,32 @@
                         <td><%= unless is_nil(@payslip.hopay), do: :erlang.float_to_binary(@payslip.hopay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Restday Pay</label></td>
                         <td><%= unless is_nil(@payslip.rdpay), do: :erlang.float_to_binary(@payslip.rdpay, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
+                    </tr>
+                    <tr>
+                        <td><label>Night Differential Pay</label></td>
+                        <td><%= unless is_nil(@payslip.ndpay), do: :erlang.float_to_binary(@payslip.ndpay, [decimals: 2]) %></td>
+                        <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Other Pay</label></td>
-                        <td><%= number_input f, :other_pay, class: "form-control med-tright", step: "any",
+                        <td><%= number_input f, :other_pay, class: "form-control text-left form-control-sm med-tright", step: "any",
                                 value: unless(is_nil(@payslip.other_pay), do: :erlang.float_to_binary(@payslip.other_pay, [decimals: 2])) %></td>
                         <td>
-                          <%= text_input f, :otherpay_remarks, class: "form-control", maxlength: "60",
+                          <%= text_input f, :otherpay_remarks, class: "form-control form-control-sm", maxlength: "60",
                               placeholder: "remarks", value: unless(is_nil(@payslip.otherpay_remarks), do: @payslip.otherpay_remarks ) %>
                         </td>
-                        <td></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Rice</label></td>
                         <td><%= unless is_nil(@payslip.rice), do: :erlang.float_to_binary(@payslip.rice, [decimals: 2]) %></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -341,12 +354,10 @@
                         <td><%= unless is_nil(@payslip.meal), do: :erlang.float_to_binary(@payslip.meal, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Communication</label></td>
                         <td><%= unless is_nil(@payslip.communication), do: :erlang.float_to_binary(@payslip.communication, [decimals: 2]) %></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -355,12 +366,10 @@
                         <td><%= unless is_nil(@payslip.transpo), do: :erlang.float_to_binary(@payslip.transpo, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Gasoline</label></td>
                         <td><%= unless is_nil(@payslip.gasoline), do: :erlang.float_to_binary(@payslip.gasoline, [decimals: 2]) %></td>
-                        <td></td>
                         <td></td>
                         <td></td>
                     </tr>
@@ -369,13 +378,11 @@
                         <td><%= unless is_nil(@payslip.clothing), do: :erlang.float_to_binary(@payslip.clothing, [decimals: 2]) %></td>
                         <td></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Tardiness</label></td>
                         <td></td>
                         <td><%= unless is_nil(@payslip.tardiness), do: :erlang.float_to_binary(@payslip.tardiness, [decimals: 2]) %></td>
-                        <td></td>
                         <td></td>
                     </tr>
                     <tr>
@@ -383,13 +390,11 @@
                         <td></td>
                         <td><%= unless is_nil(@payslip.undertime), do: :erlang.float_to_binary(@payslip.undertime, [decimals: 2]) %></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Absent</label></td>
                         <td></td>
                         <td><%= unless is_nil(@payslip.absent), do: :erlang.float_to_binary(@payslip.absent, [decimals: 2]) %></td>
-                        <td></td>
                         <td></td>
                     </tr>
                     <tr>
@@ -397,13 +402,11 @@
                         <td></td>
                         <td><%= unless is_nil(@payslip.pagibig), do: :erlang.float_to_binary(@payslip.pagibig, [decimals: 2]) %></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>Phil. Health</label></td>
                         <td></td>
                         <td><%= unless is_nil(@payslip.philhealth), do: :erlang.float_to_binary(@payslip.philhealth, [decimals: 2]) %></td>
-                        <td></td>
                         <td></td>
                     </tr>
                     <tr>
@@ -411,25 +414,43 @@
                         <td></td>
                         <td><%= unless is_nil(@payslip.sss), do: :erlang.float_to_binary(@payslip.sss, [decimals: 2]) %></td>
                         <td></td>
-                        <td></td>
                     </tr>
-                    <tr class="bg-success">
-                        <td>TOTAL COMPENSATION:</td>
-                        <td><%= unless is_nil(@payslip.totalcompen), do: round(@payslip.totalcompen) %></td>
-                        <td>Deduction:</td>
-                        <td><%= unless is_nil(@payslip.totaldeduction), do: round(@payslip.totaldeduction) %></td>
-                        <td></td>
+                    <tr class="bg-success text-white">
+                        <td>
+                          <h6><b>TOTAL COMPENSATION:</b></h6>
+                        </td>
+                        <td>
+                          <h6>
+                            <b>
+                              <%= unless is_nil(@payslip.totalcompen), do: round(@payslip.totalcompen) %>
+                            </b>
+                          </h6>
+                        </td>
+                        <td><h6><b>DEDUCTION:</b></h6></td>
+                        <td>
+                          <h6>
+                          <b>
+                            <%= unless is_nil(@payslip.totaldeduction), do: round(@payslip.totaldeduction) %>
+                          </b>
+                          <h6>
+                        </td>
                     </tr>
-                    <tr class="bg-success">
-                        <td><label>NET TAXABLE</label></td>
-                        <td><%= unless is_nil(@payslip.net_taxable), do: round(@payslip.net_taxable) %></td>
-                        <td><!--- 30% (Tax Shield):--></td>
-                        <td></td>
-                        <td></td>
+                    <tr class="bg-success text-white">
+                      <td>
+                        <h6><b>NET TAXABLE</b></h6>
+                      </td>
+                      <td>
+                        <h6>
+                          <b>
+                            <%= unless is_nil(@payslip.net_taxable), do: round(@payslip.net_taxable) %>
+                          </b>
+                        </h6>
+                      </td>
+                      <td><!--- 30% (Tax Shield):--></td>
+                      <td></td>
                     </tr>
-                    <tr class="bg-success">
-                        <td><label>TOTAL ALLOWANCES</label></td>
-                        <td></td>
+                    <tr class="bg-info text-white">
+                        <td><label><b>TOTAL ALLOWANCES</b></label></td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -439,79 +460,76 @@
                         <td></td>
                         <td><%= unless is_nil(@payslip.wtax), do: :erlang.float_to_binary(@payslip.wtax, [decimals: 2]) %></td>
                         <td></td>
-                        <td></td>
                     </tr>
                     <tr>
                         <td><label>SSS Loan</label></td>
                         <td></td>
-                        <td><%= number_input f, :sss_loan, class: "form-control med-tright", value: unless(is_nil(@payslip.sss_loan), do: round(@payslip.sss_loan)) %></td>
-                        <td></td>
+                        <td><%= number_input f, :sss_loan, class: "form-control form-control-sm med-tright", value: unless(is_nil(@payslip.sss_loan), do: round(@payslip.sss_loan)) %></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Pagibig Loan</label></td>
                         <td></td>
-                        <td><%= number_input f, :hdmf_loan, class: "form-control med-tright", value: unless(is_nil(@payslip.hdmf_loan), do: round(@payslip.hdmf_loan)) %></td>
-                        <td></td>
+                        <td><%= number_input f, :hdmf_loan, class: "form-control form-control-sm med-tright", value: unless(is_nil(@payslip.hdmf_loan), do: round(@payslip.hdmf_loan)) %></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Office Loan</label></td>
                         <td></td>
-                        <td><%= number_input f, :office_loan, class: "form-control med-tright", value: unless(is_nil(@payslip.office_loan), do: round(@payslip.office_loan)) %></td>
-                        <td></td>
+                        <td><%= number_input f, :office_loan, class: "form-control form-control-sm med-tright", value: unless(is_nil(@payslip.office_loan), do: round(@payslip.office_loan)) %></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Bank Loan</label></td>
                         <td></td>
-                        <td><%= number_input f, :bank_loan, class: "form-control med-tright", value: unless(is_nil(@payslip.bank_loan), do: round(@payslip.bank_loan)) %></td>
-                        <td></td>
+                        <td><%= number_input f, :bank_loan, class: "form-control form-control-sm med-tright", value: unless(is_nil(@payslip.bank_loan), do: round(@payslip.bank_loan)) %></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Healthcare</label></td>
                         <td></td>
-                        <td><%= number_input f, :healthcare, class: "form-control med-tright", value: unless(is_nil(@payslip.healthcare), do: round(@payslip.healthcare)) %></td>
-                        <td></td>
+                        <td><%= number_input f, :healthcare, class: "form-control form-control-sm med-tright", value: unless(is_nil(@payslip.healthcare), do: round(@payslip.healthcare)) %></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>feliciana</label></td>
                         <td></td>
-                        <td><%= number_input f, :feliciana, class: "form-control med-tright", value: unless(is_nil(@payslip.feliciana), do: round(@payslip.feliciana)) %></td>
-                        <td></td>
+                        <td><%= number_input f, :feliciana, class: "form-control form-control-sm med-tright", value: unless(is_nil(@payslip.feliciana), do: round(@payslip.feliciana)) %></td>
                         <td></td>
                     </tr>
                     <tr>
                         <td><label>Others</label></td>
                         <td></td>
                         <td>
-                          <%= number_input f, :others, class: "form-control med-tright", step: "any",
+                          <%= number_input f, :others, class: "form-control form-control-sm med-tright", step: "any", placeholder: 0,
                               value: unless(is_nil(@payslip.other_deduction), do: :erlang.float_to_binary(@payslip.other_deduction, [decimals: 2])) %>
                         </td>
                         <td>
-                          <%= text_input f, :otherded_remarks, class: "form-control", maxlength: "40",
+                          <%= text_input f, :otherded_remarks, class: "form-control form-control-sm", maxlength: "40",
                               placeholder: "remarks", value: unless(is_nil(@payslip.otherded_remarks), do: @payslip.otherded_remarks )%>
                         </td>
-                        <td></td>
                     </tr>
-                    <tr class="bg-success">
-                        <td><label>Totals</label></td>
+                    <tr class="bg-info text-white">
                         <td></td>
                         <td></td>
-                        <td>NETPAY: <%= unless is_nil(@payslip.wtax), do: :erlang.float_to_binary(@payslip.net, [decimals: 2]) %></td>
                         <td></td>
+                        <td>
+                            <h4>
+                              <b>
+                                NETPAY: <%= unless is_nil(@payslip.wtax), do: :erlang.float_to_binary(@payslip.net, [decimals: 2]) %>
+                              </b>
+                            </h4>
+                        </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="col-sm-5">
+    <div class="col-sm-4">
     <!--DTR TOTALS-->
     <%= if assoc_loaded?(@employee.dtrs) do %>
-        <table class="table">
+        <table class="table table-sm table-bordered">
           <thead>
             <tr>
               <th></th>
@@ -556,23 +574,23 @@
       </div>
     <% end %>
     </div>
-
 <hr>
-<div class="container-fluid text-right">
+<div class="container-fluid text-left">
       <%= text_input f, :range, style: "display: none;", value: @range %>
       <%= text_input f, :yearmonth, type: "hidden", id: "inputg" %>
 
       <%= if assoc_loaded?(@employee.dtrs) do %>
-        <%= submit [class: "btn btn-info", id: "sub", onclick: "getmonthInput()"] do %>
-          <span class="glyphicon glyphicon-save"></span>
+        <%= submit [class: "btn btn-success", id: "sub", onclick: "getmonthInput()"] do %>
+          <i class="fab fa-superpowers"></i>
           <%= if(is_nil(@payslip.id), do: " GENERATE", else: " UPDATE") %>
         <% end %>
       <% end %>
     <% end %>
     <%= unless is_nil(@payslip.id) do %>
       <%= link [to: payroll_path(@conn, :print, @payslip), class: "btn btn-info", target: "_blank"] do %>
-        <span class="glyphicon glyphicon-print"></span> PRINT
+        <i class="fas fa-print"></i>
       <% end %>
     <% end %>
 </div>
-<br><br>
+</div>
+</div>

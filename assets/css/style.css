@@ -38,14 +38,6 @@
     text-align: center;
 }
 
-/*Custom Styles*/
-#tblSearchEmployeeRecords, #tblGeneratePayslip, #tblPayslipSummary {
-    text-align: center;
-}
-
-#tblSearchEmployeeRecords thead tr th, #tblGeneratePayslip thead tr th, #tblPayslipSummary thead tr th {
-    text-align: center;
-}
 
 /*Input custome size*/
 .xs {
@@ -62,7 +54,3 @@
 .hide {
   visibility: hidden;
 }
-
-.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
-    background-color: #E9967A;
-  }

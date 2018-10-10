@@ -1,1 +1,63 @@
 /* This file is for your main application css. */
+.no-top-border tr th {
+  border-top: none !important;
+  border-bottom: 2px solid black !important;
+}
+
+.no-bottom-border tr td {
+  border-bottom: none !important;
+}
+
+.no-border tr td {
+  border: none !important;
+}
+
+table {
+  font-size: smaller;
+}
+
+.wdth-5 {
+  width: 5%;
+}
+
+.wdth-2 {
+  width: 2%;
+}
+
+.wdth-7 {
+  width: 7%;
+}
+
+.wdth-12 {
+  width: 12%;
+}
+
+.wdth-10 {
+ width: 10%;
+}
+
+.wdth-15 {
+ width: 15%;
+}
+
+.wdth-20 {
+  width: 20%;
+}
+
+.wdth-30 {
+  width: 30%;
+}
+
+.hide-text-overflow td {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-group-xs > .btn, .btn-xs, .pagination {
+  padding  : .20rem .4rem !important;
+  font-size  : .700rem !important;
+  line-height  : .3 !important;
+  border-radius : .2rem !important;
+}

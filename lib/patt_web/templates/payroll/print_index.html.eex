@@ -1,23 +1,10 @@
-<h2>Listing Payperiods <%= Date.utc_today.year %></h2>
-
-<style>
-  .table-hover tbody tr:hover {
-    color: white;
-  }
-  .modal.fade:not(.in) .modal-dialog {
-    -webkit-transform: translate3d(0, 25%, 0);
-    transform: translate3d(0, 25%, 0);
-  }
-</style>
-
-<table class="table table-striped table-bordered table-hover">
+<div class="card">
+  <div class="card-header">
+    <b>Payperiods <%= Date.utc_today.year %></b>
+  </div>
+  <div class="card-body">
+<table class="table table-sm table-hover">
   <thead>
-    <tr>
-      <th>ID</th>
-      <th></th>
-
-      <th></th>
-    </tr>
   </thead>
   <tbody>
     <%= for pp <- @payperiods do %>
@@ -28,17 +15,17 @@
       <td class="text-right">
         <span>
           <%= link [to: payroll_path(@conn, :print_bulk, pp), class: "btn btn-info btn-xs", target: "_blank"] do %>
-            <span class="glyphicon glyphicon-print"></span>
+            <i class="fas fa-print"></i>
           <% end %>
         </span>
         <span>
-          <button class="btn btn-info btn-xs" data-toggle="modal" data-target="#editEmpModal<%= pp.id %>">
-            <span class="glyphicon glyphicon-list-alt"></span>
+          <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#editEmpModal<%= pp.id %>">
+            <i class="fas fa-list"></i>
           </button>
         </span>
         <span>
-          <%= link [to: payroll_path(@conn, :print_atm, pp), class: "btn btn-info btn-xs"] do %>
-            <span class="glyphicon glyphicon-credit-card"></span>
+          <%= link [to: payroll_path(@conn, :print_atm, pp), class: "btn btn-warning btn-xs"] do %>
+            <i class="fas fa-credit-card"></i>
           <% end %>
         </span>
       </td>
@@ -135,3 +122,5 @@
     <% end %>
   </tbody>
 </table>
+  </div>
+</div>
