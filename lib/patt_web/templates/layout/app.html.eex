@@ -30,7 +30,7 @@
         <ul class="nav navbar-nav">
             <li class="nav-item dropdown active">
               <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
-                <i class="fas fa-users"></i> Employee
+                <i class="fas fa-folder-open"></i> Employee
               </a>
 
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -41,23 +41,36 @@
                     <i class="fas fa-pen-alt"></i><%= " Manage Records" %>
                   <% end %>
               </div>
-
             </li>
 
-            <li class="nav-item">
-              <%= link to: payroll_path(@conn, :index), class: "nav-link" do %>
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
                 <i class="fas fa-hand-holding-usd"></i> Payroll
-              <% end %>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= link to: payroll_path(@conn, :index), class: "dropdown-item" do %>
+                  <i class="fas fa-dollar-sign"></i> Generate
+                <% end %>
+                <%= link to: payroll_path(@conn, :print_index), class: "dropdown-item" do %>
+                  <i class="fas fa-print"></i> Printing
+                <% end %>
+              </div>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                <i class="fas fa-clock"></i> Attendance
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <%= link to: holiday_path(@conn, :index), class: "dropdown-item" do %>
+                  <i class="fas fa-calendar-alt"></i> Holidays
+                <% end %>
+              </div>
+            </li>
+
+            <li class="nav-item">
             </li>
             <li class="nav-item">
-              <%= link to: holiday_path(@conn, :index), class: "nav-link" do %>
-                <i class="fas fa-calendar-alt"></i> Holidays
-              <% end %>
-            </li>
-            <li class="nav-item">
-              <%= link to: payroll_path(@conn, :print_index), class: "nav-link" do %>
-                <i class="fas fa-print"></i> Printing
-              <% end %>
             </li>
         </ul>
 
