@@ -13,6 +13,7 @@ defmodule Patt.Attendance do
   alias Patt.Attendance.SchedProfile
   alias Patt.Attendance.Dtr
   alias Patt.Payroll
+  alias Ecto.Query
 
   ### EMPLOYEE
 
@@ -20,9 +21,24 @@ defmodule Patt.Attendance do
     Repo.all(Employee)
   end
 
-  def list_employees_post_dept do
-    list_employees()
+  def list_employees_post_dept_with_type(types) do
+    query = from e in Employee, where: e.emp_type in ^types
+    query
+    |> Repo.all()
     |> Repo.preload(position: :department)
+  end
+
+  def list_employee_with_type(types) do
+    query = from e in Employee, where: e.emp_type in ^types
+    query
+    |> Repo.all()
+    |> Repo.preload([
+      :contribution,
+      :compensation,
+      :tax,
+      employee_sched: [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday],
+      position: :department
+    ])
   end
 
   def list_employees_wdassoc do
@@ -101,6 +117,15 @@ defmodule Patt.Attendance do
               "vl_total" => 6,
               "sl_total" => 6
             })
+
+          _ ->
+            Map.put(attrs, "leave", %{
+              "id" => employee.leave.id,
+              "sl_used" => 0,
+              "vl_used" => 0,
+              "vl_total" => 0,
+              "sl_total" => 0
+            })
         end
       else
         attrs
@@ -117,16 +142,16 @@ defmodule Patt.Attendance do
     Employee.changeset(employee, %{})
   end
 
-  def search_employee(params, criteria) do
+  def search_employee(params, criteria, type) do
     schemas = [:employee_sched, :contribution, :compensation, :tax, position: :department]
-    query = generate_query(params, criteria)
+    query = generate_query(params, criteria, type)
 
     query
     |> Repo.all()
     |> Repo.preload(schemas)
   end
 
-  def generate_query(params, criteria) do
+  def generate_query(params, criteria, type) do
     querystr = "%#{params}%"
 
     case criteria do
@@ -135,42 +160,52 @@ defmodule Patt.Attendance do
           {number, _} ->
             Employee
             |> Ecto.Query.where([e], e.id == ^number)
+            |> Ecto.Query.where([e], e.emp_type in ^type)
 
           :error ->
             Employee
+            |> Ecto.Query.where([e], e.emp_type in ^type)
         end
 
       "fname" ->
         Employee
         |> Ecto.Query.where([e], ilike(e.first_name, ^querystr))
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
       "mname" ->
         Employee
         |> Ecto.Query.where([e], ilike(e.middle_name, ^querystr))
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
       "lname" ->
         Employee
         |> Ecto.Query.where([e], ilike(e.last_name, ^querystr))
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
       "street" ->
         Employee
         |> Ecto.Query.where([e], ilike(e.street, ^querystr))
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
       "brgy" ->
         Employee
         |> Ecto.Query.where([e], ilike(e.brgy, ^querystr))
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
       "town" ->
         Employee
         |> Ecto.Query.where([e], ilike(e.town, ^querystr))
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
       "province" ->
         Employee
         |> Ecto.Query.where([e], ilike(e.province, ^querystr))
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
       "emptype" ->
         Employee
         |> Ecto.Query.where([e], ilike(e.emp_type, ^querystr))
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
       "department" ->
         Ecto.Query.from(
@@ -179,6 +214,7 @@ defmodule Patt.Attendance do
           join: d in assoc(p, :department),
           where: ilike(d.name, ^querystr)
         )
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
       "position" ->
         Ecto.Query.from(
@@ -186,8 +222,9 @@ defmodule Patt.Attendance do
           join: p in assoc(e, :position),
           where: ilike(p.name, ^querystr)
         )
+        |> Ecto.Query.where([e], e.emp_type in ^type)
 
-      true ->
+      _ ->
         Employee
     end
   end

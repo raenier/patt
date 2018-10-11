@@ -46,17 +46,17 @@
 
             <li class="nav-item">
               <%= link to: payroll_path(@conn, :index), class: "nav-link" do %>
-                <span class="glyphicon glyphicon-folder-open"></span>&nbsp;<%= " Payroll"%>
+                <i class="fas fa-hand-holding-usd"></i> Payroll
               <% end %>
             </li>
             <li class="nav-item">
               <%= link to: holiday_path(@conn, :index), class: "nav-link" do %>
-                <span class="glyphicon glyphicon-list-alt"></span>&nbsp;<%= " Holidays"%>
+                <i class="fas fa-calendar-alt"></i> Holidays
               <% end %>
             </li>
             <li class="nav-item">
               <%= link to: payroll_path(@conn, :print_index), class: "nav-link" do %>
-                <span class="glyphicon glyphicon-print"></span>&nbsp;<%= " Bulk Print"%>
+                <i class="fas fa-print"></i> Printing
               <% end %>
             </li>
             <li class="nav-item">

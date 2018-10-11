@@ -185,7 +185,7 @@
               </label>
             </div>
             <% error = if @changeset.errors[:emp_type] && @changeset.action, do: "alert-danger", else: "" %>
-            <%= select f, :emp_type, ["Probationary": "probationary", "Regular": "regular"], class: "form-control #{error}" %>
+            <%= select f, :emp_type, ["Probationary": "probationary", "Regular": "regular", "Resigned": "resigned"], class: "form-control #{error}" %>
           </div>
         </div>
 

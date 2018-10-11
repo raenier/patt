@@ -7,7 +7,7 @@ defmodule PattWeb.EmployeeController do
   alias Patt.Payroll.Contribution
 
   def index(conn, _params) do
-    employees = Attendance.list_employees_wdassoc()
+    employees = Attendance.list_employee_with_type(["regular", "probationary"])
     employees = Enum.sort_by employees, &(&1.last_name)
     positions = Attendance.list_departments_positions_kl()
     schedprofiles = Attendance.list_profiles_kl()
@@ -16,7 +16,7 @@ defmodule PattWeb.EmployeeController do
   end
 
   def search(conn, %{"search" => %{"for" => params, "attr" => attr}}) do
-    results = Attendance.search_employee(params, attr)
+    results = Attendance.search_employee(params, attr, ["regular", "probationary"])
     positions = Attendance.list_departments_positions_kl()
     schedprofiles = Attendance.list_profiles_kl()
 

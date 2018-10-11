@@ -5,9 +5,6 @@
       <li class="nav-item">
           <a class="nav-link active" href="#">Active</a>
       </li>
-      <li class="nav-item">
-          <a class="nav-link" href="#">Inactive</a>
-      </li>
       <div class="ml-auto">
           <%= form_for @conn, employee_path(@conn, :search), [as: :search], fn f -> %>
                   <div class="input-group input-group-sm">

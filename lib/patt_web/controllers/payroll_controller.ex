@@ -8,7 +8,7 @@ defmodule PattWeb.PayrollController do
   alias Patt.Helper
 
   def index(conn, _params) do
-    employees = Attendance.list_employees_post_dept()
+    employees = Attendance.list_employees_post_dept_with_type(["regular", "probationary"])
     employees = Enum.sort_by employees, &(&1.last_name)
     render conn, "index.html", employees: employees
   end
