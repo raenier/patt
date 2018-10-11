@@ -59,11 +59,6 @@
                 <i class="fas fa-print"></i> Printing
               <% end %>
             </li>
-            <li class="nav-item">
-              <%= link to: attendance_path(@conn, :index), class: "nav-link" do %>
-                <span class="glyphicon glyphicon-calendar"></span>&nbsp;<%= " Monitoring"%>
-              <% end %>
-            </li>
         </ul>
 
         <ul class="navbar-nav ml-auto">
