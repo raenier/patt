@@ -3,13 +3,12 @@
     <b>HOLIDAYS for <%= Date.utc_today.year %></b>
   </div>
 <div class="card-body">
-<table class="table table-sm no-top-border table-striped">
+<table class="table table-sm no-top-border">
   <thead>
     <tr>
-      <th>Name</th>
-      <th>Type</th>
+      <th class="wdth-15">Name</th>
+      <th class="wdth-10">Type</th>
       <th>Date</th>
-
       <th></th>
     </tr>
   </thead>
