@@ -48,7 +48,7 @@
             <tr>
               <td>
                 <%= unless is_nil(ps.employee) do %>
-                  <%= ps.employee.last_name %> <%= ps.employee.first_name %> <%= String.capitalize(String.first(ps.employee.middle_name)) %>
+                  <%= ps.employee.last_name %> <%= ps.employee.first_name %> <%= ps.employee.middle_name %>
                 <%= else %>
                   DELETED EMPLOYEE INFO
                 <% end %>
