@@ -431,7 +431,7 @@
                         <td><%= unless is_nil(@payslip.sss), do: :erlang.float_to_binary(@payslip.sss, [decimals: 2]) %></td>
                         <td></td>
                     </tr>
-                    <tr class="bg-success text-white">
+                    <tr class="bg-success">
                         <td>
                           <h6><b>TOTAL COMPENSATION:</b></h6>
                         </td>
@@ -451,7 +451,7 @@
                           <h6>
                         </td>
                     </tr>
-                    <tr class="bg-success text-white">
+                    <tr class="bg-success">
                       <td>
                         <h6><b>NET TAXABLE</b></h6>
                       </td>
@@ -465,7 +465,7 @@
                       <td><!--- 30% (Tax Shield):--></td>
                       <td></td>
                     </tr>
-                    <tr class="bg-info text-white">
+                    <tr class="bg-info">
                         <td><label><b>TOTAL ALLOWANCES</b></label></td>
                         <td></td>
                         <td></td>
@@ -525,7 +525,7 @@
                               placeholder: "remarks", value: unless(is_nil(@payslip.otherded_remarks), do: @payslip.otherded_remarks )%>
                         </td>
                     </tr>
-                    <tr class="bg-info text-white">
+                    <tr class="bg-info">
                         <td></td>
                         <td></td>
                         <td></td>
