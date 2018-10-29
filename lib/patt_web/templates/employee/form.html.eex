@@ -283,11 +283,17 @@
       </h5>
     <hr>
         <div class="form-group">
+          <label class="text-danger">Check to start deduction on payroll</label>
           <div class="input-group input-group-sm">
             <div class="input-group-prepend">
               <label class="control-label input-group-text" for="sss">SSS #:</label>
             </div>
-            <%= number_input con, :sss_num, class: "form-control", placeholder: "SSS Number"%>
+            <%= text_input con, :sss, class: "form-control", placeholder: "SSS Number"%>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <%= checkbox con, :sss_check %>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -296,7 +302,12 @@
             <div class="input-group-prepend">
               <label class="control-label input-group-text" for="sss">Philhealth #:</label>
             </div>
-            <%= number_input con, :philhealth_num, class: "form-control", placeholder: "Philhealth Number"%>
+            <%= text_input con, :philhealth, class: "form-control", placeholder: "Philhealth Number"%>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <%= checkbox con, :philhealth_check %>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -305,7 +316,12 @@
             <div class="input-group-prepend">
               <label class="control-label input-group-text" for="sss">Pagibig #:</label>
             </div>
-            <%= number_input con, :pagibig_num, class: "form-control", placeholder: "Pagibig Number" %>
+            <%= text_input con, :pagibig, class: "form-control", placeholder: "Pagibig Number" %>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <%= checkbox con, :pagibig_check %>
+              </div>
+            </div>
           </div>
         </div>
 
