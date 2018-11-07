@@ -35,6 +35,10 @@ defmodule PattWeb.Router do
     get "/payroll/payperiod/:id/summary", PayrollController, :print_summary
     post "/payroll/payperiod/:id/summary", PayrollController, :print_summary
     get "/payroll/payperiod/:id/atm", PayrollController, :print_atm
+    get "/payroll/report", PayrollController, :report
+    get "/payroll/report", PayrollController, :thirteenth
+    get "/payroll/report/:id", PayrollController, :emp_thirteenth
+    post "/payroll/report/:id", PayrollController, :gen_thirteenth
 
     resources "/holidays", HolidayController
     resources "/users", UserController

@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="col-sm-2">
+    <div class="card">
+      <div class="card-body">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <%= link to: payroll_path(@conn, :thirteenth), class: "navlink" do %>
+              13th Month
+            <% end %>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-10">
+    <div class="card">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+              <a class="nav-link active" href="#">13th Month</a>
+          </li>
+        </ul>
+      </div>
+      <div class="card-body">
+        <table class="table table-sm table-hover no-top-border">
+          <thead>
+            <tr>
+              <th class="wdth-15">Name</th>
+              <th class="wdth-5"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <%= for employee <- @employees do %>
+              <tr>
+                <td><%= employee.last_name <> " " <> employee.middle_name <> " " <> employee.last_name %></td>
+                <td class="text-right">
+                  <%= link to: payroll_path(@conn, :emp_thirteenth, employee), class: "btn btn-primary btn-xs" do %>
+                    <i class="fas fa-book-open"></i>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

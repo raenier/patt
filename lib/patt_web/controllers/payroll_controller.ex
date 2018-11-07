@@ -1,8 +1,10 @@
 defmodule PattWeb.PayrollController do
   use PattWeb, :controller
+  import Ecto.Query
   alias Patt.Attendance
   alias Patt.Payroll
   alias Patt.Payroll.Payslip
+  alias Patt.Payroll.Payperiod
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Dtr
   alias Patt.Helper
@@ -294,5 +296,35 @@ defmodule PattWeb.PayrollController do
     payperiod = Map.put(payperiod, :payslips, sorted)
 
     render conn, "print_atm.html", payperiod: payperiod
+  end
+
+  def report(conn, _params) do
+    employees = Attendance.list_employees_post_dept_with_type(["regular", "probationary"])
+    employees = Enum.sort_by employees, &(&1.last_name)
+    render conn, "report.html", employees: employees
+  end
+
+  def emp_thirteenth(conn, %{"id" => id}) do
+    employee = Attendance.get_employee! id
+    employee = Map.put employee, :payslips, []
+    totals = %{reg: 0.00, absent: 0.00, undertime: 0.00, tard: 0.00}
+    render conn, "thirteenth.html", employee: employee, totals: totals
+  end
+
+  def gen_thirteenth(conn, %{"id" => id, "year" => year}) do
+    #generate necessary information in order to calculate 13th month pay of employee
+    employee = Attendance.get_employee! id
+    {:ok, startd} = NaiveDateTime.new(String.to_integer(year), 1, 1, 0, 0, 0)
+    {:ok, endd} = NaiveDateTime.new(String.to_integer(year), 12, 31, 0, 0, 0)
+    query = from p in Payslip,  left_join: pr in assoc(p, :payperiod),
+                                where: pr.from >= ^startd and pr.from <= ^endd,
+                                order_by: pr.from
+    employee = Patt.Repo.preload employee, [payslips: query]
+    totalreg = Enum.reduce employee.payslips, 0, fn ps, acc -> acc + ps.regpay end
+    totalabsent = Enum.reduce employee.payslips, 0, fn ps, acc -> acc + ps.absent end
+    totalundertime = Enum.reduce employee.payslips, 0, fn ps, acc -> acc + ps.undertime end
+    totaltardiness = Enum.reduce employee.payslips, 0, fn ps, acc -> acc + ps.tardiness end
+    totals = %{reg: totalreg, absent: totalabsent, undertime: totalundertime, tard: totaltardiness}
+    render conn, "thirteenth.html", employee: employee, totals: totals
   end
 end

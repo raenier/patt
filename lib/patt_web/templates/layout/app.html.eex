@@ -54,6 +54,9 @@
                 <%= link to: payroll_path(@conn, :print_index), class: "dropdown-item" do %>
                   <i class="fas fa-print"></i> Printing
                 <% end %>
+                <%= link to: payroll_path(@conn, :report), class: "dropdown-item" do %>
+                  <i class="fas fa-chart-pie"></i> Reporting
+                <% end %>
               </div>
             </li>
 
