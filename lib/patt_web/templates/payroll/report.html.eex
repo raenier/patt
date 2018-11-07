@@ -32,7 +32,7 @@
           <tbody>
             <%= for employee <- @employees do %>
               <tr>
-                <td><%= employee.last_name <> " " <> employee.middle_name <> " " <> employee.last_name %></td>
+                <td><%= employee.last_name %> <%= employee.middle_name %> <%= employee.last_name %></td>
                 <td class="text-right">
                   <%= link to: payroll_path(@conn, :emp_thirteenth, employee), class: "btn btn-primary btn-xs" do %>
                     <i class="fas fa-book-open"></i>
