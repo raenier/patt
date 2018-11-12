@@ -732,11 +732,22 @@ defmodule Patt.Attendance do
         ho = Patt.Payroll.get_holiday_bydate(dtr.date)
 
         unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || ho do
-          if dtr.sched_in && dtr.sched_out && (is_nil(dtr.in) && is_nil(dtr.out)) do
-            absent = round(Time.diff(dtr.sched_out, dtr.sched_in) / 60 - 60)
-            absent + acc
-          else
-            acc
+          #change to cond clause to accomodate no out absent policy
+          cond do
+            (dtr.sched_in && dtr.sched_out && (is_nil(dtr.in) && is_nil(dtr.out))) ->
+              absent = round(Time.diff(dtr.sched_out, dtr.sched_in) / 60 - 60)
+              absent + acc
+
+            (dtr.sched_in && dtr.sched_out && is_nil(dtr.out)) ->
+              absent = round(Time.diff(dtr.sched_out, dtr.sched_in) / 60 - 60)
+              absent + acc
+
+            (dtr.sched_in && dtr.sched_out && is_nil(dtr.in)) ->
+              absent = round(Time.diff(dtr.sched_out, dtr.sched_in) / 60 - 60)
+              absent + acc
+
+            true ->
+              acc
           end
         else
           acc
