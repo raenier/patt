@@ -425,24 +425,21 @@ defmodule Patt.Payroll do
       end
 
     philhealth =
-      #change to another attrib - boolean attrib - checkbox on front
-      if payslip.employee.contribution.philhealth do
+      if payslip.employee.contribution.check_philhealth do
         compute_philhealth(compen.basic)
       else
         0
       end
 
     pagibig =
-      #change to another attrib - boolean attrib - checkbox on front
-      if payslip.employee.contribution.pagibig do
+      if payslip.employee.contribution.check_pagibig do
         compute_pagibig()
       else
         0
       end
 
     sss =
-      #change to another attrib - boolean attrib - checkbox on front
-      if payslip.employee.contribution.sss do
+      if payslip.employee.contribution.check_sss do
         compute_sss(compen.basic)
       else
         0

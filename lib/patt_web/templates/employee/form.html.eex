@@ -291,7 +291,7 @@
             <%= text_input con, :sss, class: "form-control", placeholder: "SSS Number"%>
             <div class="input-group-append">
               <div class="input-group-text">
-                <%= checkbox con, :sss_check %>
+                <%= checkbox con, :check_sss %>
               </div>
             </div>
           </div>
@@ -305,7 +305,7 @@
             <%= text_input con, :philhealth, class: "form-control", placeholder: "Philhealth Number"%>
             <div class="input-group-append">
               <div class="input-group-text">
-                <%= checkbox con, :philhealth_check %>
+                <%= checkbox con, :check_philhealth %>
               </div>
             </div>
           </div>
@@ -319,7 +319,7 @@
             <%= text_input con, :pagibig, class: "form-control", placeholder: "Pagibig Number" %>
             <div class="input-group-append">
               <div class="input-group-text">
-                <%= checkbox con, :pagibig_check %>
+                <%= checkbox con, :check_pagibig %>
               </div>
             </div>
           </div>
