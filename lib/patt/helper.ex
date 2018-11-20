@@ -357,4 +357,39 @@ defmodule Patt.Helper do
       |> elem(1)
       |> Map.keys
   end
+
+  #TODO: Add 12 prefix on pm, dont display for example "00:12 pm" instead display "12:12pm", and maybe on am
+  def twelvehourformat(time) do
+    {hour, min, sec} = Time.to_erl time
+    mincount = min |> Integer.digits |> Enum.count
+    min =
+      if (mincount) == 1 do
+        "0" <> Integer.to_string(min)
+      else
+        Integer.to_string(min)
+      end
+
+    hourstr =
+    if hour >= 12 do
+      hourcount = (hour - 12) |> Integer.digits() |> Enum.count
+        if (hourcount) == 1 do
+          "0" <> Integer.to_string(hour - 12)
+        else
+          Integer.to_string(hour - 12)
+        end
+    else
+      hourcount = hour |> Integer.digits() |> Enum.count
+        if (hourcount) == 1 do
+          "0" <> Integer.to_string(hour)
+        else
+          Integer.to_string(hour)
+        end
+    end
+
+    if hour >= 12 do
+      hourstr <> ":" <> min <> " pm"
+    else
+      hourstr <> ":" <> min <> " am"
+    end
+  end
 end

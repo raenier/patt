@@ -3,6 +3,7 @@ defmodule PattWeb.EmployeeController do
   use PattWeb, :controller
   alias Patt.Attendance
   alias Patt.Attendance.Employee
+  alias Patt.Attendance.SchedProfile
   alias Patt.Attendance.EmployeeSched
   alias Patt.Payroll.Contribution
 
@@ -94,5 +95,32 @@ defmodule PattWeb.EmployeeController do
   def delete_employee(conn, _params) do
     employees = Attendance.list_employees()
     render conn, "delete_emp_index.html", employees: employees
+  end
+
+  def sched_profile(conn, _params) do
+    schedprofiles = Attendance.list_profiles_sorted()
+    changeset = Patt.Attendance.SchedProfile.changeset(%SchedProfile{}, %{})
+    render conn, "sched_profile.html", schedprofiles: schedprofiles, changeset: changeset
+  end
+
+  def add_sched(conn, %{"sched_profile" => sched_profile}) do
+    %{ "afternoon_out" => to, "morning_in" => from } = sched_profile
+    {:ok, from} = Time.from_iso8601(from <> ":00")
+    {:ok, to} = Time.from_iso8601(to <> ":00")
+    case Attendance.create_profile(%{morning_in: from, afternoon_out: to}) do
+      {:ok, sched_profile} ->
+        redirect conn, to: employee_path(conn, :sched_profile)
+
+      {:error, changeset} ->
+        redirect conn, to: employee_path(conn, :sched_profile)
+    end
+  end
+
+  def delete_schedprofile(conn, %{"id" => id}) do
+    schedprofile = Attendance.get_profile!(id)
+    case Attendance.delete_profile(schedprofile) do
+      {:ok, profile} ->
+        redirect conn, to: employee_path(conn, :sched_profile)
+    end
   end
 end

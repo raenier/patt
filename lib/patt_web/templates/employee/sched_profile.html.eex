@@ -1,0 +1,74 @@
+<div class="card">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+          <a class="nav-link active" href="#">Sched Profiles</a>
+      </li>
+      <div class="ml-auto">
+        <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#addSchedModal">
+          <i class="fas fa-plus"></i>&nbsp;
+          <i class="fas fa-fingerprint"></i>&nbsp;
+        </button>
+      </div>
+    </ul>
+  </div>
+  <div class="card-body">
+    <table class="table table-sm">
+      <thead class="no-top-border">
+        <tr>
+          <th class="wdth-5">From</th>
+          <th class="wdth-5">To</th>
+          <th class="wdth-30"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for sp <- @schedprofiles do %>
+          <tr>
+            <td><%= Patt.Helper.twelvehourformat(sp.morning_in) %></td>
+            <td><%= Patt.Helper.twelvehourformat(sp.afternoon_out) %></td>
+            <td>
+              <%= link [to: employee_path(@conn, :delete_schedprofile, sp),
+                            method: :delete, data: [confirm: "Are you sure?"],
+                            class: "btn btn-outline-danger btn-xs"] do %>
+                &nbsp;<i class="fas fa-trash"></i>&nbsp;
+              <% end %>
+
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<div id="addSchedModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <i class="fas fa-check-double"></i>&nbsp;
+        <i class="fas fa-shapes"></i>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <%= form_for @changeset, employee_path(@conn, :add_sched), [class: "form-horizontal"], fn f -> %>
+          <div class="form-group">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend"><label class="input-group-text">FROM</label></div>
+              <%= time_input f, :morning_in, class: "form-control", required: "required"%>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group input-group-sm">
+              <div class="input-group-prepend"><label class="input-group-text">TO</label></div>
+              <%= time_input f, :afternoon_out, class: "form-control", required: "required" %>
+            </div>
+          </div>
+          <%= submit class: "btn btn-outline-success btn-block" do %>
+            <i class="fas fa-plus"></i> ADD
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

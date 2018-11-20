@@ -7,6 +7,7 @@ defmodule Patt.Attendance do
 
   alias Ecto.Multi
   alias Patt.Repo
+  alias Patt.Helper
   alias Patt.Attendance.Employee
   alias Patt.Attendance.Department
   alias Patt.Attendance.Position
@@ -270,20 +271,30 @@ defmodule Patt.Attendance do
   end
 
   ### SCHED_PROFILES
-  #
+  def get_profile!(id), do: Repo.get!(SchedProfile, id)
+
   def list_profiles do
     Repo.all(SchedProfile)
   end
 
+  def list_profiles_sorted do
+    from(sp in Patt.Attendance.SchedProfile, order_by: sp.morning_in)
+    |> Patt.Repo.all()
+  end
+
   def list_profiles_kl do
     list_profiles()
-    |> Enum.map(&{&1.name, &1.id})
+    |> Enum.map(&{Helper.twelvehourformat(&1.morning_in) <> " - " <> Helper.twelvehourformat(&1.afternoon_out), &1.id})
   end
 
   def create_profile(attrs \\ %{}) do
     %SchedProfile{}
     |> SchedProfile.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def delete_profile(%SchedProfile{} = schedprofile) do
+    Repo.delete(schedprofile)
   end
 
   ### DTR

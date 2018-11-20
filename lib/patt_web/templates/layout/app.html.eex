@@ -37,6 +37,9 @@
                   <%= link to: employee_path(@conn, :new), class: "dropdown-item" do %>
                     <i class="fas fa-plus"></i><%= " Add New" %>
                   <% end %>
+                  <%= link to: employee_path(@conn, :sched_profile), class: "dropdown-item" do %>
+                    <i class="fas fa-clipboard-list"></i><%= " Schedule Profiles" %>
+                  <% end %>
                   <%= link to: employee_path(@conn, :index), class: "dropdown-item" do %>
                     <i class="fas fa-pen-alt"></i><%= " Manage Records" %>
                   <% end %>
