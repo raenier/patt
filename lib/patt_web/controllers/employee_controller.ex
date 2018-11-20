@@ -98,6 +98,31 @@ defmodule PattWeb.EmployeeController do
     end
   end
 
+  def resigned_update(conn, %{"id" => id, "employee" => params}) do
+    employee = Attendance.get_employee_wdassoc!(id)
+    positions = Attendance.list_departments_positions_kl()
+    schedprofiles = Attendance.list_profiles_kl()
+
+    case Attendance.update_employee_multi(employee, params) do
+      {:ok, _employee} ->
+        conn
+        |> put_flash(:info, "successfully updated")
+        |> redirect(to: employee_path(conn, :resigned_index))
+      {:error, _failed_operation, changeset, _changes} ->
+        conn
+        |> render("edit.html", changeset: changeset,
+                                employee: employee,
+                                positions: positions,
+                                schedprofiles: schedprofiles)
+      {:error, changeset} ->
+        conn
+        |> render("edit.html", changeset: changeset,
+                                employee: employee,
+                                positions: positions,
+                                schedprofiles: schedprofiles)
+    end
+  end
+
   def delete(conn,%{"id" => id}) do
     employee = Attendance.get_employee!(id)
 

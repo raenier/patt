@@ -19,13 +19,14 @@ defmodule PattWeb.Router do
     get "/", PageController, :index
 
     post "/employees/search", EmployeeController, :search
-    post "/employees/resigned/search", EmployeeController, :resigned_search
     get "/employees/delete", EmployeeController, :delete_employee
     get "/employees/schedule/profiles", EmployeeController, :sched_profile
     post "/employees/schedule/profiles", EmployeeController, :add_sched
     delete "/employees/schedule/profiles/:id", EmployeeController, :delete_schedprofile
     resources "/employees", EmployeeController, except: [:edit]
     get "/employees/resigned/index", EmployeeController, :resigned_index
+    post "/employees/resigned/search", EmployeeController, :resigned_search
+    put "/employees/resigned/update/:id", EmployeeController, :resigned_update
 
     get "/payroll", PayrollController, :index
     get "/payroll/:id/new", PayrollController, :new
