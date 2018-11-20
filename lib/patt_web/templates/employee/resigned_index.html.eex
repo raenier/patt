@@ -3,17 +3,17 @@
   <div class="card-header">
     <ul class="nav nav-tabs card-header-tabs">
       <li class="nav-item">
-        <%= link to: employee_path(@conn, :index), class: "nav-link active" do %>
+        <%= link to: employee_path(@conn, :index), class: "nav-link" do %>
           <i class="fas fa-user-tie"></i> Active
         <% end %>
       </li>
       <li class="nav-item">
-        <%= link to: employee_path(@conn, :resigned_index), class: "nav-link" do %>
+        <%= link to: employee_path(@conn, :resigned_index), class: "nav-link active" do %>
           <i class="fas fa-user-alt-slash"></i> Resigned
         <% end %>
       </li>
       <div class="ml-auto">
-          <%= form_for @conn, employee_path(@conn, :search), [as: :search], fn f -> %>
+          <%= form_for @conn, employee_path(@conn, :resigned_search), [as: :search], fn f -> %>
                   <div class="input-group input-group-sm">
                       <%= text_input f, :for, class: "form-control input-sm", placeholder: "Search Name or ID" %>
 

@@ -24,6 +24,23 @@ defmodule PattWeb.EmployeeController do
     render conn, "index.html", employees: results, positions: positions, schedprofiles: schedprofiles
   end
 
+  def resigned_index(conn, _params) do
+    employees = Attendance.list_employee_with_type(["resigned"])
+    employees = Enum.sort_by employees, &(&1.last_name)
+    positions = Attendance.list_departments_positions_kl()
+    schedprofiles = Attendance.list_profiles_kl()
+
+    render conn, "resigned_index.html", employees: employees, positions: positions, schedprofiles: schedprofiles
+  end
+
+  def resigned_search(conn, %{"search" => %{"for" => params, "attr" => attr}}) do
+    results = Attendance.search_employee(params, attr, ["resigned"])
+    positions = Attendance.list_departments_positions_kl()
+    schedprofiles = Attendance.list_profiles_kl()
+
+    render conn, "resigned_index.html", employees: results, positions: positions, schedprofiles: schedprofiles
+  end
+
   def new(conn, _params) do
     changeset = Employee.changeset_nested(%Employee{
       employee_sched: %EmployeeSched{},
