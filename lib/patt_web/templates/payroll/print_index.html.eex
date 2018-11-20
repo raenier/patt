@@ -1,6 +1,7 @@
 <div class="card">
   <div class="card-header">
     <b>Payperiods <%= Date.utc_today.year %></b>
+
   </div>
   <div class="card-body">
 <table class="table table-sm table-hover">
@@ -10,7 +11,7 @@
     <%= for pp <- @payperiods do %>
     <tr>
       <td><%= pp.id %></td>
-      <td><%= pp.from %> - <%= pp.to %></td>
+      <td><b><%= pp.from %></b> to <b><%= pp.to %></td></b>
 
       <td class="text-right">
         <span>
@@ -22,11 +23,6 @@
           <button class="btn btn-success btn-xs" data-toggle="modal" data-target="#editEmpModal<%= pp.id %>">
             <i class="fas fa-list"></i>
           </button>
-        </span>
-        <span>
-          <%= link [to: payroll_path(@conn, :print_atm, pp), class: "btn btn-warning btn-xs"] do %>
-            <i class="fas fa-credit-card"></i>
-          <% end %>
         </span>
       </td>
     </tr>
