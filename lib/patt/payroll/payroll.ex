@@ -80,22 +80,28 @@ defmodule Patt.Payroll do
         |> Enum.sort_by(&(elem(&1, 1).order))
         |> Keyword.keys
 
-    all_dtypes =
-      if employee.leave.sl_total == 0 do
-        Enum.filter(all_dtypes, &(&1 !== :sl))
-      else
-        all_dtypes
-      end
+    used_leaves = Payroll.used_leave(employee)
 
     all_dtypes =
-      if employee.leave.vl_total == 0 do
-        Enum.filter(all_dtypes, &(&1 !== :vl))
-      else
-        all_dtypes
-      end
+    Enum.map all_dtypes, fn key ->
+      cond do
+        key == :vl ->
+          if used_leaves.rem_vl <= 0 do
+            [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+          else
+            [key: String.upcase(Atom.to_string(key)), value: key]
+          end
 
-    Enum.map all_dtypes, fn daytype ->
-      {String.upcase(Atom.to_string(daytype)), daytype}
+        key == :sl ->
+          if used_leaves.rem_sl <= 0 do
+            [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+          else
+            [key: String.upcase(Atom.to_string(key)), value: key]
+          end
+
+        true ->
+          [key: String.upcase(Atom.to_string(key)), value: key]
+      end
     end
   end
 
