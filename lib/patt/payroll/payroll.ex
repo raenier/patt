@@ -81,26 +81,38 @@ defmodule Patt.Payroll do
         |> Keyword.keys
 
     used_leaves = Payroll.used_leave(employee)
-
     all_dtypes =
     Enum.map all_dtypes, fn key ->
-      cond do
-        key == :vl ->
-          if used_leaves.rem_vl <= 0 do
-            [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
-          else
-            [key: String.upcase(Atom.to_string(key)), value: key]
-          end
+      unless employee.emp_type == "probationary" do
+        cond do
+          key == :vl ->
+            if used_leaves.rem_vl <= 0 do
+              [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+            else
+              [key: String.upcase(Atom.to_string(key)), value: key]
+            end
 
-        key == :sl ->
-          if used_leaves.rem_sl <= 0 do
-            [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
-          else
-            [key: String.upcase(Atom.to_string(key)), value: key]
-          end
+          key == :sl ->
+            if used_leaves.rem_sl <= 0 do
+              [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+            else
+              [key: String.upcase(Atom.to_string(key)), value: key]
+            end
 
-        true ->
-          [key: String.upcase(Atom.to_string(key)), value: key]
+          true ->
+            [key: String.upcase(Atom.to_string(key)), value: key]
+        end
+      else
+        cond do
+          key == :vl ->
+            [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+
+          key == :sl ->
+            [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+
+          true ->
+            [key: String.upcase(Atom.to_string(key)), value: key]
+        end
       end
     end
   end
