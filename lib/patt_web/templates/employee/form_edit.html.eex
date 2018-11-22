@@ -1,0 +1,467 @@
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+  <div class="row">
+    <div class="col-sm-7">
+        <h5>
+          <i class="fas fa-user"></i>
+          <i class="fas fa-list-alt"></i>
+          &nbsp;&nbsp;Personal Information
+        </h5>
+        <hr>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">ID </label>
+            </div>
+              <% error = if @changeset.errors[:employee_number] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= number_input f, :employee_number, class: "form-control #{error}", placeholder: "Employee Number" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                <i class="fas fa-user-circle"></i>
+              </label>
+            </div>
+            <% error = if @changeset.errors[:first_name] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= text_input f, :first_name, class: "form-control #{error}", placeholder: "First Name", required: "required"%>
+            <div class="input-group-append">
+              <label class="input-group-text">First Name</label>
+            </div>
+         </div>
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                <i class="fas fa-dot-circle"></i>
+              </label>
+            </div>
+            <% error = if @changeset.errors[:middle_name] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= text_input f, :middle_name, class: "form-control #{error}", placeholder: "Middle Name"%>
+            <div class="input-group-append">
+              <label class="input-group-text">Middle</label>
+            </div>
+          </div>
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                <i class="fas fa-dot-circle"></i>
+              </label>
+            </div>
+            <% error = if @changeset.errors[:last_name] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= text_input f, :last_name, class: "form-control #{error}", placeholder: "Last Name", required: "required" %>
+            <div class="input-group-append">
+              <label class="input-group-text">Last</label>
+            </div>
+          </div>
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                <i class="fas fa-dot-circle"></i>
+              </label>
+            </div>
+            <% error = if @changeset.errors[:maiden_name] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= text_input f, :maiden_name, class: "form-control #{error}", placeholder: "Maiden Name" %>
+            <div class="input-group-append">
+              <label class="input-group-text">Maiden</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                <i class="fas fa-mars"></i>&nbsp;
+                <i class="fas fa-venus"></i>
+              </label>
+            </div>
+            <% error = if @changeset.errors[:gender] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= select f, :gender,["Male": "male", "Female": "female"], class: "form-control #{error}", placeholder: "Gender", required: "required" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                 Civil Status
+              </label>
+            </div>
+            <% error = if @changeset.errors[:civil_status] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= select f, :civil_status, ["Single": "single", "Married": "married", "Separated": "separated", "Widowed": "widowed"],
+                          class: "form-control #{error}", placeholder: "Civil Status", required: "required" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                &nbsp;<i class="fas fa-address-card"></i>
+              </label>
+            </div>
+              <% error = if @changeset.errors[:street] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :street, class: "form-control margin-b-5 #{error}" %>
+            <div class="input-group-append">
+              <label class="input-group-text">Block/Street</label>
+            </div>
+          </div>
+
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                &nbsp;<i class="fas fa-map-marker-alt"></i> &nbsp;
+              </label>
+            </div>
+              <% error = if @changeset.errors[:brgy] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :brgy, class: "form-control margin-b-5 #{error}" %>
+            <div class="input-group-append">
+              <label class="input-group-text">Brgy.</label>
+            </div>
+          </div>
+
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                &nbsp;<i class="fas fa-map-marker-alt"></i> &nbsp;
+              </label>
+            </div>
+              <% error = if @changeset.errors[:town] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :town, class: "form-control margin-b-5 #{error}", placeholder: "Town" %>
+            <div class="input-group-append">
+              <label class="input-group-text">Town.</label>
+            </div>
+          </div>
+
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                &nbsp;<i class="fas fa-map-marker-alt"></i> &nbsp;
+              </label>
+            </div>
+              <% error = if @changeset.errors[:province] && @changeset.action, do: "alert-danger", else: "" %>
+              <%= text_input f, :province, class: "form-control margin-b-5 #{error}", placeholder: "Province" %>
+            <div class="input-group-append">
+              <label class="input-group-text">Province.</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+               &nbsp;<i class="fas fa-phone"></i> &nbsp;
+              </label>
+            </div>
+            <% error = if @changeset.errors[:contact_num] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= number_input f, :contact_num, class: "form-control #{error}", placeholder: "Contact Number" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                Birthdate
+              </label>
+            </div>
+            <% error = if @changeset.errors[:birth_date] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= date_select f, :birth_date, builder: fn b -> %>
+              <%= b.(:day, [class: "form-control"]) %>
+              <%= b.(:month, [class: "form-control"]) %>
+              <%= b.(:year, [class: "form-control", options: 1960..(Date.utc_today).year]) %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                Type
+              </label>
+            </div>
+            <% error = if @changeset.errors[:emp_type] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= select f, :emp_type, ["Probationary": "probationary", "Regular": "regular", "Resigned": "resigned"], class: "form-control #{error}" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                Class
+              </label>
+            </div>
+            <% error = if @changeset.errors[:emp_class] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= select f, :emp_class, ["Rank and File": "rnf", "Supervisor": "spv", "Manager": "mgr"], class: "form-control #{error}" %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                Position
+              </label>
+            </div>
+             <%= select f, :position_id, @positions,
+                  class: "form-control" , prompt: "Choose Position for employee"%>
+          </div>
+        </div>
+
+        <!--PUT branch input here-->
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">
+                Date Hired
+              </label>
+            </div>
+            <% error = if @changeset.errors[:date_hired] && @changeset.action, do: "alert-danger", else: "" %>
+            <%= date_select f, :date_hired, builder: fn b -> %>
+              <%= b.(:day, [class: "form-control"]) %>
+              <%= b.(:month, [class: "form-control"]) %>
+              <%= b.(:year, [class: "form-control", options: 1960..(Date.utc_today).year]) %>
+            <% end %>
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-sm-5">
+      <%= inputs_for f, :employee_sched, fn sched -> %>
+        <h5>
+          <i class="fas fa-calendar-alt"></i><i class="fas fa-clock"></i>&nbsp;&nbsp;Work Schedule
+        </h5>
+        <hr>
+        <% list = [
+                    monday: :monday_id, tuesday: :tuesday_id,
+                    wednesday: :wednesday_id, thursday: :thursday_id,
+                    friday: :friday_id, saturday: :saturday_id, sunday: :sunday_id
+                  ]%>
+
+        <%= Enum.map list, fn {day, day_id} -> %>
+          <div class="form-group">
+            <div class="input-group input-group-sm">
+              <%= select sched, day_id, @schedprofiles, class: "form-control", prompt: "RESTDAY"%>
+              <div class="input-group-append">
+                <label class="control-label input-group-text" for="<%= day %>"><%=Atom.to_string(day) |> String.capitalize() %>:</label>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <label class="text-danger">This is for daily paid employees</label>
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Work days</label>
+            </div>
+            <%= select sched, :dpm, ["26": 26, "22": 22], class: "form-control" %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= unless f.data.emp_type == "probationary" do %>
+      <!--LEAVE-->
+      <br>
+        <%= inputs_for f, :leave, fn leave -> %>
+        <h5>
+          <i class="fas fa-plane-departure"></i>&nbsp;&nbsp; Leave Credits
+        </h5>
+        <hr>
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">SL Total</label>
+            </div>
+            <%= number_input leave, :sl_total, class: "form-control" %>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">VL Total</label>
+            </div>
+            <%= number_input leave, :vl_total, class: "form-control" %>
+          </div>
+        </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <hr>
+  <%= inputs_for f, :contribution, fn con -> %>
+  <div class="row">
+    <!--BENEFITS-->
+    <div class="col-sm-7">
+      <h5>
+        <i class="fas fa-credit-card"></i>
+        &nbsp;&nbsp;Social Benefits/TIN/Bank Account
+      </h5>
+    <hr>
+        <div class="form-group">
+          <label class="text-danger">Check to start deduction on payroll</label>
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="control-label input-group-text" for="sss">SSS #:</label>
+            </div>
+            <%= text_input con, :sss, class: "form-control", placeholder: "SSS Number"%>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <%= checkbox con, :check_sss %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="control-label input-group-text" for="sss">Philhealth #:</label>
+            </div>
+            <%= text_input con, :philhealth, class: "form-control", placeholder: "Philhealth Number"%>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <%= checkbox con, :check_philhealth %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="control-label input-group-text" for="sss">Pagibig #:</label>
+            </div>
+            <%= text_input con, :pagibig, class: "form-control", placeholder: "Pagibig Number" %>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <%= checkbox con, :check_pagibig %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="control-label input-group-text" for="sss">TIN #:</label>
+            </div>
+              <%= inputs_for f, :tax, fn tax -> %>
+                <%= number_input tax, :tin, class: "form-control", placeholder: "TIN"%>
+              <% end %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="control-label input-group-text" for="sss">Bank #:</label>
+            </div>
+            <%= text_input f, :atm_acct, class: "form-control", placeholder: "ACCT NUM"%>
+          </div>
+        </div>
+      </div>
+
+    <!--COMPENSATION-->
+    <div class="col-sm-5">
+      <h5>
+        <i class="fas fa-money-bill-wave"></i>
+        &nbsp;&nbsp;Compensation
+      </h5>
+      <hr>
+        <%= inputs_for f, :compensation, fn comp -> %>
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Basic</label>
+            </div>
+            <%= number_input comp, :basic, class: "form-control", placeholder: "0.00", max: 1000000 %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Rice</label>
+            </div>
+            <%= number_input comp, :rice, class: "form-control", placeholder: "0.00", max: 1000000 %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Communication</label>
+            </div>
+            <%= number_input comp, :communication, class: "form-control", placeholder: "0.00", max: 1000000 %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Clothing</label>
+            </div>
+            <%= number_input comp, :clothing, class: "form-control", placeholder: "0.00", max: 1000000 %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Gasoline</label>
+            </div>
+            <%= number_input comp, :gasoline, class: "form-control", placeholder: "0.00", max: 1000000 %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Transportation</label>
+            </div>
+            <%= number_input comp, :transpo, class: "form-control", placeholder: "0.00", max: 1000000 %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Meal</label>
+            </div>
+            <%= number_input comp, :meal, class: "form-control", placeholder: "0.00", max: 1000000 %>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Paymode</label>
+            </div>
+              <%= select comp, :paymode, [Daily: "daily", Fixed365: "365", Fixed313: "313", Fixed261: "261"],class: "form-control" %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+  </div>
+  <% end %>
+
+
+  <hr>
+  <div class="container-fluid text-right">
+    <button class="btn btn-info btn-block" type="submit">
+      <i class="fas fa-save"></i>
+      <i class="fas fa-external-link-square-alt"></i>
+      &nbsp;&nbsp;Save
+    </button>
+  </div>
+  <br>
+<% end %>

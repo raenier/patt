@@ -37,8 +37,9 @@ defmodule Patt.Attendance do
       :contribution,
       :compensation,
       :tax,
+      :leave,
       employee_sched: [:monday, :tuesday, :wednesday, :thursday, :friday, :saturday, :sunday],
-      position: :department
+      position: :department,
     ])
   end
 

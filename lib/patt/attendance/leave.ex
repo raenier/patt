@@ -8,10 +8,10 @@ defmodule Patt.Attendance.Leave do
   schema "leaves" do
     belongs_to :employee, Employee
 
-    field :vl_used, :integer
-    field :sl_used, :integer
-    field :vl_total, :integer
-    field :sl_total, :integer
+    field :vl_used, :integer, default: 0
+    field :sl_used, :integer, default: 0
+    field :vl_total, :integer, default: 0
+    field :sl_total, :integer, default: 0
 
     timestamps()
   end

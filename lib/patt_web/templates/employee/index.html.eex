@@ -95,7 +95,7 @@
                     </div>
 
                     <div class="modal-body">
-                          <%= render "form.html", changeset: Patt.Attendance.change_employee(employee),
+                          <%= render "form_edit.html", changeset: Patt.Attendance.change_employee(employee),
                                                   action: employee_path(@conn, :update, employee),
                                                   positions: @positions,
                                                   schedprofiles: @schedprofiles %>
