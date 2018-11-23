@@ -120,20 +120,23 @@ defmodule Patt.Payroll do
   def used_leave(employee, year) do
     {:ok, start} = Date.from_erl {year, 01, 01}
     {:ok, endd} = Date.from_erl {year, 12, 31}
-    used_sl =
-      from(d in Patt.Attendance.Dtr, where: d.daytype == "sl" and d.employee_id == ^employee.id and d.date >= ^start and d.date <= ^endd)
-      |> Patt.Repo.all
-      |> Enum.count
-
-    used_vl =
-      from(d in Patt.Attendance.Dtr, where: d.daytype == "vl" and d.employee_id == ^employee.id and d.date >= ^start and d.date <= ^endd)
-      |> Patt.Repo.all
-      |> Enum.count
 
     %{
-      rem_sl: employee.leave.sl_total - used_sl,
-      rem_vl: employee.leave.vl_total - used_vl,
+      rem_sl: employee.leave.sl_total - used_sl(employee, start, endd),
+      rem_vl: employee.leave.vl_total - used_vl(employee, start, endd),
     }
+  end
+
+  def used_vl(employee, start_date, end_date) do
+    from(d in Patt.Attendance.Dtr, where: d.daytype == "vl" and d.employee_id == ^employee.id and d.date >= ^start_date and d.date <= ^end_date)
+    |> Patt.Repo.all
+    |> Enum.count
+  end
+
+  def used_sl(employee, start_date, end_date) do
+    from(d in Patt.Attendance.Dtr, where: d.daytype == "sl" and d.employee_id == ^employee.id and d.date >= ^start_date and d.date <= ^end_date)
+    |> Patt.Repo.all
+    |> Enum.count
   end
 
   ###PAYSLIP
