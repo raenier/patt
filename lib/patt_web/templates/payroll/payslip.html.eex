@@ -65,9 +65,18 @@
                   </label>
                 </div>
                 <label class="form-control">
-                  <%= unless is_nil(@employee.emp_class),
-                      do: @employee.emp_class,
-                      else: "Please choose employee class" %>
+                  <%= unless is_nil(@employee.emp_class) do %>
+                    <%= case @employee.emp_class do%>
+                      <%  "rnf" -> %>
+                        Rank and File
+                      <%  "mgr" -> %>
+                        Manager
+                      <%  "spv" -> %>
+                        Supervisor
+                      <%  _ -> %>
+                        Please choose employee class
+                    <% end %>
+                  <% end %>
                 </label>
               </div>
             </div>
