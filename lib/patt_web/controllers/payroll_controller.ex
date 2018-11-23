@@ -19,7 +19,7 @@ defmodule PattWeb.PayrollController do
     employee = Attendance.get_employee_wdassoc!(id)
     changeset = Employee.changeset_dtr(Map.put(employee, :dtrs, []), %{})
     range = ""
-    usedleave = Payroll.used_leave(employee)
+    usedleave = Payroll.used_leave(employee, Date.utc_today.year)
     payslip = %Payslip{}
     yearmonth =
       Date.utc_today
@@ -56,9 +56,9 @@ defmodule PattWeb.PayrollController do
       |> Attendance.sort_dtrs_bydate()
 
     changeset = Employee.changeset_dtr(employee, %{})
-    daytypes = Payroll.daytype_list(employee)
+    daytypes = Payroll.daytype_list(employee, String.to_integer(year))
     totals = Attendance.overall_totals(employee.dtrs)
-    usedleave = Payroll.used_leave(employee)
+    usedleave = Payroll.used_leave(employee, String.to_integer(year))
 
     #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
@@ -100,9 +100,9 @@ defmodule PattWeb.PayrollController do
       |> Attendance.sort_dtrs_bydate()
 
     changeset = Employee.changeset_dtr(employee, %{})
-    daytypes = Payroll.daytype_list(employee)
+    daytypes = Payroll.daytype_list(employee, String.to_integer(year))
     totals = Attendance.overall_totals(employee.dtrs)
-    usedleave = Payroll.used_leave(employee)
+    usedleave = Payroll.used_leave(employee, String.to_integer(year))
     #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
     payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
@@ -141,9 +141,9 @@ defmodule PattWeb.PayrollController do
     employee = Attendance.sort_dtrs_bydate(employee)
 
     changeset = Employee.changeset_dtr(employee, %{})
-    daytypes = Payroll.daytype_list(employee)
+    daytypes = Payroll.daytype_list(employee, String.to_integer(year))
     totals = Attendance.overall_totals(employee.dtrs)
-    usedleave = Payroll.used_leave(employee)
+    usedleave = Payroll.used_leave(employee, String.to_integer(year))
     #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
     payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
@@ -192,9 +192,9 @@ defmodule PattWeb.PayrollController do
       |> Attendance.sort_dtrs_bydate()
 
     changeset = Employee.changeset_dtr(employee, %{})
-    daytypes = Payroll.daytype_list(employee)
+    daytypes = Payroll.daytype_list(employee, String.to_integer(year))
     totals = Attendance.overall_totals(employee.dtrs)
-    usedleave = Payroll.used_leave(employee)
+    usedleave = Payroll.used_leave(employee, String.to_integer(year))
 
     #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)

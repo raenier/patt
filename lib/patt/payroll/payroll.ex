@@ -72,7 +72,7 @@ defmodule Patt.Payroll do
   end
 
   #custom
-  def daytype_list(employee) do
+  def daytype_list(employee, year) do
     all_dtypes =
       %Patt.Payroll.Daytype{}
         |> Map.pop(:__struct__)
@@ -80,7 +80,7 @@ defmodule Patt.Payroll do
         |> Enum.sort_by(&(elem(&1, 1).order))
         |> Keyword.keys
 
-    used_leaves = Payroll.used_leave(employee)
+    used_leaves = Payroll.used_leave(employee, year)
     all_dtypes =
     Enum.map all_dtypes, fn key ->
       unless employee.emp_type == "probationary" do
@@ -117,9 +117,9 @@ defmodule Patt.Payroll do
     end
   end
 
-  def used_leave(employee) do
-    {:ok, start} = Date.from_erl {Date.utc_today.year, 01, 01}
-    {:ok, endd} = Date.from_erl {Date.utc_today.year, 12, 31}
+  def used_leave(employee, year) do
+    {:ok, start} = Date.from_erl {year, 01, 01}
+    {:ok, endd} = Date.from_erl {year, 12, 31}
     used_sl =
       from(d in Patt.Attendance.Dtr, where: d.daytype == "sl" and d.employee_id == ^employee.id and d.date >= ^start and d.date <= ^endd)
       |> Patt.Repo.all
