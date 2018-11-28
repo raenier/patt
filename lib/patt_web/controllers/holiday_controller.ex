@@ -24,7 +24,9 @@ defmodule PattWeb.HolidayController do
         |> put_flash(:info, "Holiday created successfully.")
         |> redirect(to: holiday_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        conn
+        |> put_flash(:warning, "Error on creating Holiday.")
+        |> redirect(to: holiday_path(conn, :index))
     end
   end
 
@@ -48,7 +50,8 @@ defmodule PattWeb.HolidayController do
         |> put_flash(:info, "Holiday updated successfully.")
         |> redirect(to: holiday_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
-        render(conn, "edit.html", holiday: holiday, changeset: changeset)
+        conn
+        |> redirect(to: holiday_path(conn, :index))
     end
   end
 
