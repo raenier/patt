@@ -47,6 +47,7 @@ defmodule PattWeb.Router do
     post "/payroll/report/:id", PayrollController, :gen_thirteenth
 
     resources "/holidays", HolidayController
+    post "/holidays/year/search", HolidayController, :year_search
     resources "/users", UserController
   end
 

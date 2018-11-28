@@ -63,7 +63,7 @@ defmodule PattWeb.PayrollController do
     #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
     payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
-    holidays = Payroll.list_holidays_date()
+    holidays = Payroll.list_holidays_date(String.to_integer(year))
 
     render conn, "payslip.html",
     [
@@ -106,7 +106,7 @@ defmodule PattWeb.PayrollController do
     #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
     payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
-    holidays = Payroll.list_holidays_date()
+    holidays = Payroll.list_holidays_date(String.to_integer(year))
 
     render conn, "payslip.html",
     [
@@ -147,7 +147,7 @@ defmodule PattWeb.PayrollController do
     #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
     payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
-    holidays = Payroll.list_holidays_date()
+    holidays = Payroll.list_holidays_date(String.to_integer(year))
 
     render conn, "payslip.html",
     [
@@ -199,7 +199,7 @@ defmodule PattWeb.PayrollController do
     #forgeneratingpayslip
     payperiod = Payroll.get_else_create_payperiod(range.first, range.last)
     payslip = Payroll.get_ps_else_new(employee.id, payperiod.id)
-    holidays = Payroll.list_holidays_date()
+    holidays = Payroll.list_holidays_date(String.to_integer(year))
 
     #USER input values
     userinputs = Payroll.get_user_inputs(

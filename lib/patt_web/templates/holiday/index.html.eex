@@ -1,19 +1,40 @@
 <div class="card">
   <div class="card-header">
-    <b>HOLIDAYS for <%= Date.utc_today.year %></b>
+    <div class="d-flex">
+      <%= form_for @conn, holiday_path(@conn, :year_search), [as: :year_search], fn ys -> %>
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend">
+            <label class="input-group-text">
+              <b>HOLIDAYS</b>
+            </label>
+          </div>
+          <%= select ys, :year, 2010..2100, class: "form-control", selected: Date.utc_today.year %>
+          <div class="input-group-append">
+            <%= submit class: "btn btn-sm btn-outline-success" do %>
+              <i class="fas fa-search"></i>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <div class="ml-auto">
+        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#addHolidayModal">
+          <i class="fas fa-save"></i> <i class="fas fa-plus"></i>
+        </button>
+      </div>
+    </div>
   </div>
 <div class="card-body">
 <table class="table table-sm no-top-border">
   <thead>
     <tr>
-      <th class="wdth-15">Name</th>
+      <th class="wdth-15"></th>
       <th class="wdth-10">Type</th>
       <th>Date</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-<%= for holiday <- @holidays do %>
+  <%= for holiday <- @holidays do %>
     <tr>
       <td><%= String.capitalize(holiday.name) %></td>
       <td><%= String.capitalize(holiday.type) %></td>
@@ -21,9 +42,9 @@
 
       <td class="text-right">
         <span>
-          <%= link [to: holiday_path(@conn, :edit, holiday), class: "btn btn-secondary btn-xs"] do %>
+          <button class="btn btn-outline-secondary btn-xs" data-toggle="modal" data-target="#editHolidayModal<%= holiday.id %>">
             <i class="fas fa-pen"></i>
-          <% end %>
+          </button>
         </span>
         <span>
           <%= link [to: holiday_path(@conn, :delete, holiday),
@@ -35,14 +56,41 @@
 
       </td>
     </tr>
-<% end %>
+    <!-- Edit Holiday Information -->
+    <div id="editHolidayModal<%= holiday.id %>" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+          <div class="modal-header">
+            <i class="fas fa-pen"></i>
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+          <div class="modal-body">
+            <%= render "form.html" , year: @year, changeset: Patt.Payroll.change_holiday(holiday), action: holiday_path(@conn, :update, holiday) %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
   </tbody>
 </table>
 
 <span>
-  <%= link [to: holiday_path(@conn, :new), class: "btn btn-info btn-sm"] do %>
-    <i class="fas fa-save"></i> <i class="fas fa-plus"></i>
-  <% end %>
 </span>
 </div>
 </div>
+
+  <!-- Add Holiday Information -->
+  <div id="addHolidayModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <i class="fas fa-pen"></i>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <%= render "form.html" , year: @year, changeset: @changeset, action: holiday_path(@conn, :create) %>
+        </div>
+      </div>
+    </div>
+  </div>
