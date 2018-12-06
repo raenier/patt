@@ -10,6 +10,7 @@ defmodule Patt.Attendance.Employee do
   alias Patt.Payroll.Tax
   alias Patt.Attendance.Dtr
   alias Patt.Payroll.Payslip
+  alias Patt.Payroll.Bonus
 
 
   schema "employees" do
@@ -21,6 +22,7 @@ defmodule Patt.Attendance.Employee do
     has_one :leave, Leave
     has_many :dtrs, Dtr
     has_many :payslips, Payslip
+    has_many :bonus, Bonus
 
     field :first_name, :string
     field :middle_name, :string

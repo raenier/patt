@@ -45,6 +45,9 @@ defmodule PattWeb.Router do
     get "/payroll/report", PayrollController, :thirteenth
     get "/payroll/report/:id", PayrollController, :emp_thirteenth
     post "/payroll/report/:id", PayrollController, :gen_thirteenth
+    post "/payroll/report", PayrollController, :load_thirteenth
+    post "/payroll/report/update/all", PayrollController, :update_thirteenth
+    get "/payroll/report/print/:year", PayrollController, :print_thirteenth
 
     resources "/holidays", HolidayController
     post "/holidays/year/search", HolidayController, :year_search

@@ -19,9 +19,34 @@
           <li class="nav-item">
               <a class="nav-link active" href="#">13th Month</a>
           </li>
+          <div class="ml-auto">
+            <%= form_for @conn, payroll_path(@conn, :load_thirteenth), fn f -> %>
+              <div class="input-group input-group-sm">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">YEAR</div>
+                </div>
+                <%= select f, :year, 1990..2100, class: "form-control form-control-sm", selected: Date.utc_today.year %>
+                <div class="input-group-append">
+                  <%= submit class: "btn btn-sm btn-outline-primary" do %>
+                    Load <i class="fas fa-angle-double-right"></i>
+                  <% end %>
+            <% end %>
+            <!--UPDATE-->
+            <%= form_for @conn, payroll_path(@conn, :update_thirteenth), [as: :thirteenth], fn ut -> %>
+              <%= submit class: "btn btn-outline-success btn-sm" do %>
+                UPDATE
+              <% end %>
+              &nbsp;&nbsp;
+            <!--PRINT-->
+              <%= link to: payroll_path(@conn, :print_thirteenth, @year), class: "btn btn-sm btn-primary" do %>
+                <i class="fas fa-print"></i>
+              <% end %>
+              </div>
+            </div>
+          </div>
         </ul>
       </div>
-      <div class="card-body">
+      <div class="card-body text-right">
         <table class="table table-sm table-hover no-top-border">
           <thead>
             <tr>
@@ -33,15 +58,28 @@
             <%= for employee <- @employees do %>
               <tr>
                 <td><%= employee.last_name %> <%= employee.middle_name %> <%= employee.last_name %></td>
+                    <% bonus = Enum.find employee.bonus, fn b -> b.year.year == @year end %>
                 <td class="text-right">
-                  <%= link to: payroll_path(@conn, :emp_thirteenth, employee), class: "btn btn-primary btn-xs" do %>
-                    <i class="fas fa-book-open"></i>
-                  <% end %>
+                  <div class="input-group">
+                    <%= number_input ut, :"#{employee.id}", step: 0.0001, value: unless(is_nil(bonus), do: :erlang.float_to_binary(bonus.thirteenth, [decimals: 2]), else: 0.0) %>
+                    <%= hidden_input ut, :year, value: @year %>
+                    <div class="input-group-append">
+                      &nbsp;
+                      <%= link to: payroll_path(@conn, :emp_thirteenth, employee), class: "btn btn-primary btn-xs" do %>
+                        <i class="fas fa-book-open"></i>
+                      <% end %>
+                    </div>
+                  </div>
                 </td>
               </tr>
             <% end %>
+
           </tbody>
         </table>
+          <%= submit class: "btn btn-outline-success btn-sm" do %>
+            UPDATE
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>

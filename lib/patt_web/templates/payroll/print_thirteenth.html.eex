@@ -1,0 +1,98 @@
+
+<html>
+<head>
+    <!--For removal of date and url on printing page-->
+    <style>
+      @page {
+        size: auto;
+        margin: 5mm;
+      }
+      td {
+        text-align: right;
+        padding: 0;
+        font-family: Helvetica, Arial;
+      }
+      th {
+        text-align: left;
+        font-family: Helvetica;
+      }
+      tr {
+        padding: 0;
+        margin: 0;
+        vertical-align: top;
+        font-family: Helvetica;
+      }
+      td[rowspan] {
+        text-align: left;
+        font-family: Helvetica;
+      }
+      table {
+        table-layout: fixed;
+        width: 1200px;
+        margin: 0;
+        font-size: 16px;
+      }
+      body {
+      }
+    </style>
+    <script type="text/javascript">
+      window.onload = function() { window.print(); }
+    </script>
+</head>
+<body>
+<%= for employee <- @employees do %>
+<hr>
+<table style="border: 1px dash; font-family: sans;">
+      <thead>
+    <tr>
+      <th colspan=11 style="font-size: 18px;"><br><b>SOLIMAN E.C. SEPTIC TANK DISPOSAL<b></th>
+    </tr>
+    <tr>
+      <td colspan=11>
+        YEAR: <i> <%= @year %> </i><hr>
+      </td>
+    </tr>
+    <tr>
+      <th colspan=4>Name of employee: </th>
+      <td colspan=7>
+        <%= employee.last_name %> <%= employee.middle_name %> <%= employee.last_name %>
+      </td>
+    </tr>
+    <tr>
+      <td colspan=11><hr><td>
+    </tr>
+    <tr>
+      <th colspan=11></th>
+    </tr>
+    <tr>
+      <th colspan=3>EARNINGS:</th>
+      <th colspan=3>
+        <br><br>
+      </th>
+      <th colspan=3>DEDUCTIONS:</th>
+      <th colspan=2></th>
+    </tr>
+    <tr><td colspan=11><br></td></tr>
+    <tr><td colspan=11></td></tr>
+    <tr><td colspan=11></td></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>THIRTEENTH MONTH:</td>
+      <td>
+        <% bonus = Enum.find employee.bonus, fn b -> b.year.year == String.to_integer(@year) end %>
+        <%= unless is_nil(bonus), do: :erlang.float_to_binary(bonus.thirteenth, [decimals: 2]), else: 0.0 %>
+      </td>
+      <td></td>
+    </tr>
+    <tr><td colspan=11>&nbsp;</td></tr>
+    <tr>
+      <br>
+      <td colspan=11><br><hr></td>
+    </tr>
+  </tbody>
+</table>
+<br><br><br>
+<% end %>
+</body>
+</html>

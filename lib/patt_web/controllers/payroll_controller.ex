@@ -300,8 +300,45 @@ defmodule PattWeb.PayrollController do
 
   def report(conn, _params) do
     employees = Attendance.list_employees_post_dept_with_type(["regular", "probationary"])
+    employees = Patt.Repo.preload(employees, :bonus)
+    year = Date.utc_today.year()
     employees = Enum.sort_by employees, &(&1.last_name)
-    render conn, "report.html", employees: employees
+    render conn, "report.html", employees: employees, year: year
+  end
+
+  def load_thirteenth(conn, %{"year" => year}) do
+    employees = Attendance.list_employees_post_dept_with_type(["regular", "probationary"])
+    employees = Patt.Repo.preload(employees, :bonus)
+    employees = Enum.sort_by employees, &(&1.last_name)
+    year = String.to_integer(year)
+    render conn, "report.html", employees: employees, year: year
+  end
+
+  def update_thirteenth(conn, %{"thirteenth" => params}) do
+    {year, params} = Map.pop params, "year"
+    year = String.to_integer(year)
+    Enum.map params, fn {key, val} ->
+      emp =
+        Attendance.get_employee!(String.to_integer(key))
+        |> Patt.Repo.preload(:bonus)
+      bonus = Enum.find emp.bonus, fn b -> b.year.year == year end
+      val =
+      case Float.parse(val) do
+        {val, _} -> val
+        :error -> 0
+      end
+      IO.inspect bonus
+      unless is_nil(bonus) do
+        Payroll.update_bonus(bonus, %{thirteenth: val})
+      else
+        {:ok, date} = Date.new(year, 1, 1)
+        Payroll.create_bonus(%{thirteenth: val, year: date, employee_id: emp.id})
+      end
+    end
+    employees = Attendance.list_employees_post_dept_with_type(["regular", "probationary"])
+    employees = Patt.Repo.preload(employees, :bonus)
+    employees = Enum.sort_by employees, &(&1.last_name)
+    render conn, "report.html", employees: employees, year: year
   end
 
   def emp_thirteenth(conn, %{"id" => id}) do
@@ -326,5 +363,15 @@ defmodule PattWeb.PayrollController do
     totaltardiness = Enum.reduce employee.payslips, 0, fn ps, acc -> acc + ps.tardiness end
     totals = %{reg: totalreg, absent: totalabsent, undertime: totalundertime, tard: totaltardiness}
     render conn, "thirteenth.html", employee: employee, totals: totals
+  end
+
+  def print_thirteenth(conn, %{"year" => year}) do
+    employees =
+      Attendance.list_employees_post_dept_with_type(["regular", "probationary"])
+      |> Patt.Repo.preload(:bonus)
+      |> Enum.sort_by(&(&1.last_name))
+    conn
+      |> put_layout(false)
+      |> render("print_thirteenth.html", employees: employees, year: year)
   end
 end
