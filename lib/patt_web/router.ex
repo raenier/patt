@@ -54,6 +54,15 @@ defmodule PattWeb.Router do
     resources "/users", UserController
   end
 
+  scope "/department", PattWeb do
+    pipe_through :browser # Use the default browser stack
+
+    get "/", EmployeeController, :department
+    post "/create", EmployeeController, :create_dept
+    delete "/:id", EmployeeController, :delete_dept
+    put "/:id/update", EmployeeController, :update_dept
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", PattWeb do
   #   pipe_through :api

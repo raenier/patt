@@ -1,0 +1,86 @@
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex">
+    Department and Positions
+    <div class="ml-auto">
+      <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#addDeptModal">
+         <i class="fas fa-plus"></i> Department
+      </button>
+    </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <ul class="list-group list-group-flush">
+      <%= for dept <- @department do %>
+      <li class="list-group-item">
+        <div class="d-flex">
+          <a class="btn btn-sm dropdown-toggle" data-toggle="collapse" href="#collapseExample<%= dept.id %>" role="button" aria-expanded="false" aria-controls="collapseExample">
+            <%= dept.name %>
+          </a>
+          <div class="ml-auto">
+            <button class="btn btn-outline-primary btn-xs" data-toggle="modal" data-target="#editDeptModal<%= dept.id %>">
+              <i class="fas fa-pen"></i> Edit
+            </button>
+            <%= button to: employee_path(@conn, :delete_dept, dept),
+                        method: "delete", class: "btn btn-xs btn-outline-danger",
+                        data: [confirm: "Department and corresponding positions will be deleted"] do %>
+              <i class="fas fa-trash"></i> Delete
+            <% end %>
+            <button class="btn btn-xs btn-outline-success">
+              ADD Position <i class="fas fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="collapse" id="collapseExample<%= dept.id%>">
+          <%= for position <- dept.positions do %>
+          <table class="table table-sm table-hover hide-text-overflow text-right">
+            <tbody>
+              <tr>
+                <td class="wdth-5">&nbsp;</td>
+                <th class="wdth-10"><%= position.name %></th>
+                <td class="wdth-20"><i><%= position.description %></i></td>
+                <td class="wdth-5">
+                  <button class="btn btn-primary btn-xs"><i class="fas fa-pen"></i></button>
+                  <button class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <% end %>
+        </div>
+      </li>
+      <!--Edit Department Modal-->
+        <div id="editDeptModal<%= dept.id %>" class="modal fade" role="dialog">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title"><i class="fas fa-code-branch"></i></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                <%= render "dept_form.html", changeset: Patt.Attendance.Department.changeset(dept, %{}),
+                                          action: employee_path(@conn, :update_dept, dept) %>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </ul>
+  </div>
+</div>
+
+<!--ADD Department Modal-->
+<div id="addDeptModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><i class="fas fa-code-branch"></i></h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <%= render "dept_form.html", changeset: @dept_changeset,
+                                  action: employee_path(@conn, :create_dept) %>
+      </div>
+    </div>
+  </div>
+</div>

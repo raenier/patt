@@ -239,6 +239,14 @@ defmodule Patt.Attendance do
     |> Repo.insert()
   end
 
+  def update_department(department, attrs \\ %{}) do
+    department
+    |> Department.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def get_department!(id), do: Repo.get!(Department, id)
+
   def list_departments do
     Repo.all(Department)
   end
@@ -253,6 +261,10 @@ defmodule Patt.Attendance do
     Enum.map(departments, fn dept ->
       {dept.name, Enum.map(dept.positions, &{&1.name, &1.id})}
     end)
+  end
+
+  def list_departments_preload_allassoc() do
+    list_departments() |> Enum.map(&Repo.preload(&1, positions: :employees))
   end
 
   def delete_department(%Department{} = department) do

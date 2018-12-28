@@ -3,6 +3,7 @@ defmodule PattWeb.EmployeeController do
   use PattWeb, :controller
   alias Patt.Attendance
   alias Patt.Attendance.Employee
+  alias Patt.Attendance.Department
   alias Patt.Attendance.SchedProfile
   alias Patt.Attendance.EmployeeSched
   alias Patt.Payroll.Contribution
@@ -164,5 +165,35 @@ defmodule PattWeb.EmployeeController do
       {:ok, profile} ->
         redirect conn, to: employee_path(conn, :sched_profile)
     end
+  end
+
+  def department(conn, _params) do
+    department =
+      Attendance.list_departments_positions
+      |> Enum.sort_by(&(&1.name))
+
+    dept_changeset = Department.changeset(%Department{}, %{})
+    render conn, "department.html", department: department, dept_changeset: dept_changeset
+  end
+
+  def create_dept(conn, %{"department" => attr}) do
+    case Attendance.create_department(attr) do
+      {:ok, _department} ->
+        redirect conn, to: employee_path(conn, :department)
+      {:error, _changeset} ->
+        redirect conn, to: employee_path(conn, :department)
+    end
+  end
+
+  def update_dept(conn, %{"department" => attrs, "id" => id}) do
+    dept = Attendance.get_department!(id)
+    Attendance.update_department(dept, attrs)
+    redirect conn, to: employee_path(conn, :department)
+  end
+
+  def delete_dept(conn, %{"id" => id}) do
+    dept = Attendance.get_department!(id)
+    Attendance.delete_department(dept)
+    redirect conn, to: employee_path(conn, :department)
   end
 end
