@@ -26,7 +26,7 @@
                         data: [confirm: "Department and corresponding positions will be deleted"] do %>
               <i class="fas fa-trash"></i> Delete
             <% end %>
-            <button class="btn btn-xs btn-outline-success">
+            <button class="btn btn-xs btn-outline-success" data-toggle="modal" data-target="#addPostModal<%= dept.id %>">
               ADD Position <i class="fas fa-plus"></i>
             </button>
           </div>
@@ -41,7 +41,11 @@
                 <td class="wdth-20"><i><%= position.description %></i></td>
                 <td class="wdth-5">
                   <button class="btn btn-primary btn-xs"><i class="fas fa-pen"></i></button>
-                  <button class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></button>
+                  <%= link to: employee_path(@conn, :delete_position, position),
+                           method: "delete", class: "btn btn-danger btn-xs",
+                           data: [confirm: "Delete Position?"] do %>
+                    <i class="fas fa-trash"></i>
+                  <% end %>
                 </td>
               </tr>
             </tbody>
@@ -64,6 +68,24 @@
             </div>
           </div>
         </div>
+
+
+        <!--ADD Position Modal-->
+        <div id="addPostModal<%= dept.id %>" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title"><i class="fas fa-user-tie"></i></h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <%= render "post_form.html", changeset: @post_changeset,
+                                        action: employee_path(@conn, :create_position, dept) %>
+            </div>
+          </div>
+        </div>
+        </div>
+
       <% end %>
     </ul>
   </div>

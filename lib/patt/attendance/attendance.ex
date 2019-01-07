@@ -272,6 +272,7 @@ defmodule Patt.Attendance do
   end
 
   ### POSITION
+  def get_position!(id), do: Repo.get!(Position, id)
 
   def list_positions do
     Repo.all(Position)
@@ -281,6 +282,20 @@ defmodule Patt.Attendance do
     Ecto.build_assoc(department, :positions, attrs)
     |> Position.changeset(%{})
     |> Repo.insert()
+  end
+
+  def insert_position(attrs \\ %{}) do
+    %Position{}
+    |> Position.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def delete_position(%Position{} = position) do
+    Repo.delete position
+  end
+
+  def change_position(%Position{} = position) do
+    Position.changeset(position, %{})
   end
 
   ### SCHED_PROFILES

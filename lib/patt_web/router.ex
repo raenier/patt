@@ -61,6 +61,8 @@ defmodule PattWeb.Router do
     post "/create", EmployeeController, :create_dept
     delete "/:id", EmployeeController, :delete_dept
     put "/:id/update", EmployeeController, :update_dept
+    post "/:id/create", EmployeeController, :create_position
+    delete "/:id/position", EmployeeController, :delete_position
   end
 
   # Other scopes may use custom stacks.
