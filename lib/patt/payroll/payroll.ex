@@ -587,8 +587,16 @@ defmodule Patt.Payroll do
     |> Repo.all()
   end
 
+  def list_holidays_incl_dec_lastyear(year) do
+    {:ok, start} = Date.new(year - 1, 12, 01)
+    {:ok, endd} = Date.new(year, 12, 31)
+
+    from(h in Holiday, where: h.date >= ^start and h.date <= ^endd)
+    |> Repo.all()
+  end
+
   def list_holidays_date(year) do
-    holidays = list_holidays(year)
+    holidays = list_holidays_incl_dec_lastyear(year)
     Enum.map holidays, &(&1.date)
   end
 
