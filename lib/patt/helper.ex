@@ -15,7 +15,12 @@ defmodule Patt.Helper do
         Date.range(startr, endr)
 
       28 ->
-        {:ok, startr} = Date.new(year, month-1, 28)
+        {:ok, startr} =
+        if month == 1 do
+          Date.new(year-1, 12, 28)
+        else
+          Date.new(year, month-1, 28)
+        end
         {:ok, endr} = Date.new(year, month, 12)
         Date.range(startr, endr)
 
@@ -25,7 +30,12 @@ defmodule Patt.Helper do
         Date.range(startr, endr)
 
       26 ->
-        {:ok, startr} = Date.new(year, month-1, 26)
+        {:ok, startr} =
+        if month == 1 do
+          Date.new(year-1, 12, 26)
+        else
+          Date.new(year, month-1, 26)
+        end
         {:ok, endr} = Date.new(year, month, 10)
         Date.range(startr, endr)
     end
