@@ -145,7 +145,7 @@ defmodule Patt.Attendance do
   end
 
   def search_employee(params, criteria, type) do
-    schemas = [:employee_sched, :contribution, :compensation, :tax, position: :department]
+    schemas = [:employee_sched, :contribution, :compensation, :tax, :leave, position: :department]
     query = generate_query(params, criteria, type)
 
     query
