@@ -72,6 +72,9 @@
                 <%= link to: employee_path(@conn, :sched_profile), class: "dropdown-item" do %>
                   <i class="fas fa-clipboard-list"></i> <%= "  Schedule Profiles" %>
                 <% end %>
+                <%= link to: monitoring_path(@conn, :index), class: "dropdown-item" do %>
+                  <i class="fas fa-chart-bar"></i> Monitoring
+                <% end %>
               </div>
             </li>
 

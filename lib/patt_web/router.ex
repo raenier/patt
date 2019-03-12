@@ -65,6 +65,12 @@ defmodule PattWeb.Router do
     delete "/:id/position", EmployeeController, :delete_position
   end
 
+  scope "/attendance", PattWeb do
+    pipe_through :browser # Use the default browser stack
+
+    get "/monitoring", MonitoringController, :index
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", PattWeb do
   #   pipe_through :api
