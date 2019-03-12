@@ -40,7 +40,6 @@
                 <th class="wdth-10"><%= position.name %></th>
                 <td class="wdth-20"><i><%= position.description %></i></td>
                 <td class="wdth-5">
-                  <button class="btn btn-primary btn-xs"><i class="fas fa-pen"></i></button>
                   <%= link to: employee_path(@conn, :delete_position, position),
                            method: "delete", class: "btn btn-danger btn-xs",
                            data: [confirm: "Delete Position?"] do %>
