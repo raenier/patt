@@ -21,7 +21,11 @@
             <td><%= String.capitalize(employee.emp_type) %></td>
             <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
             <td><%= if employee.position, do: String.upcase(employee.position.department.name), else: "Unknown"  %></td>
-            <td><button class="btn btn-xs btn-outline-success">&nbsp;<i class="fas fa-check-circle"></i>&nbsp;</button></td>
+            <td>
+              <%= link to: monitoring_path(@conn, :monitor, employee), class: "btn btn-xs btn-outline-success" do %>
+                <i class="fas fa-check-circle"></i>
+              <% end %>
+            </td>
           </tr>
           </a>
         <% end %>

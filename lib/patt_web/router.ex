@@ -69,6 +69,8 @@ defmodule PattWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/monitoring", MonitoringController, :index
+    get "/monitoring/:id", MonitoringController, :monitor
+    post "/monitoring/:id", MonitoringController, :get_stats
   end
 
   # Other scopes may use custom stacks.

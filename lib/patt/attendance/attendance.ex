@@ -889,6 +889,46 @@ defmodule Patt.Attendance do
     }
   end
 
+  def count_tardiness(dtrs) do
+    Enum.reduce dtrs, %{tard_ctr: 0, tard_min: 0}, fn dtr, acc ->
+      unless (is_nil(dtr.sched_in) or is_nil(dtr.in)) do
+        case Time.compare(dtr.sched_in, dtr.in) do
+          :eq ->
+            acc
+          :lt ->
+            acc = Map.put(acc, :tard_ctr, acc.tard_ctr + 1)
+            Map.put(acc, :tard_min, acc.tard_min + compute_tard(dtr))
+          :gt ->
+            acc
+          _->
+            acc
+        end
+      else
+        acc
+      end
+    end
+  end
+
+  def count_undertime(dtrs) do
+    Enum.reduce dtrs, %{ut_ctr: 0, ut_min: 0}, fn dtr, acc ->
+      unless (is_nil(dtr.sched_out) or is_nil(dtr.out)) do
+        case Time.compare(dtr.sched_out, dtr.out) do
+          :eq ->
+            acc
+          :lt ->
+            acc
+          :gt ->
+            acc = Map.put(acc, :ut_ctr, acc.ut_ctr + 1)
+            Map.put(acc, :ut_min, acc.ut_min + compute_ut(dtr))
+          _->
+            acc
+        end
+      else
+        acc
+      end
+    end
+  end
+
   def count_absent(dtrs) do
     Enum.count(dtrs, fn dtr ->
       ho = Patt.Payroll.get_holiday_bydate(dtr.date)

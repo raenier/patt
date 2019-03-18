@@ -1,0 +1,52 @@
+<div class="card">
+  <div class="card-header">
+    <h4><%= @employee.last_name %>, <%= @employee.first_name %> <%= @employee.middle_name %></h4>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-6">
+        <%= form_for @conn, monitoring_path(@conn, :get_stats, @employee), [as: :stats, onsubmit: "return validateValues('from', 'to');"], fn f -> %>
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend">
+            <label class="input-group-text">FROM:</label>
+          </div>
+          <%= date_input f, :from, id: "from", class: "form-control", required: "required" %>
+          <div class="input-group-prepend">
+          <label class="input-group-text">TO:</label>
+          </div>
+          <%= date_input f, :to, id: "to", class: "form-control", required: "required" %>
+          <div class="input-group-append">
+            <%= submit class: "btn btn-sm btn-outline-success" do %>
+              GO! <i class="fas fa-search"></i>
+            <% end %>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%= unless @state == 0 do %>
+    <table class="table table-sm">
+      <tbody>
+        <thead>
+          <tr>
+            <td></td>
+            <td><i>COUNT</i></td>
+            <td><i>TOTAL MINUTES</i></td>
+          </tr>
+        </thead>
+        <tr>
+          <th>TARDINESS:</th><td><%= @tardiness.tard_ctr %></td> <td><%= @tardiness.tard_min %></td>
+        </tr>
+        <tr>
+          <th>UNDERTIME:</th><td><%= @undertime.ut_ctr %></td> <td><%= @undertime.ut_min %></td>
+        </tr>
+        <tr>
+          <th>ABSENT:</th><td><%= @absent %></td> <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <% end %>
+  <!--END CARDBODY-->
+  </div>
+</div>
