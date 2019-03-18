@@ -794,20 +794,7 @@ defmodule Patt.Attendance do
       end)
 
     # count total days of absent
-    absentdays =
-      Enum.count(dtrs, fn dtr ->
-        ho = Patt.Payroll.get_holiday_bydate(dtr.date)
-
-        unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || ho do
-          if dtr.sched_in && dtr.sched_out && (is_nil(dtr.in) && is_nil(dtr.out)) do
-            true
-          else
-            false
-          end
-        else
-          false
-        end
-      end)
+    absentdays = count_absent(dtrs)
 
     # count total work minutes skipping restday that has no actual in and out
     # Count actual work days and employee actual work in
@@ -901,4 +888,20 @@ defmodule Patt.Attendance do
       totalabs: absent
     }
   end
+
+  def count_absent(dtrs) do
+    Enum.count(dtrs, fn dtr ->
+      ho = Patt.Payroll.get_holiday_bydate(dtr.date)
+      unless dtr.daytype == "vl" || dtr.daytype == "sl" || dtr.daytype == "restday" || ho do
+        if dtr.sched_in && dtr.sched_out && (is_nil(dtr.in) && is_nil(dtr.out)) do
+          true
+        else
+          false
+        end
+      else
+        false
+      end
+    end)
+  end
+
 end
