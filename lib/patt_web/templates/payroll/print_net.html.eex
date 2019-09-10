@@ -1,0 +1,92 @@
+<html>
+  <head>
+    <title>Soliman E.C. | Payroll System</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <script type="text/javascript">
+      window.onload = function() { window.print(); }
+    </script>
+    <style>
+      @page {
+        size: auto;
+        margin-bottom: 3mm;
+        margin-top: 5mm;
+        margin-right: 5mm;
+        margin-left: 5mm;
+      }
+
+      table {
+        padding: 0;
+        margin: auto;
+        font-size: 10px;
+        width: 100%;
+      }
+      tr, td {
+        padding: 2;
+      }
+      th {
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+    &nbsp;&nbsp;&nbsp;<div><h4><b>SOLIMAN E.C. SEPTIC TANK DISPOSAL</b></h4></div>
+    <span class="pull-left"></span><span class="pull-right"><b>Payperiod: </b><i><%= @payperiod.from %> to <%= @payperiod.to %></i></span>
+    </header>
+    <main>
+      <table border>
+        <thead>
+          <tr>
+            <th>NAME</th>
+            <th>GROSS</th>
+            <th>RICE</th>
+            <th>COMMUNICATION</th>
+            <th>GASOLINE</th>
+            <th>TRANSPORTATION</th>
+            <th>NET</th>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for ps <- @payperiod.payslips do %>
+            <tr>
+              <td>
+                <%= unless is_nil(ps.employee) do %>
+                  <%= ps.employee.last_name %> <%= ps.employee.first_name %> <%= String.capitalize(String.first(ps.employee.middle_name)) %>
+                <%= else %>
+                  DELETED EMPLOYEE INFO
+                <% end %>
+              </td>
+              <td>
+                <% totalallowance = unless is_nil(ps.rice), do:
+                    ps.rice + ps.communication + ps.meal + ps.transpo + ps.gasoline + ps.clothing, else: 0 %>
+                <%= :erlang.float_to_binary((ps.net - totalallowance), [decimals: 2]) %>
+              </td>
+              <td><%= unless is_nil(ps.rice), do: :erlang.float_to_binary(ps.rice, [decimals: 2]), else: 0 %></td>
+              <td><%= unless is_nil(ps.communication), do: :erlang.float_to_binary(ps.communication, [decimals: 2]), else: 0 %></td>
+              <td><%= unless is_nil(ps.gasoline), do: :erlang.float_to_binary(ps.gasoline, [decimals: 2]), else: 0 %></td>
+              <td><%= unless is_nil(ps.transpo), do: :erlang.float_to_binary(ps.transpo, [decimals: 2]), else: 0 %></td>
+
+              <td><%= :erlang.float_to_binary(ps.net, [decimals: 2]) %></td>
+            </tr>
+          <% end %>
+          <tr style="border-top: solid 2px;">
+            <th>TOTAL</th>
+            <%
+              allallowance = @totals.totalrice + @totals.totalcomm + @totals.totalmeal
+              + @totals.totaltranspo + @totals.totalgasoline + @totals.totalclothing
+            %>
+            <td><%= :erlang.float_to_binary((@totals.totalnet - allallowance), [decimals: 2]) %></td>
+            <td><%= :erlang.float_to_binary(@totals.totalrice, [decimals: 2])%></td>
+            <td><%= :erlang.float_to_binary(@totals.totalcomm, [decimals: 2])%></td>
+            <td><%= :erlang.float_to_binary(@totals.totalgasoline, [decimals: 2])%></td>
+            <td><%= :erlang.float_to_binary(@totals.totaltranspo, [decimals: 2])%></td>
+
+            <td><%= :erlang.float_to_binary(@totals.totalnet, [decimals: 2]) %></td>
+          </tr>
+        </tbody>
+      </table>
+      </main>
+      <br><br>
+  </body>
+</html>

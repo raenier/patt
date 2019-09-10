@@ -1,31 +1,38 @@
+<br>
 <!-- Main Table -->
 <div class="table-responsive">
-  <table id="tblSearchEmployeeRecords" class="table table-hover table-striped table-bordered">
-    <thead class="bg-color-3c3c3c txt-color-FFFFFF">
+  <div class="card">
+  <div class="card-body">
+  <table id="tblSearchEmployeeRecords" class="table table-sm table-hover no-top-border">
+    <thead>
     <tr>
-      <th>Employee ID</th>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Position</th>
-      <th>Department</>
-      <th></th>
+      <th class="wdth-5">ID</th>
+      <th class="wdth-15">Name</th>
+      <th class="wdth-10">Type</th>
+      <th class="wdth-15">Position</th>
+      <th class="wdth-15">Department</>
+      <th class="wdth-5"></th>
     </tr>
     </thead>
     <tbody>
     <%= for employee <- @employees do %>
-    <tr class="text-left">
+    <tr>
       <td><%= employee.id %></td>
       <td><%= employee.last_name %> <%= employee.first_name %> <%= employee.middle_name %></td>
       <td><%= String.capitalize(employee.emp_type) %></td>
       <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
       <td><%= if employee.position, do: employee.position.department.name, else: "No Department" %></td>
       <td>
-        <%= link to: payroll_path(@conn, :new, employee), class: "btn btn-default" do %>
-          <span class="glyphicon glyphicon-book"></span> <%= "Generate Payslip" %>
+        <%= link to: payroll_path(@conn, :new, employee), class: "btn btn-success btn-xs" do %>
+          <span class="glyphicon glyphicon-book"></span>
+          <i class="fas fa-angle-double-right"></i>
+          <%= "Generate Payslip" %>
         <% end %>
       </td>
       </tr>
     <% end %>
     </tbody>
   </table>
+</div>
+</div>
 </div>

@@ -18,6 +18,6 @@ defmodule Patt.Attendance.SchedProfile do
   def changeset(%SchedProfile{} = sched_profile, attrs) do
     sched_profile
     |> cast(attrs, [:name, :morning_in, :morning_out, :afternoon_in, :afternoon_out])
-    |> validate_required([:name, :morning_in, :morning_out, :afternoon_in, :afternoon_out])
+    |> validate_required([:morning_in, :afternoon_out])
   end
 end

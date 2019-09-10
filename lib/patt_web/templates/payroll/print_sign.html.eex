@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>RECEIVING</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <script type="text/javascript">
+      window.onload = function() { window.print(); }
+    </script>
+    <style>
+      @page {
+        size: auto;
+        margin-bottom: 3mm;
+        margin-top: 5mm;
+        margin-right: 5mm;
+        margin-left: 5mm;
+      }
+
+      table {
+        padding: 0;
+        margin: auto;
+        font-size: 10px;
+        width: 100%;
+      }
+      tr, td {
+        padding: 2;
+      }
+      th {
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+    &nbsp;&nbsp;&nbsp;<div><h4><b>SOLIMAN E.C. SEPTIC TANK DISPOSAL</b></h4></div>
+    <span class="pull-left"></span><span class="pull-right"><b>Payperiod: </b><i><%= @payperiod.from %> to <%= @payperiod.to %></i></span>
+    </header>
+    <main>
+      <table border>
+        <thead>
+          <tr>
+            <th>NAME</th>
+            <td>DATE RECEIVED</td>
+            <td>SIGNATURE</td>
+          </tr>
+        </thead>
+        <tbody>
+          <%= for ps <- @payperiod.payslips do %>
+            <tr>
+              <td>
+                <%= unless is_nil(ps.employee) do %>
+                  <%= ps.employee.last_name %> <%= ps.employee.first_name %> <%= ps.employee.middle_name %>
+                <%= else %>
+                  DELETED EMPLOYEE INFO
+                <% end %>
+              </td>
+              <td>
+                &nbsp;
+              </td>
+              <td>
+                &nbsp;
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      </main>
+      <br><br>
+
+  </body>
+</html>

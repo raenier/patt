@@ -214,4 +214,64 @@ defmodule Patt.PayrollTest do
       assert %Ecto.Changeset{} = Payroll.change_holiday(holiday)
     end
   end
+
+  describe "bonus" do
+    alias Patt.Payroll.Bonus
+
+    @valid_attrs %{thirteenth: 120.5}
+    @update_attrs %{thirteenth: 456.7}
+    @invalid_attrs %{thirteenth: nil}
+
+    def bonus_fixture(attrs \\ %{}) do
+      {:ok, bonus} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Payroll.create_bonus()
+
+      bonus
+    end
+
+    test "list_bonus/0 returns all bonus" do
+      bonus = bonus_fixture()
+      assert Payroll.list_bonus() == [bonus]
+    end
+
+    test "get_bonus!/1 returns the bonus with given id" do
+      bonus = bonus_fixture()
+      assert Payroll.get_bonus!(bonus.id) == bonus
+    end
+
+    test "create_bonus/1 with valid data creates a bonus" do
+      assert {:ok, %Bonus{} = bonus} = Payroll.create_bonus(@valid_attrs)
+      assert bonus.thirteenth == 120.5
+    end
+
+    test "create_bonus/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Payroll.create_bonus(@invalid_attrs)
+    end
+
+    test "update_bonus/2 with valid data updates the bonus" do
+      bonus = bonus_fixture()
+      assert {:ok, bonus} = Payroll.update_bonus(bonus, @update_attrs)
+      assert %Bonus{} = bonus
+      assert bonus.thirteenth == 456.7
+    end
+
+    test "update_bonus/2 with invalid data returns error changeset" do
+      bonus = bonus_fixture()
+      assert {:error, %Ecto.Changeset{}} = Payroll.update_bonus(bonus, @invalid_attrs)
+      assert bonus == Payroll.get_bonus!(bonus.id)
+    end
+
+    test "delete_bonus/1 deletes the bonus" do
+      bonus = bonus_fixture()
+      assert {:ok, %Bonus{}} = Payroll.delete_bonus(bonus)
+      assert_raise Ecto.NoResultsError, fn -> Payroll.get_bonus!(bonus.id) end
+    end
+
+    test "change_bonus/1 returns a bonus changeset" do
+      bonus = bonus_fixture()
+      assert %Ecto.Changeset{} = Payroll.change_bonus(bonus)
+    end
+  end
 end

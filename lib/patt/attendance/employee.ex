@@ -10,6 +10,7 @@ defmodule Patt.Attendance.Employee do
   alias Patt.Payroll.Tax
   alias Patt.Attendance.Dtr
   alias Patt.Payroll.Payslip
+  alias Patt.Payroll.Bonus
 
 
   schema "employees" do
@@ -21,6 +22,7 @@ defmodule Patt.Attendance.Employee do
     has_one :leave, Leave
     has_many :dtrs, Dtr
     has_many :payslips, Payslip
+    has_many :bonus, Bonus
 
     field :first_name, :string
     field :middle_name, :string
@@ -35,16 +37,28 @@ defmodule Patt.Attendance.Employee do
     field :province, :string
     field :emp_type, :string
 
+    field :maiden_name, :string
+    field :civil_status, :string
+    field :date_hired, :date
+    field :branch, :string
+    field :employee_number, :integer
+    field :emp_class, :string
+    field :atm_acct, :string
+
     timestamps()
   end
 
   @doc false
   def changeset(%Employee{} = employee, attrs) do
     employee
-    |> cast(attrs, [:first_name, :middle_name, :last_name, :birth_date, :birth_place, :gender,
-                    :contact_num, :street, :brgy, :town, :province, :emp_type, :position_id])
-    |> validate_required([:first_name, :middle_name, :last_name, :birth_date, :contact_num, :street,
-                          :brgy, :town, :province, :emp_type, :gender])
+    |> cast(attrs, [
+      :first_name, :middle_name, :last_name, :birth_date, :birth_place, :gender,
+      :contact_num, :street, :brgy, :town, :province, :emp_type, :position_id,
+      :maiden_name, :civil_status, :date_hired, :branch, :employee_number, :emp_class,
+      :atm_acct,
+    ])
+    |> validate_required([:first_name, :last_name, :birth_date, :emp_type, :gender])
+    |> unsafe_validate_unique(:employee_number, Patt.Repo)
   end
 
   def changeset_nested(%Employee{} = employee, attrs) do

@@ -1,0 +1,35 @@
+<div class="card">
+  <div class="card-header">
+    <h4><i class="fas fa-clipboard-check"></i> Attendance Monitoring</h4>
+  </div>
+  <div class="card-body">
+    <table class="table table-sm table-hover no-top-border">
+      <thead>
+        <tr>
+          <th class="wdth-20">Name</th>
+          <th class="wdth-10">Type</th>
+          <th class="wdth-10">Position</th>
+          <th class="wdth-10">Department</th>
+          <th class="wdth-5"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for employee <- @employees do %>
+          <a href="#">
+          <tr>
+            <td><%= employee.last_name %>, <%= employee.first_name %>, <%= employee.middle_name %></td>
+            <td><%= String.capitalize(employee.emp_type) %></td>
+            <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
+            <td><%= if employee.position, do: String.upcase(employee.position.department.name), else: "Unknown"  %></td>
+            <td>
+              <%= link to: monitoring_path(@conn, :monitor, employee), class: "btn btn-xs btn-outline-success" do %>
+                <i class="fas fa-check-circle"></i>
+              <% end %>
+            </td>
+          </tr>
+          </a>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

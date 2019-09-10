@@ -1,0 +1,45 @@
+<div class="row">
+  <div class="col-sm-7">
+    <h2>ATM Accounts</h2>
+  </div>
+  <div class="col-sm-5 text-right">
+    <%= link [to: payroll_path(@conn, :print_index), class: "btn btn-default btn-sm"] do %>
+      <span class="glyphicon glyphicon-arrow-left"></span> Back
+    <% end %>
+  </div>
+</div>
+<div class="pull-right"><i><b>From:</b> <%= @payperiod.from %> <b>To:</b> <%= @payperiod.to %></i></div>
+<table class="table table-hover">
+  <thead>
+    <tr>
+    <th colspan>NAME</th>
+    <th>ACCOUNT NUMBER</th>
+    <th>SALARY</th>
+    </tr>
+  </thead>
+
+  <tbody>
+      <%= for ps <- @payperiod.payslips do %>
+        <tr>
+          <td>
+            <%= unless is_nil(ps.employee) do %>
+              <%= ps.employee.last_name %> <%= ps.employee.first_name %> <%= String.capitalize(String.first(ps.employee.middle_name)) %>
+            <% else %>
+              DELETED EMPLOYEE INFO
+            <% end %>
+          </td>
+          <td>
+            <%= unless is_nil(ps.employee) || is_nil(ps.employee.atm_acct) || ps.employee.atm_acct == "" do %>
+              <%= ps.employee.atm_acct %>
+            <% else %>
+              NOT AVAILABLE
+            <% end %>
+          </td>
+          <td>
+            <%= :erlang.float_to_binary(ps.net, [decimals: 2]) %>
+          </td>
+
+        </tr>
+      <% end %>
+  </tbody>
+</table>

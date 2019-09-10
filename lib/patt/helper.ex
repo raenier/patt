@@ -7,16 +7,36 @@ defmodule Patt.Helper do
   alias Patt.Attendance.SchedProfile
   alias Patt.Attendance
 
-  def gen_range(rangepattern) do
+  def gen_range(rangepattern, year, month) do
     case rangepattern do
       13 ->
-        {:ok, startr} = Date.new(Date.utc_today().year, Date.utc_today().month, 13)
-        {:ok, endr} = Date.new(Date.utc_today().year, Date.utc_today().month, 27)
+        {:ok, startr} = Date.new(year, month, 13)
+        {:ok, endr} = Date.new(year, month, 27)
         Date.range(startr, endr)
 
       28 ->
-        {:ok, startr} = Date.new(Date.utc_today().year, Date.utc_today().month-1, 28)
-        {:ok, endr} = Date.new(Date.utc_today().year, Date.utc_today().month, 12)
+        {:ok, startr} =
+        if month == 1 do
+          Date.new(year-1, 12, 28)
+        else
+          Date.new(year, month-1, 28)
+        end
+        {:ok, endr} = Date.new(year, month, 12)
+        Date.range(startr, endr)
+
+      11 ->
+        {:ok, startr} = Date.new(year, month, 11)
+        {:ok, endr} = Date.new(year, month, 25)
+        Date.range(startr, endr)
+
+      26 ->
+        {:ok, startr} =
+        if month == 1 do
+          Date.new(year-1, 12, 26)
+        else
+          Date.new(year, month-1, 26)
+        end
+        {:ok, endr} = Date.new(year, month, 10)
         Date.range(startr, endr)
     end
   end
@@ -322,6 +342,54 @@ defmodule Patt.Helper do
       5 -> "fri"
       6 -> "sat"
       7 -> "sun"
+    end
+  end
+
+  def get_attributes(struct = %{}) do
+    struct
+      |> Map.pop(:__meta__)
+      |> elem(1)
+      |> Map.pop(:__struct__)
+      |> elem(1)
+      |> Map.pop(:inserted_at)
+      |> elem(1)
+      |> Map.pop(:updated_at)
+      |> elem(1)
+      |> Map.keys
+  end
+
+  #TODO: Add 12 prefix on pm, dont display for example "00:12 pm" instead display "12:12pm", and maybe on am
+  def twelvehourformat(time) do
+    {hour, min, sec} = Time.to_erl time
+    mincount = min |> Integer.digits |> Enum.count
+    min =
+      if (mincount) == 1 do
+        "0" <> Integer.to_string(min)
+      else
+        Integer.to_string(min)
+      end
+
+    hourstr =
+    if hour >= 12 do
+      hourcount = (hour - 12) |> Integer.digits() |> Enum.count
+        if (hourcount) == 1 do
+          "0" <> Integer.to_string(hour - 12)
+        else
+          Integer.to_string(hour - 12)
+        end
+    else
+      hourcount = hour |> Integer.digits() |> Enum.count
+        if (hourcount) == 1 do
+          "0" <> Integer.to_string(hour)
+        else
+          Integer.to_string(hour)
+        end
+    end
+
+    if hour >= 12 do
+      hourstr <> ":" <> min <> " pm"
+    else
+      hourstr <> ":" <> min <> " am"
     end
   end
 end

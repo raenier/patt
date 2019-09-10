@@ -1,5 +1,12 @@
-<br>
-<%= for payslip <- @payperiod.payslips do %>
-  <%= render "print.html", payslip: payslip %>
-  <br><br>
-<% end %>
+<html>
+  <head>
+    <title>BULK PRINTING</title>
+  </head>
+  <body>
+    <br>
+    <%= for payslip <- @payperiod.payslips do %>
+      <%= render "print.html", payslip: payslip %>
+      <br><br>
+    <% end %>
+  </body>
+</html>

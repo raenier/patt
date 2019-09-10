@@ -1,0 +1,114 @@
+<div class="card">
+  <div class="card-header">
+    <div class="row">
+    <div class="col-sm-9">
+      <h4>
+        <i class="fas fa-user-circle"></i>
+        <%= @employee.first_name <> " " <> @employee.middle_name <> " " <> @employee.last_name %>
+      </h4>
+
+    </div>
+    <div class="col-sm-3 text-right">
+      <%= form_for @conn, payroll_path(@conn, :gen_thirteenth, @employee), fn f -> %>
+        <div class="input-group input-group-sm">
+            <div class="input-group-prepend">
+              <div class="input-group-text">YEAR</div>
+            </div>
+            <%= select f, :year, 1990..2100, class: "form-control form-control-sm", selected: Date.utc_today.year %>
+            <div class="input-group-append">
+              <%= submit class: "btn btn-sm btn-primary" do %>
+                Load <i class="fas fa-angle-double-right"></i>
+              <% end %>
+            </div>
+            &nbsp;
+
+          <%= link to: payroll_path(@conn, :report), class: "btn btn-sm btn-outline-primary" do %>
+            <i class="fas fa-caret-left"></i> BACK
+          <% end %>
+        </div>
+      <% end %>
+
+    </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <table class="table table-sm no-top-border">
+      <thead>
+        <tr>
+          <th class="wdth-10">Payperiod</th>
+          <th class="wdth-5">Basic</th>
+          <th class="wdth-5">Undertime</th>
+          <th class="wdth-5">Tardiness</th>
+          <th class="wdth-5">Absent</th>
+          <th class="wdth-2"></th>
+          <th class="wdth-5"></th>
+          <th class="wdth-15">Other Pay</th>
+          <th class="wdth-15">Other Deduction</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= for payslip <- @employee.payslips do %>
+          <tr>
+            <td>
+              <% payslip = Patt.Repo.preload payslip, :payperiod %>
+              <%= payslip.payperiod.from %> - <%= payslip.payperiod.to %>
+            </td>
+            <td><%= :erlang.float_to_binary(payslip.regpay, [decimals: 2]) %></td>
+            <td><%= :erlang.float_to_binary(payslip.undertime, [decimals: 2]) %></td>
+            <td><%= :erlang.float_to_binary(payslip.tardiness, [decimals: 2]) %></td>
+            <td><%= :erlang.float_to_binary(payslip.absent, [decimals: 2]) %></td>
+            <td>=</td>
+            <td>
+              <!--REg - absents -->
+              <% net = payslip.regpay - payslip.undertime - payslip.tardiness - payslip.absent %>
+              <b class="text-primary"><%= :erlang.float_to_binary(net, [decimals: 2]) %></b>
+            </td>
+            <td>
+              <%= :erlang.float_to_binary(payslip.other_pay, [decimals: 2]) %>
+              - <%= payslip.otherpay_remarks %>
+            </td>
+            <td>
+              <%= :erlang.float_to_binary(payslip.other_deduction, [decimals: 2]) %>
+              - <%= payslip.otherded_remarks %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan=9></th>
+        </tr>
+        <tr>
+          <th>
+            TOTAL
+          </th>
+          <th><%= :erlang.float_to_binary @totals.reg, [decimals: 2] %></th>
+          <th><%= :erlang.float_to_binary @totals.undertime, [decimals: 2] %></th>
+          <th><%= :erlang.float_to_binary @totals.tard, [decimals: 2] %></th>
+          <th><%= :erlang.float_to_binary @totals.absent, [decimals: 2] %></th>
+          <th> </th>
+          <th class="text-primary">
+            <% nettotal = @totals.reg - @totals.undertime - @totals.tard - @totals.absent %>
+            <%= :erlang.float_to_binary nettotal, [decimals: 2] %>
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    <h5>
+      <i class="fas fa-list-alt"></i>
+      Adjustments
+    </h5>
+  </div>
+  <div class="card-footer text-right">
+    <div class="input-group">
+      <button class="btn btn-success">Generate 13th month</button>
+      <div class="input-group-append">
+        <button class="btn btn-primary"><i class="fas fa-print"></i></button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -96,3 +96,23 @@ function validateDateInput(inputFields){
     }
     return formValidate;
 }
+
+function getmonthInput() {
+  val = document.getElementById("acinput").value;
+  document.getElementById("inputa").value = val;
+  document.getElementById("inputb").value = val;
+  document.getElementById("inpute").value = val;
+  document.getElementById("inputf").value = val;
+  document.getElementById("inputg").value = val;
+}
+
+function validateValues(from, to) {
+  fromval = new Date(document.getElementById(from).value);
+  toval = new Date(document.getElementById(to).value);
+  if (fromval > toval) {
+    alert("Invalid Input-: From: should be earlier than To:");
+    return false;
+  } else {
+    return true;
+  }
+}

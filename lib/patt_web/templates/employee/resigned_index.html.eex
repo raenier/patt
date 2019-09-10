@@ -1,0 +1,118 @@
+  <!-- Search Form -->
+<div class="card">
+  <div class="card-header">
+    <ul class="nav nav-tabs card-header-tabs">
+      <li class="nav-item">
+        <%= link to: employee_path(@conn, :index), class: "nav-link" do %>
+          <i class="fas fa-user-tie"></i> Active
+        <% end %>
+      </li>
+      <li class="nav-item">
+        <%= link to: employee_path(@conn, :resigned_index), class: "nav-link active" do %>
+          <i class="fas fa-user-alt-slash"></i> Resigned
+        <% end %>
+      </li>
+      <div class="ml-auto">
+          <%= form_for @conn, employee_path(@conn, :resigned_search), [as: :search], fn f -> %>
+                  <div class="input-group input-group-sm">
+                      <%= text_input f, :for, class: "form-control input-sm", placeholder: "Search Name or ID" %>
+
+                        <div class="input-group-append">
+                      <%= select f, :attr,
+                        [
+                          ID: "id",
+                          FIRSTNAME: "fname",
+                          MIDDLENAME: "mname",
+                          LASTNAME: "lname",
+                          STREET: "street",
+                          BRGY: "brgy",
+                          TOWN: "town",
+                          PROVINCE: "province",
+                          EMPLOYEETYPE: "emptype",
+                          DEPARTMENT: "department",
+                          POSITION: "position",
+                        ], class: "btn" %>
+
+                        <%= submit class: "btn btn-info" do %>
+                          <i class="fas fa-search"></i>
+                        <% end %>
+                        <%= link to: "/employees", class: "btn btn-secondary" do %>
+                          <i class="fas fa-redo"></i>
+                        <% end %>
+                        <%= link to: employee_path(@conn, :new), class: "btn btn-success btn-sm" do %>
+                          <i class="fas fa-plus"></i>&nbsp;
+                          <i class="fas fa-user"></i>&nbsp;
+                        <% end %>
+                        </div>
+                  </div>
+          <% end %>
+
+      </div>
+    </ul>
+  </div>
+
+<div class="card-body">
+<!-- Main Table -->
+  <table id="tblSearchEmployeeRecords" class="hide-text-overflow table table-sm table-hover no-top-border">
+    <thead>
+    <tr>
+      <th class="wdth-5">Emp #</th>
+      <th class="wdth-20">Name</th>
+      <th class="wdth-30">Address</th>
+      <th class="wdth-10">Contact Number</th>
+      <th class="wdth-10">Type</th>
+      <th class="wdth-10">Position</th>
+      <th class="wdth-10">Department</th>
+      <th class="wdth-5"></th>
+    </tr>
+    </thead>
+    <tbody>
+    <%= for employee <- @employees do %>
+    <tr class="text-left">
+      <td><%= employee.employee_number %></td>
+      <td><%= employee.last_name %>, <%= employee.first_name %>, <%= employee.middle_name %></td>
+      <td><%= employee.street %>, <%= employee.brgy %>, <%= employee.town %>, <%= employee.province %>.</td>
+      <td><%= employee.contact_num %></td>
+      <td><%= String.capitalize(employee.emp_type) %></td>
+      <td><%= if employee.position, do: employee.position.name, else: "No Position Yet" %></td>
+      <td><%= if employee.position, do: String.upcase(employee.position.department.name), else: "Unknown"  %></td>
+      <td>
+        <button class="btn btn-outline-info btn-xs" data-toggle="modal" data-target="#editEmpModal<%= employee.id %>">
+          <i class="fas fa-pen"></i>
+        </button>
+      </td>
+
+      <!-- Edit Employee Information -->
+        <td style="padding: 0">
+        <div id="editEmpModal<%= employee.id %>" class="modal fade" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title">
+                          <i class="fas fa-user-edit"></i>
+                        </h3>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <div class="modal-body">
+                          <%= render "form.html", changeset: Patt.Attendance.change_employee(employee),
+                                                  action: employee_path(@conn, :resigned_update, employee),
+                                                  positions: @positions,
+                                                  schedprofiles: @schedprofiles %>
+                    </div>
+                    <div class="modal-footer" style="margin-left: 2px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      </td>
+    </tr>
+    <% end %>
+
+    </tbody>
+  </table>
+
+</div>
+</div>

@@ -10,6 +10,8 @@ defmodule Patt.Payroll do
   alias Patt.Payroll.Payperiod
   alias Patt.Payroll.Payslip
   alias Patt.Payroll.Holiday
+  alias Patt.Payroll
+  alias Patt.Attendance
 
   def list_contributions do
     Repo.all(Contribution)
@@ -60,7 +62,7 @@ defmodule Patt.Payroll do
   def get_payperiod_payslip!(id) do
     Payperiod
     |> Repo.get!(id)
-    |> Repo.preload(payslips: [:employee, :payperiod])
+    |> Repo.preload(payslips: [:payperiod, employee: [:compensation]])
   end
 
   def create_payperiod(attrs \\ %{}) do
@@ -70,7 +72,7 @@ defmodule Patt.Payroll do
   end
 
   #custom
-  def daytype_list(employee) do
+  def daytype_list(employee, year) do
     all_dtypes =
       %Patt.Payroll.Daytype{}
         |> Map.pop(:__struct__)
@@ -78,42 +80,63 @@ defmodule Patt.Payroll do
         |> Enum.sort_by(&(elem(&1, 1).order))
         |> Keyword.keys
 
+    used_leaves = Payroll.used_leave(employee, year)
     all_dtypes =
-      if employee.leave.sl_total == 0 do
-        Enum.filter(all_dtypes, &(&1 !== :sl))
-      else
-        all_dtypes
-      end
+    Enum.map all_dtypes, fn key ->
+      unless employee.emp_type == "probationary" do
+        cond do
+          key == :vl ->
+            if used_leaves.rem_vl <= 0 do
+              [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+            else
+              [key: String.upcase(Atom.to_string(key)), value: key]
+            end
 
-    all_dtypes =
-      if employee.leave.vl_total == 0 do
-        Enum.filter(all_dtypes, &(&1 !== :vl))
-      else
-        all_dtypes
-      end
+          key == :sl ->
+            if used_leaves.rem_sl <= 0 do
+              [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+            else
+              [key: String.upcase(Atom.to_string(key)), value: key]
+            end
 
-    Enum.map all_dtypes, fn daytype ->
-      {String.upcase(Atom.to_string(daytype)), daytype}
+          true ->
+            [key: String.upcase(Atom.to_string(key)), value: key]
+        end
+      else
+        cond do
+          key == :vl ->
+            [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+
+          key == :sl ->
+            [key: String.upcase(Atom.to_string(key)), value: key, disabled: true]
+
+          true ->
+            [key: String.upcase(Atom.to_string(key)), value: key]
+        end
+      end
     end
   end
 
-  def used_leave(employee) do
-    {:ok, start} = Date.from_erl {Date.utc_today.year, 01, 01}
-    {:ok, endd} = Date.from_erl {Date.utc_today.year, 12, 31}
-    used_sl =
-      from(d in Patt.Attendance.Dtr, where: d.daytype == "sl" and d.employee_id == ^employee.id and d.date >= ^start and d.date <= ^endd)
-      |> Patt.Repo.all
-      |> Enum.count
-
-    used_vl =
-      from(d in Patt.Attendance.Dtr, where: d.daytype == "vl" and d.employee_id == ^employee.id and d.date >= ^start and d.date <= ^endd)
-      |> Patt.Repo.all
-      |> Enum.count
+  def used_leave(employee, year) do
+    {:ok, start} = Date.from_erl {year, 01, 01}
+    {:ok, endd} = Date.from_erl {year, 12, 31}
 
     %{
-      rem_sl: employee.leave.sl_total - used_sl,
-      rem_vl: employee.leave.vl_total - used_vl,
+      rem_sl: employee.leave.sl_total - used_sl(employee, start, endd),
+      rem_vl: employee.leave.vl_total - used_vl(employee, start, endd),
     }
+  end
+
+  def used_vl(employee, start_date, end_date) do
+    from(d in Patt.Attendance.Dtr, where: d.daytype == "vl" and d.employee_id == ^employee.id and d.date >= ^start_date and d.date <= ^end_date)
+    |> Patt.Repo.all
+    |> Enum.count
+  end
+
+  def used_sl(employee, start_date, end_date) do
+    from(d in Patt.Attendance.Dtr, where: d.daytype == "sl" and d.employee_id == ^employee.id and d.date >= ^start_date and d.date <= ^end_date)
+    |> Patt.Repo.all
+    |> Enum.count
   end
 
   ###PAYSLIP
@@ -159,7 +182,22 @@ defmodule Patt.Payroll do
 
   def minute_rate(employee) do
     employee = Repo.preload(employee, [:compensation, :employee_sched])
-    ((employee.compensation.basic / employee.employee_sched.dpm)/8/60)
+    case employee.compensation.paymode do
+      "daily" ->
+        ((employee.compensation.basic / employee.employee_sched.dpm)/8/60)
+
+      "365" ->
+        ((employee.compensation.basic * 12)/365)/8/60
+
+      "313" ->
+        ((employee.compensation.basic * 12)/313)/8/60
+
+      "261" ->
+        ((employee.compensation.basic * 12)/261)/8/60
+
+      _ ->
+        ((employee.compensation.basic / employee.employee_sched.dpm)/8/60)
+    end
   end
 
   def compute_absent(absentminutes, mrate) do
@@ -213,6 +251,7 @@ defmodule Patt.Payroll do
 
   def compute_hoandrdpay(dtrs, minuterate) do
     Enum.reduce dtrs, %{rdpay: 0, hopay: 0}, fn dtr, acc ->
+      dtr = Patt.Repo.preload(dtr, :employee)
       ho = get_holiday_bydate(dtr.date)
       if is_nil(ho) do
         if dtr.daytype == "restday" do
@@ -231,15 +270,16 @@ defmodule Patt.Payroll do
           "regular" ->
             if dtr.daytype == "restday" do
               if dtr.in && dtr.out do
-                Map.put(acc, :hopay, acc.hopay + ((480 * minuterate) + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.reghord.daily))))
+                Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.reghord.daily)))
               else
-                Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+                Map.put(acc, :hopay, acc.hopay)
               end
             else
+              #ERROR on no schedule
               if dtr.in && dtr.out do
-                Map.put(acc, :hopay, acc.hopay + ((480 * minuterate) + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.regho.daily))))
+                Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.regho.daily)))
               else
-                Map.put(acc, :hopay, acc.hopay + (480 * minuterate))
+                Map.put(acc, :hopay, acc.hopay)
               end
             end
 
@@ -253,6 +293,7 @@ defmodule Patt.Payroll do
               end
             else
               if dtr.in && dtr.out do
+                #TODO Error on nil dtr.hw
                 Map.put(acc, :hopay, acc.hopay + (dtr.hw * (minuterate * %Patt.Payroll.Rates{}.special.daily)))
               else
                 Map.put(acc, :rdpay, acc.rdpay)
@@ -261,28 +302,47 @@ defmodule Patt.Payroll do
             end
         end
       end
-
     end
   end
 
-  def get_user_inputs(sss_loan, pagibig_loan, office_loan, bank_loan, healthcare, other_pay, fel, others) do
+  def get_user_inputs(
+    sss_loan, pagibig_loan, office_loan, bank_loan, healthcare,
+    other_pay, fel, others, otherpay_remarks, otherded_remarks
+  ) do
+
     sss_loan = unless String.trim(sss_loan) == "", do: String.to_integer(sss_loan), else: 0
     pagibig_loan = unless String.trim(pagibig_loan) == "", do: String.to_integer(pagibig_loan), else: 0
     office_loan = unless String.trim(office_loan) == "", do: String.to_integer(office_loan), else: 0
     bank_loan = unless String.trim(bank_loan) == "", do: String.to_integer(bank_loan), else: 0
     healthcare = unless String.trim(healthcare) == "", do: String.to_integer(healthcare), else: 0
-    other_pay = unless String.trim(other_pay) == "", do: String.to_integer(other_pay), else: 0
-
+    other_pay =
+      unless String.trim(other_pay) == "" do
+        {val, _rem} = Float.parse(other_pay)
+        val
+      else
+        0
+      end
+    otherpay_remarks = unless String.trim(otherpay_remarks) == "", do: otherpay_remarks
     fel = unless String.trim(fel) == "", do: String.to_integer(fel), else: 0
-    others = unless String.trim(others) == "", do: String.to_integer(others), else: 0
+    others =
+      unless String.trim(others) == ""  do
+        {val, _rem} = Float.parse(others)
+        val
+      else
+        0
+      end
+    otherded_remarks = unless String.trim(otherded_remarks) == "", do: otherded_remarks
+
     %{sss_loan: sss_loan,
       pagibig_loan: pagibig_loan,
       office_loan: office_loan,
       bank_loan: bank_loan,
       healthcare: healthcare,
       other_pay: other_pay,
+      otherpay_remarks: otherpay_remarks,
       fel: fel,
       others: others,
+      otherded_remarks: otherded_remarks,
     }
   end
 
@@ -338,30 +398,69 @@ defmodule Patt.Payroll do
     minuterate = minute_rate(payslip.employee)
     compen = payslip.employee.compensation
 
-    %{rdpay: rdpay, hopay: hopay} = compute_hoandrdpay(dtrs, minuterate)
+    %{rdpay: rdpay, hopay: hopay} =
+      if payslip.employee.emp_class == "rnf" do
+        compute_hoandrdpay(dtrs, minuterate)
+      else
+        %{rdpay: 0, hopay: 0}
+      end
     vlpay = totals.vl * minuterate
     slpay = totals.sl * minuterate
-    nontaxable_allowance = unless is_nil(compen.allowance_ntaxable), do: compen.allowance_ntaxable/2, else: 0
-    taxable_allowance = unless is_nil(compen.allowance_taxable), do: compen.allowance_taxable/2, else: 0
-    regpay = (totals.totalwm * minuterate)
-    overtime = compute_overtime_perday(dtrs, minuterate)
+
+    #Allowances
+    rice = unless is_nil(compen.rice), do: compen.rice/2, else: 0
+    communication = unless is_nil(compen.communication), do: compen.communication/2, else: 0
+    meal = unless is_nil(compen.meal), do: compen.meal/2, else: 0
+    transpo = unless is_nil(compen.transpo), do: compen.transpo/2, else: 0
+    gasoline = unless is_nil(compen.gasoline), do: compen.gasoline/2, else: 0
+    clothing = unless is_nil(compen.clothing), do: compen.clothing/2, else: 0
+
+    total_allowance = rice + communication + meal + transpo + gasoline + clothing
+    total_leavepay = vlpay + slpay
+    #########
+
+    regpay =
+      case compen.paymode do
+        "daily" ->
+          (totals.totalwm * minuterate)
+
+        "365" ->
+          compen.basic/2 - total_leavepay
+
+        "313" ->
+          compen.basic/2 - total_leavepay
+
+        "261" ->
+          compen.basic/2 - total_leavepay
+
+         _ ->
+          (totals.totalwm * minuterate)
+      end
+
+    #case: if rnf compute else if spv or mgr dont
+    overtime =
+      if payslip.employee.emp_class == "rnf" do
+        compute_overtime_perday(dtrs, minuterate)
+      else
+        0
+      end
 
     philhealth =
-      if payslip.employee.contribution.philhealth_num do
+      if payslip.employee.contribution.check_philhealth do
         compute_philhealth(compen.basic)
       else
         0
       end
 
     pagibig =
-      if payslip.employee.contribution.pagibig_num do
+      if payslip.employee.contribution.check_pagibig do
         compute_pagibig()
       else
         0
       end
 
     sss =
-      if payslip.employee.contribution.sss_num do
+      if payslip.employee.contribution.check_sss do
         compute_sss(compen.basic)
       else
         0
@@ -371,9 +470,11 @@ defmodule Patt.Payroll do
     undertime = compute_undertime(totals.ut, minuterate)
     tardiness = (totals.tard * minuterate)
 
-    gross = vlpay + slpay + regpay + overtime + taxable_allowance + hopay + rdpay + userinputs.other_pay
+    gross = vlpay + slpay + regpay + overtime + hopay + rdpay + userinputs.other_pay + total_allowance
     deduction = sss + pagibig + philhealth + absent + tardiness + undertime
 
+    #TAX
+    #Compute also for fringe benefits excess
     #total compensation - deduction
     net_taxable = gross - deduction
     taxshielded = net_taxable - (net_taxable * 0.3) #taxshield 30%
@@ -383,7 +484,7 @@ defmodule Patt.Payroll do
     otherdeductions =
       userinputs.sss_loan + userinputs.pagibig_loan + userinputs.office_loan + userinputs.bank_loan + userinputs.healthcare + userinputs.fel + userinputs.others + wtax
 
-    net = net_taxable + nontaxable_allowance - otherdeductions
+    net = net_taxable - otherdeductions
 
     pschangeset = Payslip.changeset(payslip, %{
         regpay: regpay,
@@ -393,8 +494,13 @@ defmodule Patt.Payroll do
         rdpay: rdpay,
         hopay: hopay,
         other_pay: userinputs.other_pay,
-        ntallowance: nontaxable_allowance,
-        tallowance: taxable_allowance,
+        otherpay_remarks: userinputs.otherpay_remarks,
+        rice: rice,
+        communication: communication,
+        meal: meal,
+        transpo: transpo,
+        gasoline: gasoline,
+        clothing: clothing,
         tardiness: tardiness,
         undertime: undertime,
         absent: absent,
@@ -409,6 +515,7 @@ defmodule Patt.Payroll do
         healthcare: userinputs.healthcare,
         feliciana: userinputs.fel,
         other_deduction: userinputs.others,
+        otherded_remarks: userinputs.otherded_remarks,
         totalcompen: gross,
         totaldeduction: deduction,
         net_taxable: net_taxable,
@@ -421,18 +528,75 @@ defmodule Patt.Payroll do
     end
   end
 
+  def get_total_for_attribute(enumerable, attrib) do
+    Enum.reduce enumerable, 0.0, fn(p, acc) ->
+      attrval = Map.get(p, attrib)
+      unless is_nil(attrval) do
+        acc + attrval
+      else
+        acc
+      end
+    end
+  end
+
+  def summary_totals(payslips) do
+    map =
+      %{}
+      |> Map.put(:totalreg, get_total_for_attribute(payslips, :regpay))
+      |> Map.put(:totalot, get_total_for_attribute(payslips, :otpay))
+      |> Map.put(:totalrd, get_total_for_attribute(payslips, :rdpay))
+      |> Map.put(:totalsl, get_total_for_attribute(payslips, :slpay))
+      |> Map.put(:totalvl, get_total_for_attribute(payslips, :vlay))
+      |> Map.put(:totalho, get_total_for_attribute(payslips, :hopay))
+
+      |> Map.put(:totalrice, get_total_for_attribute(payslips, :rice))
+      |> Map.put(:totalcomm, get_total_for_attribute(payslips, :communication))
+      |> Map.put(:totalmeal, get_total_for_attribute(payslips, :meal))
+      |> Map.put(:totaltranspo, get_total_for_attribute(payslips, :transpo))
+      |> Map.put(:totalgasoline, get_total_for_attribute(payslips, :gasoline))
+      |> Map.put(:totalclothing, get_total_for_attribute(payslips, :clothing))
+
+      |> Map.put(:totalop, get_total_for_attribute(payslips, :other_pay))
+      |> Map.put(:totalgross, get_total_for_attribute(payslips, :totalcompen))
+      |> Map.put(:totalsss, get_total_for_attribute(payslips, :sss))
+      |> Map.put(:totalphilhealth, get_total_for_attribute(payslips, :philhealth))
+      |> Map.put(:totalpagibig, get_total_for_attribute(payslips, :pagibig))
+      |> Map.put(:totaltardiness, get_total_for_attribute(payslips, :tardiness))
+      |> Map.put(:totalundertime, get_total_for_attribute(payslips, :undertime))
+      |> Map.put(:totalabsences, get_total_for_attribute(payslips, :absent))
+      |> Map.put(:totaltax, get_total_for_attribute(payslips, :wtax))
+      |> Map.put(:totalhmo, get_total_for_attribute(payslips, :healthcare))
+
+      |> Map.put(:totalsssloan, get_total_for_attribute(payslips, :sss_loan))
+      |> Map.put(:totalpagibigloan, get_total_for_attribute(payslips, :hdmf_loan))
+      |> Map.put(:totalofficeloan, get_total_for_attribute(payslips, :office_loan))
+
+      |> Map.put(:totaldeductions, get_total_for_attribute(payslips, :totaldeduction))
+      |> Map.put(:totalnet, get_total_for_attribute(payslips, :net))
+      |> Map.put(:totalfel, get_total_for_attribute(payslips, :feliciana))
+      |> Map.put(:totalbl, get_total_for_attribute(payslips, :bank_loan))
+  end
+
   ###HOLIDAYS
   #
-  def list_holidays do
-    {:ok, start} = Date.new(Date.utc_today().year, 01, 01)
-    {:ok, endd} = Date.new(Date.utc_today().year, 12, 31)
+  def list_holidays(year) do
+    {:ok, start} = Date.new(year, 01, 01)
+    {:ok, endd} = Date.new(year, 12, 31)
 
     from(h in Holiday, where: h.date >= ^start and h.date <= ^endd)
     |> Repo.all()
   end
 
-  def list_holidays_date() do
-    holidays = list_holidays()
+  def list_holidays_incl_dec_lastyear(year) do
+    {:ok, start} = Date.new(year - 1, 12, 01)
+    {:ok, endd} = Date.new(year, 12, 31)
+
+    from(h in Holiday, where: h.date >= ^start and h.date <= ^endd)
+    |> Repo.all()
+  end
+
+  def list_holidays_date(year) do
+    holidays = list_holidays_incl_dec_lastyear(year)
     Enum.map holidays, &(&1.date)
   end
 
@@ -460,5 +624,101 @@ defmodule Patt.Payroll do
 
   def change_holiday(%Holiday{} = holiday) do
     Holiday.changeset(holiday, %{})
+  end
+
+  alias Patt.Payroll.Bonus
+
+  @doc """
+  Returns the list of bonus.
+
+  ## Examples
+
+      iex> list_bonus()
+      [%Bonus{}, ...]
+
+  """
+  def list_bonus do
+    Repo.all(Bonus)
+  end
+
+  @doc """
+  Gets a single bonus.
+
+  Raises `Ecto.NoResultsError` if the Bonus does not exist.
+
+  ## Examples
+
+      iex> get_bonus!(123)
+      %Bonus{}
+
+      iex> get_bonus!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_bonus!(id), do: Repo.get!(Bonus, id)
+
+  @doc """
+  Creates a bonus.
+
+  ## Examples
+
+      iex> create_bonus(%{field: value})
+      {:ok, %Bonus{}}
+
+      iex> create_bonus(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_bonus(attrs \\ %{}) do
+    %Bonus{}
+    |> Bonus.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a bonus.
+
+  ## Examples
+
+      iex> update_bonus(bonus, %{field: new_value})
+      {:ok, %Bonus{}}
+
+      iex> update_bonus(bonus, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_bonus(%Bonus{} = bonus, attrs) do
+    bonus
+    |> Bonus.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a Bonus.
+
+  ## Examples
+
+      iex> delete_bonus(bonus)
+      {:ok, %Bonus{}}
+
+      iex> delete_bonus(bonus)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_bonus(%Bonus{} = bonus) do
+    Repo.delete(bonus)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking bonus changes.
+
+  ## Examples
+
+      iex> change_bonus(bonus)
+      %Ecto.Changeset{source: %Bonus{}}
+
+  """
+  def change_bonus(%Bonus{} = bonus) do
+    Bonus.changeset(bonus, %{})
   end
 end

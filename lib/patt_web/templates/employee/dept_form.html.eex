@@ -1,0 +1,23 @@
+<%= form_for @changeset, @action, [class: "form-horizontal"], fn f -> %>
+      <div class="form-group">
+        <div class="input-group input-group-sm">
+          <div class="input-group-prepend">
+            <label class="input-group-text">NAME</label>
+          </div>
+          <%= text_input f, :name, class: "form-control", required: "required" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-group input-group">
+          <div class="input-group-prepend">
+            <label class="input-group-text">DESCRIPTION</label>
+          </div>
+          <%= textarea f, :description, class: "form-control", required: "required" %>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= submit class: "btn btn-block btn-sm btn-success" do %>
+          <i class="fas fa-save"></i> SAVE
+        <% end %>
+      </div>
+<% end %>
