@@ -40,7 +40,6 @@
                   <%= link to: employee_path(@conn, :index), class: "dropdown-item" do %>
                     <i class="fas fa-user-cog"></i><%= " Employees" %>
                   <% end %>
-                  <% end %>
               </div>
             </li>
 
